@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Check, ArrowUpRight, ArrowDownRight, ExternalLink } from "lucide-react";
+import EviaLogo from "./EviaLogo";
 
 /**
  * Step 01 Visual Component:
@@ -565,17 +566,8 @@ export default function TimelineSection() {
                         <div className="lg:col-span-5 flex flex-col justify-between">
                           <div>
                             {/* Evia Wealth Brand Lockup */}
-                            <div className="flex items-center gap-2 mb-6 sm:mb-8">
-                              <div className="relative w-7 h-7 rounded-full bg-gradient-to-tr from-[#9c7820] via-[#dfba48] to-[#fde587] p-[1px] shadow-xs flex items-center justify-center">
-                                <div className="w-full h-full bg-black rounded-full flex items-center justify-center">
-                                  <span className="font-serif font-black text-[10px] bg-gradient-to-r from-[#edd379] to-[#d4af37] bg-clip-text text-transparent">
-                                    EW
-                                  </span>
-                                </div>
-                              </div>
-                              <span className="text-[12px] font-bold tracking-[0.14em] uppercase text-black">
-                                EVIA WEALTH
-                              </span>
+                            <div className="mb-6 sm:mb-8">
+                              <EviaLogo size="sm" lightText={false} />
                             </div>
 
                             {/* Big Title (Poppins medium, about 30px, black) */}

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { ChevronDown, ArrowRight, Menu, X, Shield, Lock, ExternalLink, Sparkles } from "lucide-react";
+import EviaLogo from "./EviaLogo";
 
 interface NavbarProps {
   onReviewPortfolio: () => void;
@@ -78,23 +79,7 @@ export default function Navbar({ onReviewPortfolio, onLoginClick }: NavbarProps)
             window.scrollTo({ top: 0, behavior: "auto" });
           }}
         >
-          {/* Gold Monogram "EW" */}
-          <div className="relative w-8 h-8 md:w-9 md:h-9 rounded-full bg-gradient-to-tr from-[#9c7820] via-[#dfba48] to-[#fde587] p-[1.5px] shadow-sm shadow-[#d4af37]/20 flex items-center justify-center">
-            <div className="w-full h-full bg-black rounded-full flex items-center justify-center">
-              <span className="font-serif font-black tracking-tighter text-[13px] md:text-[14px] bg-gradient-to-r from-[#edd379] via-[#f7e49b] to-[#d4af37] bg-clip-text text-transparent">
-                EW
-              </span>
-            </div>
-          </div>
-
-          <div className="flex flex-col text-left">
-            <span className="text-[13px] md:text-[14px] font-bold tracking-[0.14em] uppercase text-white group-hover:text-emerald-300 transition-colors">
-              EVIA WEALTH
-            </span>
-            <span className="text-[9px] font-medium tracking-[0.1em] text-neutral-400 -mt-0.5">
-              PRIVATE WEALTH
-            </span>
-          </div>
+          <EviaLogo size="sm" />
         </a>
 
         {/* Center: Desktop Nav Links */}

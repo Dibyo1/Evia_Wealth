@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { ArrowRight, Lock, Award, ShieldCheck, Check } from "lucide-react";
+import EviaLogo from "./EviaLogo";
 
 interface FooterSectionProps {
   onReviewPortfolio: () => void;
@@ -144,17 +145,8 @@ export default function FooterSection({ onReviewPortfolio }: FooterSectionProps)
           {/* Brand Col (5 cols) */}
           <div className="md:col-span-5 flex flex-col items-start">
             {/* Gold Logo */}
-            <div className="flex items-center gap-2.5 mb-4">
-              <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-[#9c7820] via-[#dfba48] to-[#fde587] p-[1.5px] shadow-sm flex items-center justify-center">
-                <div className="w-full h-full bg-black rounded-full flex items-center justify-center">
-                  <span className="font-serif font-black tracking-tighter text-[13px] bg-gradient-to-r from-[#edd379] via-[#f7e49b] to-[#d4af37] bg-clip-text text-transparent">
-                    EW
-                  </span>
-                </div>
-              </div>
-              <span className="text-[14px] font-bold tracking-[0.14em] uppercase text-white">
-                EVIA WEALTH
-              </span>
+            <div className="mb-4">
+              <EviaLogo size="md" />
             </div>
 
             <p className="text-[13px] text-neutral-400 leading-relaxed max-w-[360px] mb-4">
