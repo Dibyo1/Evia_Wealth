@@ -1,0 +1,6 @@
+{
+  "name": "Evia Wealth",
+  "description": "Personalised wealth management engineered for senior executives, business leaders, and UHNI families across India.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

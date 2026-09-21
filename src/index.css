@@ -1,0 +1,146 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --gold-light: #ebe0a6; /* champagne */
+    --gold-mid:   #cdb864;
+    --gold-deep:  #a89537;
+    --gold-cream: #f1e7b4; /* revealed quote text */
+    --gold-dim:   rgba(226, 214, 160, 0.22); /* unrevealed quote text */
+    --gold-line:  rgba(212, 175, 55, 0.45); /* hover borders */
+    --gold-solid: #d9c56e;
+    --gold-nav:   #e6d78a;
+
+    --background: 0 0% 0%;
+    --foreground: 0 0% 100%;
+    --card: 0 0% 5%;
+    --card-foreground: 0 0% 100%;
+    --popover: 0 0% 5%;
+    --popover-foreground: 0 0% 100%;
+    --primary: 0 0% 100%;
+    --primary-foreground: 0 0% 0%;
+    --secondary: 0 0% 15%;
+    --secondary-foreground: 0 0% 100%;
+    --muted: 0 0% 15%;
+    --muted-foreground: 0 0% 65%;
+    --accent: 156 72% 52%;
+    --accent-foreground: 0 0% 0%;
+    --border: 0 0% 15%;
+    --input: 0 0% 15%;
+    --ring: 156 72% 52%;
+    --radius: 1rem;
+  }
+
+  * {
+    border-color: rgba(255, 255, 255, 0.08);
+  }
+
+  html {
+    color-scheme: dark;
+    background-color: #000000;
+    overflow-x: clip;
+    scroll-behavior: auto !important;
+  }
+
+  body {
+    background-color: #000000;
+    color: #ffffff;
+    font-family: 'Poppins', sans-serif;
+    overflow-x: clip;
+    cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='%23cdb864' stroke='%23000' stroke-width='1.5'%3E%3Cpolygon points='2,2 10,22 13.5,13.5 22,10'/%3E%3C/svg%3E") 2 2, auto;
+  }
+
+  /* Headings with tight line height as requested */
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Poppins', sans-serif;
+    line-height: 1.25;
+  }
+
+  /* Keep text selectable with standard text cursor */
+  p, h1, h2, h3, h4, h5, h6, span, input, textarea {
+    cursor: auto;
+  }
+
+  a, button, [role="button"], select, .interactive-cursor {
+    cursor: pointer;
+  }
+}
+
+/* Gold Gradient Headings */
+.gold-gradient-heading {
+  background: linear-gradient(90deg, #ebe0a6 0%, #d4c06e 35%, #b9a13f 70%, #a89537 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+/* Gold pill button */
+.gold-pill-btn {
+  background: linear-gradient(90deg, #ebe0a6 0%, #d4c06e 50%, #a89537 100%);
+  color: #000000;
+  font-weight: 600;
+  font-family: 'Poppins', sans-serif;
+  box-shadow: 0 0 20px rgba(212, 175, 55, 0.3);
+  transition: all 0.25s ease;
+}
+
+.gold-pill-btn:hover {
+  box-shadow: 0 0 28px rgba(212, 175, 55, 0.5);
+  filter: brightness(1.05);
+}
+
+/* Small Gold Eyebrow Pill */
+.gold-eyebrow-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.35rem 0.85rem;
+  border-radius: 9999px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background-color: rgba(255, 255, 255, 0.03);
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+
+.gold-eyebrow-pill .gold-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 9999px;
+  background-color: #d9c56e;
+  box-shadow: 0 0 8px #d9c56e;
+}
+
+.gold-eyebrow-pill .gold-eyebrow-text {
+  color: #d9c56e;
+  text-transform: uppercase;
+  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  font-family: 'Poppins', sans-serif;
+}
+
+/* Custom subtle scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #09090b;
+}
+::-webkit-scrollbar-thumb {
+  background: #27272a;
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #3f3f46;
+}
+
+/* Performance optimizers for below-the-fold sections */
+#partners,
+#insights,
+#offices {
+  content-visibility: auto;
+  contain-intrinsic-size: 1px 700px;
+}
