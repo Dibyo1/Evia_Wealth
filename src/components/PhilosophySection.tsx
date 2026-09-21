@@ -181,10 +181,10 @@ export default function PhilosophySection() {
   const isMobile = W < 768;
 
   // Recommended starting geometry for perfect shallow premium curvature:
-  // Desktop: 180vw width, 55vw height.
+  // Desktop: 200vw width, 60vw height.
   // Mobile: 280vw width, 120vw height.
-  const domeWidthVw = isMobile ? 280 : 180;
-  const domeHeightVw = isMobile ? 120 : 55;
+  const domeWidthVw = isMobile ? 280 : 200;
+  const domeHeightVw = isMobile ? 120 : 60;
 
   const domeWidthPx = Math.round((domeWidthVw * W) / 100);
   const domeHeightPx = Math.round((domeHeightVw * W) / 100);
@@ -322,24 +322,61 @@ export default function PhilosophySection() {
         {/* LAYER 2: THE CURVED DOME MASK AND HALO GLOW                         */}
         {/* =================================================================== */}
         <div className="absolute inset-0 w-full h-full z-20 overflow-hidden pointer-events-none">
-          {/* Subtle atmospheric glow above the curve */}
+          {/* Layer A: Very soft wide atmospheric background glow */}
           <div 
             style={{
               width: `${domeWidthPx}px`,
-              height: `${glowHeightPx}px`,
+              height: `${domeHeightPx}px`,
               borderRadius: "50% 50% 0 0",
               position: "absolute",
               left: "50%",
               top: "0px",
-              transform: `translateX(-50%) translateY(${glowTranslateY}px)`,
-              background: "radial-gradient(ellipse at center, rgba(226, 214, 160, 0.15), rgba(0, 0, 0, 0) 70%)",
-              filter: "blur(12px)",
-              opacity: Math.max(0, 1 - Math.pow(arcProgress, 4)),
-              willChange: "transform, opacity",
+              transform: `translateX(-50%) translateY(${domeTranslateY - 15}px)`,
+              background: "radial-gradient(ellipse at top, rgba(160, 160, 160, 0.16) 0%, rgba(80, 80, 80, 0.05) 45%, rgba(0, 0, 0, 0) 75%)",
+              filter: "blur(24px)",
+              willChange: "transform",
               pointerEvents: "none",
             }} 
           />
-          {/* Physical black mask dome */}
+
+          {/* Layer B: Medium-width soft curved atmospheric highlight (charcoal/grey) */}
+          <div 
+            style={{
+              width: `${domeWidthPx}px`,
+              height: `${domeHeightPx}px`,
+              borderRadius: "50% 50% 0 0",
+              position: "absolute",
+              left: "50%",
+              top: "0px",
+              transform: `translateX(-50%) translateY(${domeTranslateY}px)`,
+              borderTop: "5px solid rgba(170, 170, 170, 0.22)",
+              borderLeft: "2.5px solid rgba(120, 120, 120, 0.04)",
+              borderRight: "2.5px solid rgba(120, 120, 120, 0.04)",
+              filter: "blur(2.5px)",
+              willChange: "transform",
+              pointerEvents: "none",
+            }} 
+          />
+
+          {/* Layer B2: Defined elegant boundary halo to give a clear curved definition */}
+          <div 
+            style={{
+              width: `${domeWidthPx}px`,
+              height: `${domeHeightPx}px`,
+              borderRadius: "50% 50% 0 0",
+              position: "absolute",
+              left: "50%",
+              top: "0px",
+              transform: `translateX(-50%) translateY(${domeTranslateY}px)`,
+              borderTop: "1.5px solid rgba(220, 220, 220, 0.38)",
+              borderLeft: "0.5px solid rgba(150, 150, 150, 0.03)",
+              borderRight: "0.5px solid rgba(150, 150, 150, 0.03)",
+              willChange: "transform",
+              pointerEvents: "none",
+            }} 
+          />
+
+          {/* Layer C: Physical solid black dome */}
           <div 
             style={{
               width: `${domeWidthPx}px`,
@@ -351,18 +388,18 @@ export default function PhilosophySection() {
               top: "0px",
               transform: `translateX(-50%) translateY(${domeTranslateY}px)`,
               willChange: "transform",
-              boxShadow: "0 -25px 60px -10px rgba(0, 0, 0, 0.95)",
+              boxShadow: "0 -35px 80px -15px rgba(0, 0, 0, 0.98)",
               pointerEvents: "none",
             }} 
           >
-            {/* Massive black block underneath to cover everything below the dome curve */}
+            {/* Layer D: Massive solid black fill underneath to cover everything below the curve */}
             <div 
               style={{
                 position: "absolute",
                 top: `${domeHeightPx - 2}px`,
                 left: "-10%",
                 width: "120%",
-                height: `${H * 2}px`,
+                height: `${H * 3.5}px`,
                 backgroundColor: "#000000",
               }}
             />
