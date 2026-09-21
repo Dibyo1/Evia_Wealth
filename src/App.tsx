@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import Navbar from "./components/Navbar";
 import HeroSection from "./components/HeroSection";
 import TestimonialsSection from "./components/TestimonialsSection";
@@ -13,9 +13,75 @@ import FooterSection from "./components/FooterSection";
 import AppDownloadToast from "./components/AppDownloadToast";
 import { PortfolioModal, LoginModal } from "./components/Modals";
 
+import Lenis from "lenis";
+import { useAutoAdvance, Zone } from "./hooks/useAutoAdvance";
+
 export default function App() {
   const [portfolioModalOpen, setPortfolioModalOpen] = useState(false);
   const [loginModalOpen, setLoginModalOpen] = useState(false);
+
+  // 1. Initialize Lenis globally in a StrictMode-safe lifecycle
+  useEffect(() => {
+    const lenis = new Lenis({
+      duration: 1.2,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // premium smooth easing
+      orientation: "vertical",
+      gestureOrientation: "vertical",
+      smoothWheel: true,
+    });
+
+    (window as any).lenis = lenis;
+
+    let rafId: number;
+    const raf = (time: number) => {
+      lenis.raf(time);
+      rafId = requestAnimationFrame(raf);
+    };
+    rafId = requestAnimationFrame(raf);
+
+    document.documentElement.classList.add("lenis", "lenis-smooth");
+
+    return () => {
+      lenis.destroy();
+      (window as any).lenis = undefined;
+      cancelAnimationFrame(rafId);
+      document.documentElement.classList.remove("lenis", "lenis-smooth");
+    };
+  }, []);
+
+  // 2. Configure the Auto-Advance Transition Zone
+  const zones = useMemo<Zone[]>(() => [
+    {
+      id: "philosophy-to-timeline",
+      getBounds: () => {
+        const philosophy = document.getElementById("philosophy");
+        const heading = document.getElementById("timeline-heading");
+        if (!philosophy || !heading) return null;
+
+        const philosophyTop = philosophy.getBoundingClientRect().top + window.scrollY;
+        const scrollMax = philosophy.offsetHeight - window.innerHeight;
+        
+        // Start auto-advance at scroll progress 0.82 (where the black dome covers the quote)
+        const startY = philosophyTop + 0.82 * scrollMax;
+
+        const headingTop = heading.getBoundingClientRect().top + window.scrollY;
+        const headingHeight = heading.offsetHeight;
+        
+        // End auto-advance when the timeline heading is 60% visible
+        const endY = headingTop - window.innerHeight + 0.60 * headingHeight;
+        
+        // targetY puts the heading block at 12vh from the top
+        const targetY = headingTop - 0.12 * window.innerHeight;
+
+        // upTargetY: the last fully readable state of the quote (scrollProgress = 0.45)
+        const upTargetY = philosophyTop + 0.45 * scrollMax;
+
+        return { startY, endY, targetY, upTargetY };
+      }
+    }
+  ], []);
+
+  useAutoAdvance(zones);
 
   return (
     <div className="min-h-screen bg-black text-white selection:bg-[#34d399]/30 selection:text-emerald-300 font-sans relative">

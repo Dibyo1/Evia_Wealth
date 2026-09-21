@@ -42,6 +42,18 @@
     scroll-behavior: auto !important;
   }
 
+  html.lenis, html.lenis-pure {
+    height: auto;
+  }
+
+  .lenis.lenis-smooth {
+    scroll-behavior: auto !important;
+  }
+
+  .lenis.lenis-stopped {
+    overflow: hidden;
+  }
+
   body {
     background-color: #000000;
     color: #ffffff;

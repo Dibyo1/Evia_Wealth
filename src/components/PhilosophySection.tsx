@@ -26,41 +26,6 @@ export default function PhilosophySection() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const lastScrollTimeRef = useRef(0);
-  const hasAutoAdvancedRef = useRef(false);
-
-  // Guarded auto-scroll transition to TimelineSection once the arc completes
-  useEffect(() => {
-    // When the arc finishes movement (around scrollProgress >= 0.80)
-    if (scrollProgress >= 0.80) {
-      if (!hasAutoAdvancedRef.current) {
-        const checkInactivity = () => {
-          const now = performance.now();
-          const timeSinceLastScroll = now - lastScrollTimeRef.current;
-
-          // If 200ms has elapsed since the user last scrolled
-          if (timeSinceLastScroll >= 200) {
-            const target = document.getElementById("how-we-do-things");
-            if (target && !hasAutoAdvancedRef.current) {
-              hasAutoAdvancedRef.current = true;
-              target.scrollIntoView({ behavior: "smooth", block: "start" });
-            }
-          } else {
-            // Check again once the remaining inactive time is reached
-            const remaining = 200 - timeSinceLastScroll;
-            timeoutId = setTimeout(checkInactivity, Math.max(remaining, 30));
-          }
-        };
-
-        let timeoutId = setTimeout(checkInactivity, 200);
-        return () => clearTimeout(timeoutId);
-      }
-    } else if (scrollProgress < 0.20) {
-      // Reset the guard so it can trigger again when scrolling down next time
-      hasAutoAdvancedRef.current = false;
-    }
-  }, [scrollProgress]);
-
   const quoteText =
     "Traditional wealth management is broken & you need a better way to manage your money. Using unbiased data driven decisions, we ensure your investment journey is successful so you can focus on what matters most to you";
 
@@ -115,7 +80,6 @@ export default function PhilosophySection() {
     };
 
     const handleScroll = () => {
-      lastScrollTimeRef.current = performance.now();
       if (!ticking) {
         ticking = true;
         rafId = window.requestAnimationFrame(computeProgress);
@@ -276,7 +240,7 @@ export default function PhilosophySection() {
     <section
       ref={containerRef}
       id="philosophy"
-      className="relative h-[260vh] bg-black"
+      className="relative h-[160vh] bg-black"
     >
       {/* Sticky Fullscreen Frame Pinned to Viewport */}
       <div className="sticky top-0 h-screen w-full overflow-hidden bg-black flex flex-col items-center justify-center px-5 sm:px-6">

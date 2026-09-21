@@ -417,6 +417,42 @@ function Step04Visual({ isVisible }: { isVisible: boolean }) {
 export default function TimelineSection() {
   const [activeStep, setActiveStep] = useState(0);
   const [stepVisibilities, setStepVisibilities] = useState([false, false, false, false]);
+  const headingRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const heading = headingRef.current;
+    if (!heading) return;
+
+    const handleScroll = () => {
+      const rect = heading.getBoundingClientRect();
+      const viewportHeight = window.innerHeight || 700;
+      
+      const entryStart = viewportHeight;
+      const entryEnd = viewportHeight * 0.4;
+      
+      const currentPos = rect.top;
+      
+      if (currentPos >= entryStart) {
+        heading.style.opacity = "0";
+        heading.style.transform = "translateY(24px)";
+      } else if (currentPos <= entryEnd) {
+        heading.style.opacity = "1";
+        heading.style.transform = "translateY(0px)";
+      } else {
+        const pct = (entryStart - currentPos) / (entryStart - entryEnd);
+        heading.style.opacity = pct.toFixed(3);
+        heading.style.transform = `translateY(${(24 * (1 - pct)).toFixed(1)}px)`;
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    // Run immediately to establish initial state
+    handleScroll();
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
 
   const stepRefs = [
     useRef<HTMLDivElement>(null),
@@ -514,12 +550,17 @@ export default function TimelineSection() {
   return (
     <section
       id="how-we-do-things"
-      className="relative z-20 bg-black pt-24 pb-28 sm:pb-36 text-white"
+      className="relative z-20 bg-black mt-[-18vh] pt-24 pb-28 sm:pb-36 text-white"
     >
       <div className="max-w-[1400px] w-full mx-auto px-4 sm:px-6">
         
         {/* Section Heading */}
-        <div className="max-w-3xl mx-auto flex flex-col items-center text-center mb-16 md:mb-24">
+        <div
+          id="timeline-heading"
+          ref={headingRef}
+          className="max-w-3xl mx-auto flex flex-col items-center text-center mb-16 md:mb-24 transition-all duration-150 ease-out"
+          style={{ willChange: "transform, opacity" }}
+        >
           <div className="gold-eyebrow-pill mb-6">
             <span className="gold-dot" />
             <span className="gold-eyebrow-text">HOW WE ARE DIFFERENT</span>
