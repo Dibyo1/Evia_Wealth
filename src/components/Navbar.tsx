@@ -11,6 +11,8 @@ export default function Navbar({ onReviewPortfolio, onLoginClick }: NavbarProps)
   const [productsOpen, setProductsOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
+  const [isOverWhite, setIsOverWhite] = useState(false);
+
   useEffect(() => {
     let lastScrolled = false;
     const handleScroll = () => {
@@ -21,7 +23,24 @@ export default function Navbar({ onReviewPortfolio, onLoginClick }: NavbarProps)
       }
     };
     window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
+
+    // Track when solutions section (the white cards) enters the top viewport area
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsOverWhite(entry.isIntersecting);
+      },
+      {
+        rootMargin: "-80px 0px -40% 0px",
+        threshold: 0,
+      }
+    );
+    const target = document.getElementById("solutions");
+    if (target) observer.observe(target);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      observer.disconnect();
+    };
   }, []);
 
   const scrollToSection = (id: string) => {
@@ -42,8 +61,10 @@ export default function Navbar({ onReviewPortfolio, onLoginClick }: NavbarProps)
   return (
     <header className="fixed top-4 md:top-5 inset-x-0 z-50 flex justify-center px-4 pointer-events-none">
       <nav
-        className={`pointer-events-auto w-full max-w-[1180px] h-[58px] md:h-[62px] px-4 md:px-6 rounded-full flex items-center justify-between transition-colors duration-200 border ${
-          scrolled
+        className={`pointer-events-auto w-full max-w-[1180px] h-[58px] md:h-[62px] px-4 md:px-6 rounded-full flex items-center justify-between transition-all duration-200 border ${
+          isOverWhite
+            ? "bg-[#18181b]/75 backdrop-blur-md border-neutral-300/30 shadow-[0_2px_12px_rgba(0,0,0,0.15)]"
+            : scrolled
             ? "bg-[#0a0a0c] border-white/12 shadow-[0_8px_32px_rgba(0,0,0,0.5)]"
             : "bg-[#0a0a0c] border-white/8"
         }`}

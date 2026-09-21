@@ -3,7 +3,7 @@ import { Plus, X, ArrowRight } from "lucide-react";
 import { TEAM_MEMBERS, TeamMember } from "../data/siteData";
 
 export default function TeamSection() {
-  const [expandedId, setExpandedId] = useState<string | null>(null);
+  const [expandedId, setExpandedId] = useState<string | null>(TEAM_MEMBERS[0]?.id || null);
 
   const toggleMember = (id: string) => {
     setExpandedId((prev) => (prev === id ? null : id));
@@ -61,7 +61,7 @@ export default function TeamSection() {
                       title="Close details"
                       aria-label="Close details"
                     >
-                      <X className="w-4 h-4" />
+                      <Plus className="w-4 h-4" />
                     </button>
                   </div>
 

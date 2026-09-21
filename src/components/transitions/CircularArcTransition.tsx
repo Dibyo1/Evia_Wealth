@@ -116,47 +116,83 @@ export default function CircularArcTransition({
   // Viewport geometry
   const W = viewportSize.width || 1440;
   const H = viewportSize.height || 900;
-  const maxDim = Math.max(W, H);
 
-  // Circle dimensions: diameter is significantly wider than viewport (e.g. 2.2x)
-  // so the visible top edge reads as a gentle, smooth arc spanning across the entire screen
-  const circleDiameter = Math.round(maxDim * circleMultiplier);
-  const R = circleDiameter / 2;
-  const halfW = W / 2;
+  // --- RESPONSIVE GEOMETRY FOR PREMIUM SHALLOW CURVATURE ---
+  // On desktop (landscape): width 180vw, height 120vh keeps the dome extremely wide and shallow
+  // On mobile (portrait): width 320vw, height 140vh prevents vertical squishing of the arc
+  const isMobile = W < 768;
+  const domeWidthVw = isMobile ? 320 : 180;
+  const domeHeightVh = isMobile ? 140 : 120;
 
-  // Sagitta: the vertical crown height from screen edges (x = 0, W) to arc apex (x = W/2)
-  // sagitta = R - sqrt(R^2 - (W/2)^2)
-  const sagitta = R - Math.sqrt(Math.max(R * R - halfW * halfW, 0));
+  // Convert responsive units to precise pixels for inline style safety
+  const domeWidthPx = Math.round((domeWidthVw * W) / 100);
+  const domeHeightPx = Math.round((domeHeightVh * H) / 100);
 
-  // --- TIMELINE PHASES ---
-  // Phase 1 (Progress 0.00 -> 0.70): The black circle rises from below until it fully covers all 4 corners
-  // Phase 2 (Progress 0.70 -> 1.00): Viewport is 100% solid black; incoming content fades & rises in
+  // --- MATHEMATICAL VIEWPORT COVERAGE CALCULATION ---
+  // To cover the top corners of the screen (x = W/2, y = 0) with the curved ellipse,
+  // we use the ellipse formula: (x/a)^2 + (y/b)^2 = 1.
+  // Solving for the lowest y position of the dome base to completely black out the viewport:
+  const coverageRatio = Math.sqrt(Math.max(0, 1 - Math.pow(100 / domeWidthVw, 2)));
+  const domeTopEndPx = Math.round(domeHeightPx * (coverageRatio - 1) - (H * 0.05)); // Include 5vh overshoot margin
 
+  // --- PHYSICAL MOVEMENT INTERPOLATION ---
+  // Map progress (0.0 -> 0.70) to the active sweep phase.
   const arcNorm = Math.min(progress / 0.70, 1);
+  
+  // Custom cubic ease-in-out curve for natural, expensive physical momentum (no sudden jumps/bounces)
+  const easedArcProgress = arcNorm < 0.5
+    ? 4 * arcNorm * arcNorm * arcNorm
+    : 1 - Math.pow(-2 * arcNorm + 2, 3) / 2;
 
-  // Vertical position for Technique B (scaled-circle):
-  // At progress = 0: apex is at y = H + 2 (completely off-screen below viewport)
-  // At progress = 0.70: apex has risen to y = -sagitta - 20 (both top corners at x=0 and x=W are covered)
-  const yStart = H + 2;
-  const yEnd = -sagitta - 20;
-  const circleTopPx = yStart + (yEnd - yStart) * arcNorm;
+  // Compute precise pixel positions for the dome
+  const domeTopPx = Math.round(H + (domeTopEndPx - H) * easedArcProgress);
 
-  // For Technique A (clip-path circle):
-  // Radius grows from 0% at progress 0, up to 160% (enough to cover entire rectangle from bottom center)
-  // Distance from (50%, 100%) to top corners (0,0) is sqrt(50^2 + 100^2)% = 111.8%
-  const clipRadiusPercent = arcNorm * 155;
+  // Soft atmospheric glow immediately above the curved edge (shifted up by 3.5% H on desktop, 5% on mobile)
+  const glowOffsetPx = Math.round(isMobile ? (H * 0.05) : (H * 0.035));
+  const glowTopPx = domeTopPx - glowOffsetPx;
 
   // Incoming content opacity & rise: starts once arc is 95% complete (progress 0.68)
   const contentNorm = Math.min(Math.max((progress - 0.68) / 0.30, 0), 1);
-  const contentOpacity = contentNorm;
-  const contentTranslateY = Math.round((1 - contentNorm) * 30);
+  const easedContentNorm = contentNorm * contentNorm * (3 - 2 * contentNorm); // Smoothstep
+  const contentOpacity = easedContentNorm;
+  const contentTranslateY = Math.round((1 - easedContentNorm) * 20);
 
-  // Descriptive phase status
-  let phaseLabel = "0% • Shape Off-screen (Outgoing Visible)";
+  // Dynamic Styles for the Dome and Glowing Halo
+  const glowStyle: React.CSSProperties = {
+    width: `${domeWidthPx}px`,
+    height: `${domeHeightPx}px`,
+    borderRadius: "50% 50% 0 0",
+    position: "absolute",
+    left: "50%",
+    top: `${glowTopPx}px`,
+    transform: "translateX(-50%)",
+    background: "radial-gradient(ellipse at 50% 50%, rgba(95, 95, 95, 0.24) 0%, rgba(45, 45, 45, 0.11) 45%, rgba(0, 0, 0, 0) 75%)",
+    filter: "blur(24px)",
+    opacity: 1 - Math.pow(progress, 3), // Fade glow out elegantly at 100% progress
+    willChange: "top, opacity",
+    pointerEvents: "none",
+  };
+
+  const domeStyle: React.CSSProperties = {
+    width: `${domeWidthPx}px`,
+    height: `${domeHeightPx}px`,
+    backgroundColor: "#000000",
+    borderRadius: "50% 50% 0 0",
+    position: "absolute",
+    left: "50%",
+    top: `${domeTopPx}px`,
+    transform: "translateX(-50%)",
+    willChange: "top",
+    boxShadow: "0 -25px 60px -10px rgba(0, 0, 0, 0.95)", // Soft occlusion shadow blending into the scene
+    pointerEvents: "none",
+  };
+
+  // Descriptive phase status for debugging and calibration
+  let phaseLabel = "0% • Dome Off-screen (Outgoing Pinned)";
   if (progress > 0.02 && progress < 0.68) {
-    phaseLabel = `${Math.round(progress * 100)}% • Solid Black Arc Rising (${Math.round(arcNorm * 100)}% coverage)`;
+    phaseLabel = `${Math.round(progress * 100)}% • Dome Sweeping Up (${Math.round(arcNorm * 100)}% coverage)`;
   } else if (progress >= 0.68 && progress < 0.98) {
-    phaseLabel = `${Math.round(progress * 100)}% • Solid Blackout • Revealing Content`;
+    phaseLabel = `${Math.round(progress * 100)}% • Solid Blackout • Transitioning Content`;
   } else if (progress >= 0.98) {
     phaseLabel = "100% • Transition Complete (Incoming Active)";
   }
@@ -176,7 +212,6 @@ export default function CircularArcTransition({
         <div
           className={`absolute inset-0 w-full h-full ${outgoingBg} z-10 overflow-hidden select-auto`}
           style={{
-            // Keep completely static; it gets masked/covered by the solid black shape above it
             pointerEvents: progress > 0.65 ? "none" : "auto",
           }}
         >
@@ -184,36 +219,14 @@ export default function CircularArcTransition({
         </div>
 
         {/* ================================================================= */}
-        {/* LAYER 2: THE SOLID BLACK FILLED SHAPE (#000000)                   */}
-        {/* No strokes, no borders, no glow, no gradients, 100% opaque black  */}
+        {/* LAYER 2: THE SOLID BLACK OVERSIZED DOME AND HALO                 */}
         {/* ================================================================= */}
-        {technique === "scaled-circle" ? (
-          <div className="absolute inset-0 w-full h-full z-20 overflow-hidden pointer-events-none">
-            <div
-              style={{
-                width: `${circleDiameter}px`,
-                height: `${circleDiameter}px`,
-                backgroundColor: "#000000",
-                borderRadius: "50%",
-                position: "absolute",
-                left: "50%",
-                top: `${circleTopPx}px`,
-                transform: "translateX(-50%)",
-                willChange: "top",
-              }}
-            />
-          </div>
-        ) : (
-          <div
-            className="absolute inset-0 w-full h-full z-20 pointer-events-none"
-            style={{
-              backgroundColor: "#000000",
-              clipPath: `circle(${clipRadiusPercent}% at 50% 100%)`,
-              WebkitClipPath: `circle(${clipRadiusPercent}% at 50% 100%)`,
-              willChange: "clip-path",
-            }}
-          />
-        )}
+        <div className="absolute inset-0 w-full h-full z-20 overflow-hidden pointer-events-none">
+          {/* Subtle soft dark-gray halo peeking above the curve */}
+          <div style={glowStyle} />
+          {/* Physical black mask dome */}
+          <div style={domeStyle} />
+        </div>
 
         {/* ================================================================= */}
         {/* LAYER 3: INCOMING SECTION (Appears on top of solid black)         */}

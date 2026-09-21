@@ -4,7 +4,6 @@ import HeroSection from "./components/HeroSection";
 import TestimonialsSection from "./components/TestimonialsSection";
 import PhilosophySection from "./components/PhilosophySection";
 import TimelineSection from "./components/TimelineSection";
-import CircularArcTransition from "./components/transitions/CircularArcTransition";
 import StackSection from "./components/StackSection";
 import TeamSection from "./components/TeamSection";
 import PartnersSection from "./components/PartnersSection";
@@ -34,7 +33,7 @@ export default function App() {
         {/* 4.2 Client Testimonials Carousel */}
         <TestimonialsSection />
 
-        {/* 4.3 Leadership Philosophy Quote with Word Scroll Reveal */}
+        {/* 4.3 Leadership Philosophy Quote with Word Scroll Reveal & Integrated Curved Dome Transition */}
         <PhilosophySection />
 
         {/* 4.4 How Evia Wealth Does Things Differently Timeline */}
