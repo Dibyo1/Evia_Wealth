@@ -36,13 +36,15 @@ export function useAutoAdvance(zones: Zone[]) {
     
     const checkLenis = () => {
       const lenis = (window as any).lenis;
-      if (lenis) {
+      if (lenis && typeof lenis.on === "function") {
         const handler = (e: any) => {
           handleScrollEvent(e.scroll);
         };
         lenis.on("scroll", handler);
         unsubscribeLenis = () => {
-          lenis.off("scroll", handler);
+          if (typeof lenis.off === "function") {
+            lenis.off("scroll", handler);
+          }
         };
         return true;
       }

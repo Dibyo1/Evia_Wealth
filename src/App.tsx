@@ -18,7 +18,7 @@ import { ParticlesProvider } from "@tsparticles/react";
 import { loadSlim } from "@tsparticles/slim";
 import type { Engine } from "@tsparticles/engine";
 
-import Lenis from "lenis";
+import SmoothScroll from "./components/SmoothScroll";
 
 const initParticles = async (engine: Engine) => {
   await loadSlim(engine);
@@ -29,34 +29,7 @@ export default function App() {
   const [portfolioModalOpen, setPortfolioModalOpen] = useState(false);
   const [loginModalOpen, setLoginModalOpen] = useState(false);
 
-  // 1. Initialize Lenis globally in a StrictMode-safe lifecycle
-  useEffect(() => {
-    const lenis = new Lenis({
-      duration: 1.2,
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // premium smooth easing
-      orientation: "vertical",
-      gestureOrientation: "vertical",
-      smoothWheel: true,
-    });
 
-    (window as any).lenis = lenis;
-
-    let rafId: number;
-    const raf = (time: number) => {
-      lenis.raf(time);
-      rafId = requestAnimationFrame(raf);
-    };
-    rafId = requestAnimationFrame(raf);
-
-    document.documentElement.classList.add("lenis", "lenis-smooth");
-
-    return () => {
-      lenis.destroy();
-      (window as any).lenis = undefined;
-      cancelAnimationFrame(rafId);
-      document.documentElement.classList.remove("lenis", "lenis-smooth");
-    };
-  }, []);
 
   // 2. Configure the Auto-Advance Transition Zone
   const zones = useMemo<Zone[]>(() => [
@@ -94,6 +67,7 @@ export default function App() {
 
   return (
     <ParticlesProvider init={initParticles}>
+      <SmoothScroll />
       <div className="min-h-screen bg-black text-white selection:bg-[#34d399]/30 selection:text-emerald-300 font-sans relative">
         <WelcomeSplash />
 

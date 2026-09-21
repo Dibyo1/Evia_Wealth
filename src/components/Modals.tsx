@@ -27,7 +27,7 @@ export function PortfolioModal({ isOpen, onClose }: PortfolioModalProps) {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in duration-200">
+    <div data-lenis-prevent className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in duration-200">
       <div className="w-full max-w-md bg-[#111114] border border-white/15 rounded-3xl p-6 sm:p-8 shadow-2xl relative text-left">
         <button
           onClick={onClose}
@@ -161,7 +161,7 @@ export function LoginModal({ isOpen, onClose }: LoginModalProps) {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in duration-200">
+    <div data-lenis-prevent className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in duration-200">
       <div className="w-full max-w-sm bg-[#111114] border border-white/15 rounded-3xl p-6 sm:p-8 shadow-2xl relative text-left">
         <button
           onClick={onClose}

@@ -183,6 +183,7 @@ export default function ExpandedOfficeMap({ onClose, className = "" }: ExpandedO
 
   return (
     <div
+      data-lenis-prevent
       className={`relative w-full h-[520px] md:h-[560px] bg-black border border-white/10 rounded-2xl md:rounded-3xl overflow-hidden flex flex-col ${className}`}
     >
       {/* Map Header Panel */}
