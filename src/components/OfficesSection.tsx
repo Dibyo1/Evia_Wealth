@@ -9,11 +9,9 @@ interface OfficesSectionProps {
 }
 
 export default function OfficesSection({ onGetInTouch }: OfficesSectionProps) {
-  const [activeOfficeId, setActiveOfficeId] = useState<string>("kolkata");
   const [mapExpanded, setMapExpanded] = useState<boolean>(false);
 
-  const activeOffice =
-    OFFICES_DATA.find((o) => o.id === activeOfficeId) || OFFICES_DATA[0];
+  const activeOffice = OFFICES_DATA[0];
 
   return (
     <section id="offices" className="py-24 md:py-36 bg-black relative border-t border-white/6 overflow-hidden">
@@ -24,32 +22,12 @@ export default function OfficesSection({ onGetInTouch }: OfficesSectionProps) {
             <h2 className="text-[38px] sm:text-[48px] md:text-[54px] font-bold tracking-[-0.03em] leading-[1.12] mb-5 gold-gradient-heading">
               Come visit us at
               <br />
-              any of our offices
+              our registered office
             </h2>
 
             <p className="text-[15px] sm:text-[16px] text-neutral-400 leading-[1.65] max-w-[500px] mb-8">
-              Meet our investment directors and portfolio managers in private advisory suites across India's primary economic hubs.
+              Meet our investment directors and portfolio managers in our private advisory suite in Kolkata.
             </p>
-
-            {/* City Chips */}
-            <div className="flex flex-wrap items-center gap-2 mb-8">
-              {OFFICES_DATA.map((office) => {
-                const isActive = activeOfficeId === office.id;
-                return (
-                  <button
-                    key={office.id}
-                    onClick={() => setActiveOfficeId(office.id)}
-                    className={`px-4 py-1.5 rounded-full text-xs font-semibold tracking-wide transition-all cursor-pointer ${
-                      isActive
-                        ? "bg-white text-black shadow-md"
-                        : "bg-transparent text-neutral-400 hover:text-white border border-white/15 hover:border-white/30"
-                    }`}
-                  >
-                    {office.name}
-                  </button>
-                );
-              })}
-            </div>
 
             {/* Address Card */}
             <div className="w-full rounded-2xl bg-[#0f0f12] border border-white/8 p-6 md:p-7 shadow-xl mb-8 relative group">

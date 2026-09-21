@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Navbar from "./components/Navbar";
 import HeroSection from "./components/HeroSection";
 import TestimonialsSection from "./components/TestimonialsSection";
@@ -16,6 +16,16 @@ import { PortfolioModal, LoginModal } from "./components/Modals";
 export default function App() {
   const [portfolioModalOpen, setPortfolioModalOpen] = useState(false);
   const [loginModalOpen, setLoginModalOpen] = useState(false);
+  const [isGold, setIsGold] = useState(true);
+
+  // Sync state with HTML class to allow seamless theme toggling
+  useEffect(() => {
+    if (isGold) {
+      document.documentElement.classList.add("theme-gold");
+    } else {
+      document.documentElement.classList.remove("theme-gold");
+    }
+  }, [isGold]);
 
   return (
     <div className="min-h-screen bg-black text-white selection:bg-[#34d399]/30 selection:text-emerald-300 font-sans relative">
@@ -63,6 +73,17 @@ export default function App() {
 
       {/* Floating App Download Toast */}
       <AppDownloadToast />
+
+      {/* COMPARE TOGGLE (temporary) */}
+      {/* REMOVE AFTER REVIEW */}
+      <button
+        onClick={() => setIsGold(!isGold)}
+        className="fixed bottom-5 left-5 z-[9999] h-10 px-4 rounded-full bg-neutral-900 border border-white/12 hover:border-white/25 text-neutral-300 hover:text-white text-[11px] font-bold tracking-wider uppercase shadow-2xl flex items-center gap-2.5 cursor-pointer transition-all active:scale-[0.97]"
+        title="Toggle between the new Gold palette and the Original look"
+      >
+        <span className={`w-2 h-2 rounded-full transition-all duration-300 ${isGold ? "bg-[#d4af37] shadow-[0_0_8px_#d4af37]" : "bg-neutral-500"}`} />
+        <span>Gold / Original</span>
+      </button>
 
       {/* Interactive Modals */}
       <PortfolioModal

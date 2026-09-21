@@ -1,7 +1,21 @@
 @import "tailwindcss";
 
+@theme {
+  --color-gold-100: var(--gold-100);
+  --color-gold-300: var(--gold-300);
+  --color-gold-500: var(--gold-500);
+  --color-gold-700: var(--gold-700);
+}
+
 @layer base {
   :root {
+    /* Fallback/Original States */
+    --gold-100: #ebe0a6;   /* original highlights/hover */
+    --gold-300: #cdb864;   /* original subheadings/accents */
+    --gold-500: #ffffff;   /* original headings (white) */
+    --gold-700: rgba(255, 255, 255, 0.08); /* original borders */
+    --gold-gradient: none; /* original heading is solid white */
+
     --gold-light: #ebe0a6; /* champagne */
     --gold-mid:   #cdb864;
     --gold-deep:  #a89537;
@@ -144,3 +158,216 @@
   content-visibility: auto;
   contain-intrinsic-size: 1px 700px;
 }
+
+/* =================================================================== */
+/* GOLD PALETTE IMPLEMENTATION (Under .theme-gold)                     */
+/* =================================================================== */
+
+html.theme-gold {
+  /* CSS Variables mapping the requested gold palette */
+  --gold-100: #f6e7b4;   /* highlights, hover */
+  --gold-300: #e6c66a;   /* primary body accents */
+  --gold-500: #d4af37;   /* main headings, links, icons (classic gold) */
+  --gold-700: #a8862a;   /* borders, dividers, muted text */
+  --gold-gradient: linear-gradient(135deg, #f6e7b4 0%, #d4af37 45%, #a8862a 100%);
+  
+  --accent: 45 64% 52%;
+  --ring: 45 64% 52%;
+}
+
+/* 1. Main headings (h1, h2, custom gold headings) */
+html.theme-gold h1:not(.no-gold-gradient),
+html.theme-gold h2:not(.no-gold-gradient),
+html.theme-gold .gold-gradient-heading {
+  background: var(--gold-gradient) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  color: var(--gold-500) !important;
+  font-weight: 700 !important;
+}
+
+/* Explicitly protect philosophy quote text animation spans so they animate dynamically */
+html.theme-gold .philosophy-quote-container,
+html.theme-gold .philosophy-quote-container span {
+  background: none !important;
+  -webkit-background-clip: initial !important;
+  -webkit-text-fill-color: initial !important;
+  color: inherit !important;
+}
+
+/* 2. Subheadings and eyebrow labels (uppercase, letter-spacing kept) */
+html.theme-gold .gold-eyebrow-text,
+html.theme-gold [class*="text-[10px]"][class*="uppercase"][class*="tracking-"],
+html.theme-gold [class*="text-[11px]"][class*="uppercase"][class*="tracking-"],
+html.theme-gold [class*="text-[12px]"][class*="uppercase"][class*="tracking-"],
+html.theme-gold [class*="tracking-widest"][class*="uppercase"] {
+  color: var(--gold-300) !important;
+}
+
+html.theme-gold .gold-eyebrow-pill .gold-dot {
+  background-color: var(--gold-300) !important;
+  box-shadow: 0 0 8px var(--gold-300) !important;
+}
+
+/* 3. Body paragraphs: soft gold-tinted off-white (#d9cfae) */
+html.theme-gold p,
+html.theme-gold .text-neutral-300:not(.text-black),
+html.theme-gold .text-neutral-400:not(.text-black),
+html.theme-gold .text-neutral-500:not(.text-black) {
+  color: #d9cfae !important;
+}
+
+/* 4. Stats and numbers (e.g. "20+ Years", "Top 10", "₹1Cr → ₹1.73Cr") - solid var(--gold-500) */
+html.theme-gold .grid.grid-cols-1.md\:grid-cols-3 h2,
+html.theme-gold .grid-cols-3 h2,
+html.theme-gold [class*="text-[28px]"][class*="font-bold"],
+html.theme-gold [class*="text-[32px]"][class*="font-bold"],
+html.theme-gold .text-\[\#34d399\],
+html.theme-gold .text-emerald-400 {
+  background: none !important;
+  -webkit-background-clip: initial !important;
+  -webkit-text-fill-color: initial !important;
+  color: var(--gold-500) !important;
+  font-weight: 700 !important;
+}
+
+/* 5. Nav links, footer links, text buttons: var(--gold-300), hover var(--gold-100) with 150ms transition */
+html.theme-gold nav a,
+html.theme-gold nav button,
+html.theme-gold footer a,
+html.theme-gold footer button,
+html.theme-gold a.transition-colors,
+html.theme-gold button.transition-colors {
+  color: var(--gold-300) !important;
+  transition: color 150ms ease, border-color 150ms ease, background-color 150ms ease !important;
+}
+html.theme-gold nav a:hover,
+html.theme-gold nav button:hover,
+html.theme-gold footer a:hover,
+html.theme-gold footer button:hover,
+html.theme-gold a.transition-colors:hover,
+html.theme-gold button.transition-colors:hover {
+  color: var(--gold-100) !important;
+}
+
+/* Respect prefers-reduced-motion for transitions */
+@media (prefers-reduced-motion: reduce) {
+  html.theme-gold nav a,
+  html.theme-gold nav button,
+  html.theme-gold footer a,
+  html.theme-gold footer button,
+  html.theme-gold a.transition-colors,
+  html.theme-gold button.transition-colors {
+    transition: none !important;
+  }
+}
+
+/* 6. Icons (lucide-react) and small labels/badges: var(--gold-500); badge borders var(--gold-700) */
+html.theme-gold svg.lucide,
+html.theme-gold svg:not(.wireframe-globe):not(.maplibre-gl) {
+  color: var(--gold-500) !important;
+}
+
+html.theme-gold [class*="bg-emerald-500/10"],
+html.theme-gold [class*="bg-emerald-600/5"] {
+  background-color: rgba(212, 175, 55, 0.08) !important;
+}
+
+html.theme-gold [class*="border-emerald-500/20"] {
+  border-color: var(--gold-700) !important;
+}
+
+/* 7. Cards: keep dark background, change card borders to 1px solid rgba(212,175,55,0.25), and on hover rgba(212,175,55,0.6) with a faint gold glow */
+html.theme-gold .border-white\/6,
+html.theme-gold .border-white\/8,
+html.theme-gold .border-white\/10,
+html.theme-gold .border-white\/12,
+html.theme-gold .border-white\/15,
+html.theme-gold .border-neutral-300\/30,
+html.theme-gold [class*="border-white/"] {
+  border: 1px solid rgba(212, 175, 55, 0.25) !important;
+  transition: border-color 200ms ease, box-shadow 200ms ease !important;
+}
+
+html.theme-gold .border-white\/6:hover,
+html.theme-gold .border-white\/8:hover,
+html.theme-gold .border-white\/10:hover,
+html.theme-gold .border-white\/12:hover,
+html.theme-gold .border-white\/15:hover,
+html.theme-gold .border-neutral-300\/30:hover,
+html.theme-gold [class*="border-white/"]:hover {
+  border-color: rgba(212, 175, 55, 0.6) !important;
+  box-shadow: 0 0 24px rgba(212, 175, 55, 0.12) !important;
+}
+
+/* 8. Primary CTA pills: gold-gradient background, black text, hover brightness 1.08. */
+html.theme-gold .gold-pill-btn,
+html.theme-gold button[class*="bg-gradient-to-r"] {
+  background: var(--gold-gradient) !important;
+  color: #000000 !important;
+  box-shadow: 0 0 20px rgba(212, 175, 55, 0.3) !important;
+  transition: all 150ms ease !important;
+}
+
+html.theme-gold .gold-pill-btn:hover,
+html.theme-gold button[class*="bg-gradient-to-r"]:hover {
+  filter: brightness(1.08) !important;
+  box-shadow: 0 0 28px rgba(212, 175, 55, 0.5) !important;
+}
+
+html.theme-gold .gold-pill-btn *,
+html.theme-gold button[class*="bg-gradient-to-r"] * {
+  color: #000000 !important;
+}
+
+/* Secondary CTA pills: transparent with a gold border and gold text */
+html.theme-gold .secondary-cta-pill,
+html.theme-gold button[class*="border-white/10"]:not([class*="bg-gradient"]),
+html.theme-gold button[class*="border-neutral-300"]:not([class*="bg-gradient"]) {
+  background-color: transparent !important;
+  border: 1.5px solid var(--gold-500) !important;
+  color: var(--gold-500) !important;
+  transition: all 150ms ease !important;
+}
+
+html.theme-gold .secondary-cta-pill:hover,
+html.theme-gold button[class*="border-white/10"]:not([class*="bg-gradient"]):hover,
+html.theme-gold button[class*="border-neutral-300"]:not([class*="bg-gradient"]):hover {
+  background-color: rgba(212, 175, 55, 0.08) !important;
+  color: var(--gold-100) !important;
+}
+
+/* 9. Replace current sky/cyan accents in offices section's text with gold */
+html.theme-gold .text-sky-400,
+html.theme-gold .text-\[\#38bdf8\],
+html.theme-gold .text-cyan-400,
+html.theme-gold .text-emerald-400 {
+  color: var(--gold-500) !important;
+}
+
+html.theme-gold .bg-sky-400\/10,
+html.theme-gold .bg-\[\#38bdf8\]\/10,
+html.theme-gold .bg-emerald-500\/10 {
+  background-color: rgba(212, 175, 55, 0.08) !important;
+}
+
+html.theme-gold .border-sky-400\/20,
+html.theme-gold .border-\[\#38bdf8\]\/20,
+html.theme-gold .border-emerald-500\/20 {
+  border-color: var(--gold-700) !important;
+}
+
+html.theme-gold .hover\:text-emerald-400:hover,
+html.theme-gold .hover\:text-sky-400:hover {
+  color: var(--gold-100) !important;
+}
+
+/* Globe and Map Internals Stay Unaffected */
+html.theme-gold .wireframe-globe,
+html.theme-gold .wireframe-globe *,
+html.theme-gold .maplibre-gl,
+html.theme-gold .maplibre-gl *,
+html.theme-gold canvas {
+  color: initial !important;
+}
+

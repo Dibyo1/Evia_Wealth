@@ -236,7 +236,7 @@ export default function PhilosophySection() {
           </div>
 
           {/* Centered Quote */}
-          <div className="text-[26px] sm:text-[34px] md:text-[40px] lg:text-[44px] font-bold leading-[1.25] tracking-[-0.02em] text-center">
+          <div className="text-[26px] sm:text-[34px] md:text-[40px] lg:text-[44px] font-bold leading-[1.25] tracking-[-0.02em] text-center philosophy-quote-container">
             <span className="inline-block font-serif mr-1.5" style={getWordStyle(0)}>
               “
             </span>
