@@ -13,7 +13,7 @@ export default function TeamSection() {
   };
 
   return (
-    <section id="team" className="pt-24 pb-32 md:pb-40 bg-black text-white relative">
+    <section id="team" className="pt-[12vh] pb-32 md:pb-40 bg-black text-white relative m-0">
       <div className="max-w-[1400px] mx-auto px-4">
         
         {/* =================================================================== */}
