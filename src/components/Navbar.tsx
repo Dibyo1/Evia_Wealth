@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { ChevronDown, ArrowRight, Menu, X } from "lucide-react";
+import { ArrowRight, Menu, X } from "lucide-react";
 import EviaLogo from "./EviaLogo";
+import SolutionsMenu from "./SolutionsMenu";
 
 interface NavbarProps {
   onReviewPortfolio: () => void;
@@ -8,12 +9,10 @@ interface NavbarProps {
 }
 
 export default function Navbar({ onReviewPortfolio, onLoginClick }: NavbarProps) {
-  const [productsOpen, setProductsOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const scrollToSection = (id: string) => {
     setMobileMenuOpen(false);
-    setProductsOpen(false);
     const element = document.getElementById(id);
     if (element) {
       const navOffset = 68; // perfectly aligns with our 68px desktop bar height
@@ -48,7 +47,6 @@ export default function Navbar({ onReviewPortfolio, onLoginClick }: NavbarProps)
           border-bottom: 1px solid rgba(255, 255, 255, 0.08);
           background: rgba(10, 10, 10, 0.92);
           transform: translateZ(0);
-          contain: paint;
           transition: background 250ms ease, border-color 250ms ease;
         }
 
@@ -105,61 +103,8 @@ export default function Navbar({ onReviewPortfolio, onLoginClick }: NavbarProps)
               className="flex items-center gap-[28px] ml-[28px] text-[15px] font-medium text-[#e6d78a]"
               style={{ fontFamily: "'Poppins', sans-serif", letterSpacing: "normal" }}
             >
-              {/* Products Hover Dropdown */}
-              <div
-                className="relative py-5"
-                onMouseEnter={() => setProductsOpen(true)}
-                onMouseLeave={() => setProductsOpen(false)}
-              >
-                <button
-                  onClick={() => setProductsOpen(!productsOpen)}
-                  className="flex items-center gap-1.5 text-[#e6d78a] hover:text-[#f6e7b4] transition-colors duration-150 cursor-pointer focus:outline-none"
-                >
-                  <span>Products</span>
-                  <ChevronDown
-                    className={`w-4 h-4 transition-transform duration-150 ${
-                      productsOpen ? "rotate-180 text-[#cdb864]" : "text-[#cdb864]/70"
-                    }`}
-                  />
-                </button>
-
-                {productsOpen && (
-                  <div
-                    className="absolute top-[85%] left-0 mt-1 w-64 p-2 rounded-2xl bg-[#0d0d0f]/95 border border-[#cdb864]/25 shadow-2xl backdrop-blur-md animate-in fade-in slide-in-from-top-2 duration-150 z-[1100]"
-                  >
-                    <div className="px-3 py-2 text-[10px] uppercase font-bold tracking-wider text-[#d9c56e]">
-                      Institutional Offerings
-                    </div>
-                    <button
-                      onClick={() => scrollToSection("solutions")}
-                      className="w-full text-left px-3 py-2.5 rounded-xl hover:bg-white/5 transition-colors group cursor-pointer"
-                    >
-                      <div className="text-[13px] font-medium text-white group-hover:text-[#ebe0a6]">
-                        Portfolio Management (PMS)
-                      </div>
-                      <div className="text-[11px] text-neutral-400">Targeted alpha generation</div>
-                    </button>
-                    <button
-                      onClick={() => scrollToSection("solutions")}
-                      className="w-full text-left px-3 py-2.5 rounded-xl hover:bg-white/5 transition-colors group cursor-pointer"
-                    >
-                      <div className="text-[13px] font-medium text-white group-hover:text-[#ebe0a6]">
-                        Integrated Advisory
-                      </div>
-                      <div className="text-[11px] text-neutral-400">Multi-asset UHNI family office</div>
-                    </button>
-                    <button
-                      onClick={() => scrollToSection("solutions")}
-                      className="w-full text-left px-3 py-2.5 rounded-xl hover:bg-white/5 transition-colors group cursor-pointer"
-                    >
-                      <div className="text-[13px] font-medium text-white group-hover:text-[#ebe0a6]">
-                        Fixed Income & Debt
-                      </div>
-                      <div className="text-[11px] text-neutral-400">Yield management across cycles</div>
-                    </button>
-                  </div>
-                )}
-              </div>
+              {/* Solutions Dropdown Menu */}
+              <SolutionsMenu />
 
               <button
                 onClick={() => scrollToSection("team")}
