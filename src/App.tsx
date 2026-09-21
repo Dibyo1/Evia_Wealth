@@ -12,8 +12,17 @@ import OfficesSection from "./components/OfficesSection";
 import FooterSection from "./components/FooterSection";
 import AppDownloadToast from "./components/AppDownloadToast";
 import { PortfolioModal, LoginModal } from "./components/Modals";
+import WelcomeSplash from "./components/WelcomeSplash";
+
+import { ParticlesProvider } from "@tsparticles/react";
+import { loadSlim } from "@tsparticles/slim";
+import type { Engine } from "@tsparticles/engine";
 
 import Lenis from "lenis";
+
+const initParticles = async (engine: Engine) => {
+  await loadSlim(engine);
+};
 import { useAutoAdvance, Zone } from "./hooks/useAutoAdvance";
 
 export default function App() {
@@ -84,61 +93,65 @@ export default function App() {
   useAutoAdvance(zones);
 
   return (
-    <div className="min-h-screen bg-black text-white selection:bg-[#34d399]/30 selection:text-emerald-300 font-sans relative">
-      {/* Floating Pill Navbar */}
-      <Navbar
-        onReviewPortfolio={() => setPortfolioModalOpen(true)}
-        onLoginClick={() => setLoginModalOpen(true)}
-      />
+    <ParticlesProvider init={initParticles}>
+      <div className="min-h-screen bg-black text-white selection:bg-[#34d399]/30 selection:text-emerald-300 font-sans relative">
+        <WelcomeSplash />
 
-      {/* Main Content Sections */}
-      <main>
-        {/* 4.1 Hero Section */}
-        <HeroSection onReviewPortfolio={() => setPortfolioModalOpen(true)} />
-
-        {/* 4.2 Client Testimonials Carousel */}
-        <TestimonialsSection />
-
-        {/* 4.3 Leadership Philosophy Quote with Word Scroll Reveal & Integrated Curved Dome Transition */}
-        <PhilosophySection />
-
-        {/* 4.4 How Evia Wealth Does Things Differently Timeline */}
-        <TimelineSection />
-
-        {/* 4.5 Evia Wealth Stack */}
-        <StackSection
-          onAnalyseClick={() => setPortfolioModalOpen(true)}
-          onTalkClick={() => setPortfolioModalOpen(true)}
+        {/* Floating Pill Navbar */}
+        <Navbar
+          onReviewPortfolio={() => setPortfolioModalOpen(true)}
+          onLoginClick={() => setLoginModalOpen(true)}
         />
 
-        {/* 4.6 Team of Experts Accordion */}
-        <TeamSection />
+        {/* Main Content Sections */}
+        <main>
+          {/* 4.1 Hero Section */}
+          <HeroSection onReviewPortfolio={() => setPortfolioModalOpen(true)} />
 
-        {/* 4.7 Dedicated Client Partners Carousel */}
-        <PartnersSection />
+          {/* 4.2 Client Testimonials Carousel */}
+          <TestimonialsSection />
 
-        {/* 4.8 Insights for our Clients */}
-        <InsightsSection />
+          {/* 4.3 Leadership Philosophy Quote with Word Scroll Reveal & Integrated Curved Dome Transition */}
+          <PhilosophySection />
 
-        {/* 4.9 Offices (3D Dotted Wireframe Globe + Expanded MapLibre Map) */}
-        <OfficesSection onGetInTouch={() => setPortfolioModalOpen(true)} />
-      </main>
+          {/* 4.4 How Evia Wealth Does Things Differently Timeline */}
+          <TimelineSection />
 
-      {/* 4.10 - 4.13 CTA, Newsletter, Badges & Footer */}
-      <FooterSection onReviewPortfolio={() => setPortfolioModalOpen(true)} />
+          {/* 4.5 Evia Wealth Stack */}
+          <StackSection
+            onAnalyseClick={() => setPortfolioModalOpen(true)}
+            onTalkClick={() => setPortfolioModalOpen(true)}
+          />
 
-      {/* Floating App Download Toast */}
-      <AppDownloadToast />
+          {/* 4.6 Team of Experts Accordion */}
+          <TeamSection />
 
-      {/* Interactive Modals */}
-      <PortfolioModal
-        isOpen={portfolioModalOpen}
-        onClose={() => setPortfolioModalOpen(false)}
-      />
-      <LoginModal
-        isOpen={loginModalOpen}
-        onClose={() => setLoginModalOpen(false)}
-      />
-    </div>
+          {/* 4.7 Dedicated Client Partners Carousel */}
+          <PartnersSection />
+
+          {/* 4.8 Insights for our Clients */}
+          <InsightsSection />
+
+          {/* 4.9 Offices (3D Dotted Wireframe Globe + Expanded MapLibre Map) */}
+          <OfficesSection onGetInTouch={() => setPortfolioModalOpen(true)} />
+        </main>
+
+        {/* 4.10 - 4.13 CTA, Newsletter, Badges & Footer */}
+        <FooterSection onReviewPortfolio={() => setPortfolioModalOpen(true)} />
+
+        {/* Floating App Download Toast */}
+        <AppDownloadToast />
+
+        {/* Interactive Modals */}
+        <PortfolioModal
+          isOpen={portfolioModalOpen}
+          onClose={() => setPortfolioModalOpen(false)}
+        />
+        <LoginModal
+          isOpen={loginModalOpen}
+          onClose={() => setLoginModalOpen(false)}
+        />
+      </div>
+    </ParticlesProvider>
   );
 }

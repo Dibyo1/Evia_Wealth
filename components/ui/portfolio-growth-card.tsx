@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { mountPortfolioChart, type PortfolioChartOptions } from "./portfolio-chart";
 
 /**
@@ -15,13 +15,31 @@ export default function PortfolioGrowthCard({
   ...options
 }: { className?: string } & PortfolioChartOptions) {
   const ref = useRef<HTMLDivElement>(null);
+  const [shouldAnimate, setShouldAnimate] = useState(false);
 
   useEffect(() => {
-    if (!ref.current) return;
+    const hasSplash = document.documentElement.classList.contains("splash-run");
+    if (!hasSplash) {
+      setShouldAnimate(true);
+      return;
+    }
+
+    const handleDone = () => {
+      setShouldAnimate(true);
+    };
+
+    window.addEventListener("evia:splash-done", handleDone);
+    return () => {
+      window.removeEventListener("evia:splash-done", handleDone);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!ref.current || !shouldAnimate) return;
     const chart = mountPortfolioChart(ref.current, options);
     return () => chart.destroy();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [options.autoplay, options.replayOnView, options.speed, options.loop, options.holdDuration]);
+  }, [shouldAnimate, options.autoplay, options.replayOnView, options.speed, options.loop, options.holdDuration]);
 
   return <div ref={ref} className={className} />;
 }
