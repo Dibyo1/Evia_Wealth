@@ -124,17 +124,17 @@ export default function ExpandedOfficeMap({ onClose, className = "" }: ExpandedO
             <div style="background: rgba(14, 14, 16, 0.95); backdrop-filter: blur(12px); border: 1px solid rgba(52, 211, 153, 0.3); border-radius: 12px; padding: 12px 14px; color: #fff; font-family: 'Inter', sans-serif;">
               <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 6px;">
                 <span style="display: inline-block; width: 6px; height: 6px; border-radius: 9999px; background: #34d399;"></span>
-                <span style="font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #34d399;">Kolkata Advisory Suite</span>
+                <span style="font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #34d399;">Kolkata Office</span>
               </div>
               <div style="font-size: 13px; font-weight: 600; line-height: 1.4; color: #ffffff; margin-bottom: 4px;">
-                Evia Wealth Management
+                Evia Wealth Private Limited
               </div>
               <div style="font-size: 11px; line-height: 1.5; color: rgba(255, 255, 255, 0.7);">
-                Unit 521, 5th Floor, Regus Offices, Salt Lake Sector V, Bidhannagar, Kolkata, West Bengal 700091
+                Unit 521, 5th Floor, Regus Offices, Salt Lake Sector V, Bidhannagar, P.S Electronics Complex - 700091
               </div>
               <div style="margin-top: 8px; padding-top: 8px; border-top: 1px solid rgba(255, 255, 255, 0.1); display: flex; justify-content: space-between; align-items: center; font-size: 10px; color: rgba(255, 255, 255, 0.5);">
-                <span>Phone: +91 22 6912 0000</span>
-                <span style="color: #34d399;">Active Suite &bull;</span>
+                <span>Phone: +91 9330183973</span>
+                <span style="color: #34d399;">Active Office &bull;</span>
               </div>
             </div>
           `);
@@ -183,7 +183,7 @@ export default function ExpandedOfficeMap({ onClose, className = "" }: ExpandedO
 
   return (
     <div
-      className={`relative w-full h-[520px] md:h-[560px] bg-[#0c0c0e] border border-white/10 rounded-2xl md:rounded-3xl overflow-hidden flex flex-col ${className}`}
+      className={`relative w-full h-[520px] md:h-[560px] bg-black border border-white/10 rounded-2xl md:rounded-3xl overflow-hidden flex flex-col ${className}`}
     >
       {/* Map Header Panel */}
       <div className="relative z-10 flex items-center justify-between px-5 py-3.5 bg-black/80 backdrop-blur-md border-b border-white/10">
@@ -242,7 +242,7 @@ export default function ExpandedOfficeMap({ onClose, className = "" }: ExpandedO
             <span>Salt Lake Sector V, Kolkata</span>
           </div>
           <p className="text-[10px] text-neutral-400 leading-relaxed">
-            Unit 521, 5th Floor, Regus Offices, Salt Lake Sector V
+            Unit 521, 5th Floor, Regus Offices, Salt Lake Sector V, Bidhannagar, P.S Electronics Complex - 700091
           </p>
         </div>
       </div>

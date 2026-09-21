@@ -150,7 +150,7 @@ export default function RotatingEarth({
       // Draw ocean (globe sphere)
       context.beginPath();
       context.arc(containerWidth / 2, containerHeight / 2, currentScale, 0, 2 * Math.PI);
-      context.fillStyle = "#09090b";
+      context.fillStyle = "#000000";
       context.fill();
       context.strokeStyle = "rgba(255, 255, 255, 0.15)";
       context.lineWidth = 1.5 * scaleFactor;
@@ -516,14 +516,6 @@ export default function RotatingEarth({
       }
     };
 
-    const handleWheel = (event: WheelEvent) => {
-      event.preventDefault();
-      const scaleDelta = event.deltaY > 0 ? 0.92 : 1.08;
-      const newRadius = Math.max(radius * 0.7, Math.min(radius * 2.5, projection.scale() * scaleDelta));
-      projection.scale(newRadius);
-      render();
-    };
-
     canvas.addEventListener("mousedown", onMouseDown);
     window.addEventListener("mousemove", onMouseMove);
     window.addEventListener("mouseup", onMouseUp);
@@ -531,8 +523,6 @@ export default function RotatingEarth({
     canvas.addEventListener("touchstart", onTouchStart, { passive: true });
     window.addEventListener("touchmove", onTouchMove, { passive: true });
     window.addEventListener("touchend", onTouchEnd);
-
-    canvas.addEventListener("wheel", handleWheel, { passive: false });
 
     // Load GeoJSON data
     loadWorldData();
@@ -547,8 +537,6 @@ export default function RotatingEarth({
       canvas.removeEventListener("touchstart", onTouchStart);
       window.removeEventListener("touchmove", onTouchMove);
       window.removeEventListener("touchend", onTouchEnd);
-
-      canvas.removeEventListener("wheel", handleWheel);
     };
   }, [width, height, onMarkerClick, paused]);
 
@@ -578,9 +566,8 @@ export default function RotatingEarth({
           </div>
         </div>
       )}
-      <div className="absolute bottom-4 left-4 text-[11px] tracking-wide text-neutral-400 px-3 py-1.5 rounded-full bg-neutral-900/90 border border-white/10 backdrop-blur-sm pointer-events-none flex items-center gap-2">
-        <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-        Click Kolkata marker to expand map • Drag to rotate
+      <div className="absolute bottom-4 left-4 text-[11px] tracking-wide text-neutral-400 px-4 py-1.5 rounded-lg bg-[#0e0e11]/90 border border-white/8 backdrop-blur-sm pointer-events-none">
+        Drag to rotate • Click marker for map
       </div>
     </div>
   );

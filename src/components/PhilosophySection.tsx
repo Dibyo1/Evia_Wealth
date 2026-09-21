@@ -120,18 +120,18 @@ export default function PhilosophySection() {
   }, [measureGeometry]);
 
   // --- SCROLL TIMELINE SEGMENTS ---
-  // Segment A: Word reveal from scroll progress 0.00 to 0.45
-  const wordRevealProgress = Math.min(Math.max(scrollProgress / 0.45, 0), 1);
+  // Segment A: Word reveal from scroll progress 0.10 to 0.45
+  const wordRevealProgress = Math.min(Math.max((scrollProgress - 0.10) / 0.35, 0), 1);
 
-  // Segment B: Black dome mask sweeping up from progress 0.45 to 0.85
-  const arcProgress = Math.min(Math.max((scrollProgress - 0.45) / 0.40, 0), 1);
+  // Segment B: Black dome mask sweeping up from progress 0.48 to 0.82
+  const arcProgress = Math.min(Math.max((scrollProgress - 0.48) / 0.34, 0), 1);
 
-  // Segment C: Incoming content fades & rises in from progress 0.60 to 0.95
-  const contentProgress = Math.min(Math.max((scrollProgress - 0.60) / 0.35, 0), 1);
+  // Segment C: Incoming content fades & rises in from progress 0.78 to 0.95
+  const contentProgress = Math.min(Math.max((scrollProgress - 0.78) / 0.17, 0), 1);
 
   // Compute word reveal styling
   const getWordStyle = (index: number) => {
-    const center = 0.05 + (index / Math.max(totalWords - 1, 1)) * 0.90;
+    const center = 0.10 + (index / Math.max(totalWords - 1, 1)) * 0.80;
     const waveHalfWidth = 0.07;
 
     let factor = 0;
@@ -149,11 +149,16 @@ export default function PhilosophySection() {
     const b = Math.round(160 + (180 - 160) * factor);
     const a = 0.22 + 0.78 * factor;
 
+    // Subtle wave glow that peaks near the transition front and fades
+    const distance = wordRevealProgress - center;
+    const glowFactor = Math.max(0, 1 - Math.abs(distance) / 0.08);
+    const glowOpacity = 0.22 * Math.pow(glowFactor, 2);
+
     return {
       color: `rgba(${r}, ${g}, ${b}, ${a.toFixed(2)})`,
       textShadow:
-        factor > 0.1
-          ? `0 0 20px rgba(232, 214, 140, ${(0.2 * factor).toFixed(2)})`
+        glowOpacity > 0.01
+          ? `0 0 20px rgba(232, 214, 140, ${glowOpacity.toFixed(2)})`
           : "none",
     };
   };
@@ -165,8 +170,10 @@ export default function PhilosophySection() {
   const cb = Math.round(160 + (180 - 160) * closingFactor);
   const ca = 0.22 + 0.78 * closingFactor;
 
-  // Attribution chip opacity
-  const attributionOpacity = Math.min(Math.max(0.22 + ((wordRevealProgress - 0.65) / 0.35) * 0.78, 0.22), 1);
+  const closingGlowOpacity = 0.22 * Math.pow(Math.max(0, 1 - Math.abs(closingFactor - 0.8) / 0.2), 2);
+  const closingTextShadow = closingGlowOpacity > 0.01
+    ? `0 0 20px rgba(232, 214, 140, ${closingGlowOpacity.toFixed(2)})`
+    : "none";
 
   // --- GEOMETRIC DOME CONFIGURATION ---
   const W = viewportSize.width || 1440;
@@ -192,6 +199,38 @@ export default function PhilosophySection() {
   // Dome ends completely above the screen (translateY = -domeHeightPx)
   const domeTranslateY = H + (-domeHeightPx - H) * easedArcProgress;
 
+  // Physical-based outgoing opacity:
+  // Quote is centered vertically.
+  // Starts at H * 0.30, ends at H * 0.65.
+  const quoteBottomY = H * 0.65;
+  const quoteTopY = H * 0.30;
+  
+  let outgoingOpacity = 1;
+  if (domeTranslateY <= quoteTopY) {
+    outgoingOpacity = 0;
+  } else if (domeTranslateY >= quoteBottomY) {
+    outgoingOpacity = 1;
+  } else {
+    outgoingOpacity = (domeTranslateY - quoteTopY) / (quoteBottomY - quoteTopY);
+  }
+
+  // Attribution chip is positioned lower than the quote.
+  // Starts at H * 0.65, ends at H * 0.78.
+  const attributionReveal = Math.min(Math.max((wordRevealProgress - 0.65) / 0.35, 0), 1);
+  const baseAttributionOpacity = 0.22 + 0.78 * attributionReveal;
+
+  const attrBottomY = H * 0.78;
+  const attrTopY = H * 0.65;
+  let attrCoverFactor = 1;
+  if (domeTranslateY <= attrTopY) {
+    attrCoverFactor = 0;
+  } else if (domeTranslateY >= attrBottomY) {
+    attrCoverFactor = 1;
+  } else {
+    attrCoverFactor = (domeTranslateY - attrTopY) / (attrBottomY - attrTopY);
+  }
+  const attributionOpacity = baseAttributionOpacity * attrCoverFactor;
+
   // Subtle glow layer positioned immediately preceding the curved edge
   const glowShiftPx = Math.round(isMobile ? (W * 0.12) : (W * 0.04));
   const glowTranslateY = domeTranslateY - glowShiftPx;
@@ -201,9 +240,6 @@ export default function PhilosophySection() {
   const easedContentNorm = contentProgress * contentProgress * (3 - 2 * contentProgress);
   const contentOpacity = easedContentNorm;
   const contentTranslateY = Math.round((1 - easedContentNorm) * 35);
-
-  // Fade out outgoing quote text as the dome covers it
-  const outgoingOpacity = Math.min(Math.max(1 - arcProgress * 1.5, 0), 1);
 
   return (
     <section
@@ -236,7 +272,7 @@ export default function PhilosophySection() {
           </div>
 
           {/* Centered Quote */}
-          <div className="text-[26px] sm:text-[34px] md:text-[40px] lg:text-[44px] font-bold leading-[1.25] tracking-[-0.02em] text-center philosophy-quote-container">
+          <div className="text-[26px] sm:text-[34px] md:text-[40px] lg:text-[44px] font-bold leading-[1.25] tracking-[-0.02em] text-center">
             <span className="inline-block font-serif mr-1.5" style={getWordStyle(0)}>
               “
             </span>
@@ -249,10 +285,7 @@ export default function PhilosophySection() {
               className="inline-block font-serif ml-1"
               style={{
                 color: `rgba(${cr}, ${cg}, ${cb}, ${ca.toFixed(2)})`,
-                textShadow:
-                  closingFactor > 0.1
-                    ? `0 0 20px rgba(232, 214, 140, ${(0.2 * closingFactor).toFixed(2)})`
-                    : "none",
+                textShadow: closingTextShadow,
               }}
             >
               ”
@@ -299,8 +332,8 @@ export default function PhilosophySection() {
               left: "50%",
               top: "0px",
               transform: `translateX(-50%) translateY(${glowTranslateY}px)`,
-              background: "radial-gradient(ellipse at center, rgba(80, 80, 80, 0.25), rgba(20, 20, 20, 0.08) 45%, transparent 75%)",
-              filter: "blur(10px)",
+              background: "radial-gradient(ellipse at center, rgba(226, 214, 160, 0.15), rgba(0, 0, 0, 0) 70%)",
+              filter: "blur(12px)",
               opacity: Math.max(0, 1 - Math.pow(arcProgress, 4)),
               willChange: "transform, opacity",
               pointerEvents: "none",
@@ -321,7 +354,19 @@ export default function PhilosophySection() {
               boxShadow: "0 -25px 60px -10px rgba(0, 0, 0, 0.95)",
               pointerEvents: "none",
             }} 
-          />
+          >
+            {/* Massive black block underneath to cover everything below the dome curve */}
+            <div 
+              style={{
+                position: "absolute",
+                top: `${domeHeightPx - 2}px`,
+                left: "-10%",
+                width: "120%",
+                height: `${H * 2}px`,
+                backgroundColor: "#000000",
+              }}
+            />
+          </div>
         </div>
 
         {/* =================================================================== */}

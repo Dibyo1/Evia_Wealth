@@ -12,10 +12,10 @@ export const OFFICES_DATA: OfficeInfo[] = [
   {
     id: "kolkata",
     name: "Kolkata",
-    suiteTitle: "PRINCIPAL REGISTERED OFFICE",
-    address: "Unit 521, 5th Floor, Regus Offices, Salt Lake Sector V, Bidhannagar, Kolkata, West Bengal 700091",
-    phone: "+91 22 6912 0000",
-    email: "advisory@eviawealth.com",
+    suiteTitle: "KOLKATA OFFICE",
+    address: "Evia Wealth Private Limited\nUnit 521, 5th Floor, Regus Offices\nSalt Lake Sector V, Bidhannagar\nP.S Electronics Complex - 700091",
+    phone: "+91 9330183973",
+    email: "info@eviawealth.com",
     coordinates: [88.419, 22.576],
   },
 ];
