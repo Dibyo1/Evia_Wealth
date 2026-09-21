@@ -3,6 +3,10 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 import * as d3 from "d3";
 
+// Module-level cache to persist loaded GeoJSON and generated dots across component mounts
+let cachedLandFeatures: any = null;
+let cachedAllDots: { lng: number; lat: number }[] = [];
+
 interface RotatingEarthProps {
   width?: number;
   height?: number;
@@ -21,6 +25,17 @@ export default function RotatingEarth({
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  const pausedRef = useRef(paused);
+  const onMarkerClickRef = useRef(onMarkerClick);
+
+  useEffect(() => {
+    pausedRef.current = paused;
+  }, [paused]);
+
+  useEffect(() => {
+    onMarkerClickRef.current = onMarkerClick;
+  }, [onMarkerClick]);
 
   // Geographic coordinates for Kolkata [longitude, latitude]
   const KOLKATA_COORDS: [number, number] = [88.419, 22.576];
@@ -181,16 +196,15 @@ export default function RotatingEarth({
         context.lineWidth = 1 * scaleFactor;
         context.stroke();
 
-        // Draw land outlines
+        // Draw land outlines in a single batched D3 geoPath operation
         context.beginPath();
-        landFeatures.features.forEach((feature: any) => {
-          path(feature);
-        });
+        path(landFeatures);
         context.strokeStyle = "rgba(255, 255, 255, 0.22)";
         context.lineWidth = 1 * scaleFactor;
         context.stroke();
 
-        // Draw halftone dots with back-hemisphere culling (Fixes mirrored land bug)
+        // Draw halftone dots in a single fast batched draw call
+        context.beginPath();
         allDots.forEach((dot) => {
           if (isFrontFacing(dot.lng, dot.lat)) {
             const projected = projection([dot.lng, dot.lat]);
@@ -201,13 +215,13 @@ export default function RotatingEarth({
               projected[1] >= 0 &&
               projected[1] <= containerHeight
             ) {
-              context.beginPath();
+              context.moveTo(projected[0] + 1.15 * scaleFactor, projected[1]);
               context.arc(projected[0], projected[1], 1.15 * scaleFactor, 0, 2 * Math.PI);
-              context.fillStyle = "rgba(255, 255, 255, 0.4)";
-              context.fill();
             }
           }
         });
+        context.fillStyle = "rgba(255, 255, 255, 0.4)";
+        context.fill();
       }
 
       // Draw EXACTLY ONE Kolkata Office marker locked to coordinates [88.419, 22.576]
@@ -310,6 +324,14 @@ export default function RotatingEarth({
       try {
         setIsLoading(true);
 
+        if (cachedLandFeatures && cachedAllDots.length > 0) {
+          landFeatures = cachedLandFeatures;
+          allDots.push(...cachedAllDots);
+          render();
+          setIsLoading(false);
+          return;
+        }
+
         // Try local offline GeoJSON first for instant reliability, fallback to raw github
         let response: Response | null = null;
         try {
@@ -336,6 +358,9 @@ export default function RotatingEarth({
           });
         });
 
+        cachedLandFeatures = landFeatures;
+        cachedAllDots = [...allDots];
+
         render();
         setIsLoading(false);
       } catch (err: any) {
@@ -349,22 +374,25 @@ export default function RotatingEarth({
     const rotation: [number, number] = [-78, -20];
     projection.rotate(rotation);
 
-    let autoRotate = true;
+    const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    let autoRotate = !prefersReduced;
     let isDragging = false;
-    const SPEED_DEG_PER_MS = 0.016; // ~16 deg/sec for smooth non-jittery rotation
+    const SPEED_DEG_PER_MS = prefersReduced ? 0 : 0.016; // ~16 deg/sec for smooth non-jittery rotation
     let lastTime = performance.now();
     let rotationTimer: d3.Timer | null = null;
 
     const rotate = () => {
+      if (pausedRef.current) return;
+
       const now = performance.now();
       const dt = Math.min(now - lastTime, 50);
       lastTime = now;
 
-      if (autoRotate && !isDragging && !paused) {
+      if (autoRotate && !isDragging) {
         rotation[0] += SPEED_DEG_PER_MS * dt;
         projection.rotate(rotation);
         render();
-      } else if (!paused) {
+      } else {
         render(); // render pulse animation even when user is holding or static
       }
     };
@@ -394,7 +422,7 @@ export default function RotatingEarth({
           }
         }
       },
-      { threshold: 0.05 }
+      { rootMargin: "200px 0px", threshold: 0.01 }
     );
     visibilityObserver.observe(canvas);
 
@@ -468,8 +496,8 @@ export default function RotatingEarth({
       isDragging = false;
 
       if (isClick && checkMarkerHit(cx, cy)) {
-        if (onMarkerClick) {
-          onMarkerClick();
+        if (onMarkerClickRef.current) {
+          onMarkerClickRef.current();
         }
       }
 
@@ -538,7 +566,7 @@ export default function RotatingEarth({
       window.removeEventListener("touchmove", onTouchMove);
       window.removeEventListener("touchend", onTouchEnd);
     };
-  }, [width, height, onMarkerClick, paused]);
+  }, [width, height]);
 
   if (error) {
     return (

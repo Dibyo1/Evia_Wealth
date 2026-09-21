@@ -36,31 +36,67 @@ export default function StackSection({ onAnalyseClick, onTalkClick }: StackSecti
     offset: ["start start", "end end"],
   });
 
-  // Calculate dynamic stacking transitions for Card 2 entering and Card 1 scaling down
-  // Card 2 rises from 85vh below the viewport up to 0vh to perfectly stack over Card 1.
-  // This sweep happens smoothly over the middle interval of the section scroll range (0.35 to 0.65).
-  const card2Y = useTransform(scrollYProgress, [0.35, 0.65], ["85vh", "0vh"]);
+  // Centered Heading translation: starts centered at 22vh, moves to normal 0vh at 0.15
+  const headingY = useTransform(
+    scrollYProgress,
+    [0.0, 0.15],
+    ["22vh", "0vh"],
+    { clamp: true }
+  );
+  const headingScale = useTransform(
+    scrollYProgress,
+    [0.0, 0.15],
+    [1.12, 1.0],
+    { clamp: true }
+  );
+
+  // Card 1 rises from exactly 100% of the deck height to 0% during the initial scroll (0.12 to 0.32)
+  const card1Y = useTransform(
+    scrollYProgress,
+    [0.12, 0.32],
+    ["100%", "0%"],
+    { clamp: true }
+  );
+
+  // Card 2 rises from exactly 100% of the deck height to 0% to stack perfectly over Card 1.
+  // This sweep happens smoothly over the middle interval of the section scroll range (0.55 to 0.75).
+  const card2Y = useTransform(
+    scrollYProgress,
+    [0.55, 0.75],
+    ["100%", "0%"],
+    { clamp: true }
+  );
   
-  // Card 1 scales down slightly and dims to 45% black overlay opacity during the Card 2 climb
-  const card1Scale = useTransform(scrollYProgress, [0.35, 0.65], [1, 0.97]);
-  const card1DimOpacity = useTransform(scrollYProgress, [0.35, 0.65], [0, 0.45]);
+  // Card 1 scales down slightly to 0.96 and dims to 35% black overlay opacity during the Card 2 climb (0.55 to 0.75)
+  const card1Scale = useTransform(
+    scrollYProgress,
+    [0.55, 0.75],
+    [1, 0.96],
+    { clamp: true }
+  );
+  const card1DimOpacity = useTransform(
+    scrollYProgress,
+    [0.55, 0.75],
+    [0, 0.35],
+    { clamp: true }
+  );
 
   // Synchronise list item activation based on scroll progress
   useEffect(() => {
     return scrollYProgress.onChange((v) => {
-      // Step ranges for Card 1 active list item (while Card 1 is primary active)
-      if (v < 0.12) {
+      // Step ranges for Card 1 active list item (aligned with 32% - 55% main visibility)
+      if (v < 0.38) {
         setActiveStep1(0);
-      } else if (v < 0.24) {
+      } else if (v < 0.47) {
         setActiveStep1(1);
       } else {
         setActiveStep1(2);
       }
 
-      // Step ranges for Card 2 active list item (once Card 2 takes front position)
-      if (v < 0.74) {
+      // Step ranges for Card 2 active list item (once Card 2 completes its climb at 0.75)
+      if (v < 0.81) {
         setActiveStep2(0);
-      } else if (v < 0.87) {
+      } else if (v < 0.88) {
         setActiveStep2(1);
       } else {
         setActiveStep2(2);
@@ -238,50 +274,59 @@ export default function StackSection({ onAnalyseClick, onTalkClick }: StackSecti
   };
 
   return (
-    <section ref={containerRef} id="solutions" className="relative w-full h-[350vh] bg-black text-white">
+    <section ref={containerRef} id="solutions" className="relative w-full h-[260vh] bg-black text-white">
       
-      {/* 1. SECTION HEADING (Normal flow, scrolls away naturally once Card 1 hits the top) */}
-      <div className="max-w-[860px] mx-auto text-center pt-24 pb-16 px-4">
-        <h2 className="text-[34px] sm:text-[46px] md:text-[52px] font-semibold tracking-[-0.03em] leading-[1.12] bg-gradient-to-r from-[#ebe0a6] via-[#cdb864] to-[#a89537] bg-clip-text text-transparent">
-          How Evia Wealth can help you
-        </h2>
-      </div>
+      {/* Sticky Deck Wrapper (Heading and Cards stick together) */}
+      <div className="sticky top-0 h-screen w-full flex flex-col justify-start pt-[6vh] lg:pt-[8vh] overflow-hidden">
+        
+        {/* 1. SECTION HEADING (Centered at the start, rises up smoothly as the first card enters) */}
+        <motion.div
+          style={{
+            y: headingY,
+            scale: headingScale,
+          }}
+          className="max-w-[860px] mx-auto text-center pb-6 sm:pb-10 px-4 z-40"
+        >
+          <h2 className="text-[34px] sm:text-[46px] md:text-[52px] font-semibold tracking-[-0.03em] leading-[1.12] bg-gradient-to-r from-[#ebe0a6] via-[#cdb864] to-[#a89537] bg-clip-text text-transparent font-['Poppins']">
+            How Evia Wealth can help you
+          </h2>
+        </motion.div>
 
-      {/* 2. STICKY DECK WRAPPER (Cards reside here absolutely and overlap dynamically on scroll) */}
-      <div className="sticky top-[96px] w-full px-4 sm:px-6 md:px-8 overflow-visible flex justify-center">
-        <div className="relative w-full max-w-6xl min-h-[500px] max-h-[640px] md:h-[580px] overflow-visible">
+        {/* 2. CARD DECK CONTAINER (Overlaps beautifully in the same coordinates, clipped for true deck stacking) */}
+        <div className="relative w-[92vw] max-w-[1400px] h-[680px] sm:h-[620px] lg:h-[540px] mx-auto overflow-hidden rounded-[24px] px-2 sm:px-4">
           
           {/* =================================================================== */}
           {/* STACK LAYER 1: CARD 1 (Existing Investments)                        */}
           {/* =================================================================== */}
           <motion.div
             style={{
+              y: card1Y,
               scale: card1Scale,
               transformOrigin: "top center",
             }}
-            className="absolute inset-x-0 top-0 rounded-t-[28px] bg-white text-[#0a0a0a] shadow-[0_-12px_40px_rgba(0,0,0,0.4)] border-t border-neutral-200 overflow-hidden h-full flex flex-col justify-between z-10"
+            className="absolute inset-x-0 top-0 rounded-[24px] bg-white text-[#0a0a0a] shadow-[0_20px_50px_rgba(0,0,0,0.12)] border border-neutral-200/80 overflow-hidden h-full flex flex-col justify-between z-10"
           >
             {/* Dynamic black dimming overlay when Card 2 rises on top */}
             <motion.div
               style={{ opacity: card1DimOpacity }}
-              className="absolute inset-0 bg-black pointer-events-none z-30 rounded-t-[28px]"
+              className="absolute inset-0 bg-black pointer-events-none z-30 rounded-[24px]"
             />
 
-            <div className="p-6 sm:p-10 flex-1 flex flex-col justify-between h-full">
-              <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start h-full">
+            <div className="p-5 sm:p-8 lg:p-10 flex-1 flex flex-col justify-between h-full">
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-start h-full">
                 
                 {/* Left Side: Header & Active Scroll List */}
-                <div className="lg:col-span-7 flex flex-col h-full justify-between pr-4">
+                <div className="lg:col-span-7 flex flex-col h-full justify-between pr-0 lg:pr-4">
                   <div>
                     <span className="text-[#3fb5a0] font-mono tracking-widest text-[11px] uppercase font-bold block mb-2">
                       EXISTING INVESTMENTS
                     </span>
-                    <h3 className="text-[28px] sm:text-[34px] font-semibold tracking-tight leading-[1.15] text-[#0f0f11] mb-8 font-['Poppins']">
+                    <h3 className="text-[24px] sm:text-[30px] lg:text-[34px] font-semibold tracking-tight leading-[1.15] text-[#0f0f11] mb-6 sm:mb-8 font-['Poppins']">
                       Analyse &amp; improve your current portfolio
                     </h3>
-
+ 
                     {/* Left Scroll List with Left Highlight Bars */}
-                    <div className="space-y-6">
+                    <div className="space-y-4 sm:space-y-6">
                       <div className="pl-4 relative flex items-center min-h-[44px]">
                         {activeStep1 === 0 && (
                           <motion.div
@@ -289,11 +334,11 @@ export default function StackSection({ onAnalyseClick, onTalkClick }: StackSecti
                             className="absolute left-0 w-[2px] h-6 bg-[#3fb5a0] rounded-full"
                           />
                         )}
-                        <span className={`text-[16px] sm:text-[18px] leading-snug transition-colors duration-300 ${activeStep1 === 0 ? 'text-[#0f0f11] font-medium' : 'text-[#8a8a8a] font-normal'}`}>
+                        <span className={`text-[15px] sm:text-[18px] leading-snug transition-colors duration-300 ${activeStep1 === 0 ? 'text-[#0f0f11] font-medium' : 'text-[#8a8a8a] font-normal'}`}>
                           Negative returns on debt funds
                         </span>
                       </div>
-
+ 
                       <div className="pl-4 relative flex items-center min-h-[44px]">
                         {activeStep1 === 1 && (
                           <motion.div
@@ -301,11 +346,11 @@ export default function StackSection({ onAnalyseClick, onTalkClick }: StackSecti
                             className="absolute left-0 w-[2px] h-6 bg-[#3fb5a0] rounded-full"
                           />
                         )}
-                        <span className={`text-[16px] sm:text-[18px] leading-snug transition-colors duration-300 ${activeStep1 === 1 ? 'text-[#0f0f11] font-medium' : 'text-[#8a8a8a] font-normal'}`}>
+                        <span className={`text-[15px] sm:text-[18px] leading-snug transition-colors duration-300 ${activeStep1 === 1 ? 'text-[#0f0f11] font-medium' : 'text-[#8a8a8a] font-normal'}`}>
                           High hidden distribution commissions
                         </span>
                       </div>
-
+ 
                       <div className="pl-4 relative flex items-center min-h-[44px]">
                         {activeStep1 === 2 && (
                           <motion.div
@@ -313,15 +358,15 @@ export default function StackSection({ onAnalyseClick, onTalkClick }: StackSecti
                             className="absolute left-0 w-[2px] h-6 bg-[#3fb5a0] rounded-full"
                           />
                         )}
-                        <span className={`text-[16px] sm:text-[18px] leading-snug transition-colors duration-300 ${activeStep1 === 2 ? 'text-[#0f0f11] font-medium' : 'text-[#8a8a8a] font-normal'}`}>
+                        <span className={`text-[15px] sm:text-[18px] leading-snug transition-colors duration-300 ${activeStep1 === 2 ? 'text-[#0f0f11] font-medium' : 'text-[#8a8a8a] font-normal'}`}>
                           Excessive equity portfolio overlap
                         </span>
                       </div>
                     </div>
                   </div>
-
+ 
                   {/* Card Bottom CTA Buttons */}
-                  <div className="flex flex-wrap items-center gap-3 mt-8">
+                  <div className="flex flex-wrap items-center gap-3 mt-6 sm:mt-8">
                     <button
                       type="button"
                       onClick={onAnalyseClick}
@@ -330,7 +375,7 @@ export default function StackSection({ onAnalyseClick, onTalkClick }: StackSecti
                       <span>Analyse my portfolio</span>
                       <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
                     </button>
-
+ 
                     <button
                       type="button"
                       onClick={onTalkClick}
@@ -343,10 +388,10 @@ export default function StackSection({ onAnalyseClick, onTalkClick }: StackSecti
                     </button>
                   </div>
                 </div>
-
+ 
                 {/* Right Side: Visual Diagnostic Mock */}
-                <div className="lg:col-span-5 flex flex-col justify-between h-full bg-[#f2f2f2] rounded-[28px] p-5">
-                  <div className="relative flex-1 min-h-[190px]">
+                <div className="lg:col-span-5 flex flex-col justify-between h-full bg-[#f2f2f2] rounded-[24px] p-4 lg:p-5">
+                  <div className="relative flex-1 min-h-[160px] sm:min-h-[190px]">
                     <AnimatePresence mode="wait">
                       <motion.div
                         key={activeStep1}
@@ -362,16 +407,16 @@ export default function StackSection({ onAnalyseClick, onTalkClick }: StackSecti
                       </motion.div>
                     </AnimatePresence>
                   </div>
-
-                  <span className="text-[10px] text-[#8e8a83] text-right mt-3 block">
+ 
+                  <span className="text-[10px] text-[#8e8a83] text-right mt-2 sm:mt-3 block">
                     For illustrative purposes only. This service is offered by DIPL
                   </span>
                 </div>
-
+ 
               </div>
             </div>
           </motion.div>
-
+ 
           {/* =================================================================== */}
           {/* STACK LAYER 2: CARD 2 (PMS Solutions)                                */}
           {/* =================================================================== */}
@@ -379,23 +424,23 @@ export default function StackSection({ onAnalyseClick, onTalkClick }: StackSecti
             style={{
               y: card2Y,
             }}
-            className="absolute inset-x-0 top-0 rounded-t-[28px] bg-white text-[#0a0a0a] shadow-[0_-16px_50px_rgba(0,0,0,0.6)] border-t border-neutral-200 overflow-hidden h-full flex flex-col justify-between z-20"
+            className="absolute inset-x-0 top-0 rounded-[24px] bg-white text-[#0a0a0a] shadow-[0_-8px_30px_rgba(0,0,0,0.08),0_25px_60px_rgba(0,0,0,0.18)] border border-neutral-200/80 overflow-hidden h-full flex flex-col justify-between z-20"
           >
-            <div className="p-6 sm:p-10 flex-1 flex flex-col justify-between h-full">
-              <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start h-full">
-
+            <div className="p-5 sm:p-8 lg:p-10 flex-1 flex flex-col justify-between h-full">
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-start h-full">
+ 
                 {/* Left Side: Header & Active Scroll List */}
-                <div className="lg:col-span-7 flex flex-col h-full justify-between pr-4">
+                <div className="lg:col-span-7 flex flex-col h-full justify-between pr-0 lg:pr-4">
                   <div>
                     <span className="text-[#5457b8] font-mono tracking-widest text-[11px] uppercase font-bold block mb-2">
                       PMS SOLUTIONS
                     </span>
-                    <h3 className="text-[28px] sm:text-[34px] font-semibold tracking-tight leading-[1.15] text-[#0f0f11] mb-8 font-['Poppins']">
+                    <h3 className="text-[24px] sm:text-[30px] lg:text-[34px] font-semibold tracking-tight leading-[1.15] text-[#0f0f11] mb-6 sm:mb-8 font-['Poppins']">
                       Target alpha through specialised strategies
                     </h3>
-
+ 
                     {/* Left Scroll List with Left Highlight Bars */}
-                    <div className="space-y-6">
+                    <div className="space-y-4 sm:space-y-6">
                       <div className="pl-4 relative flex items-center min-h-[44px]">
                         {activeStep2 === 0 && (
                           <motion.div
@@ -403,11 +448,11 @@ export default function StackSection({ onAnalyseClick, onTalkClick }: StackSecti
                             className="absolute left-0 w-[2px] h-6 bg-[#5457b8] rounded-full"
                           />
                         )}
-                        <span className={`text-[16px] sm:text-[18px] leading-snug transition-colors duration-300 ${activeStep2 === 0 ? 'text-[#0f0f11] font-medium' : 'text-[#8a8a8a] font-normal'}`}>
+                        <span className={`text-[15px] sm:text-[18px] leading-snug transition-colors duration-300 ${activeStep2 === 0 ? 'text-[#0f0f11] font-medium' : 'text-[#8a8a8a] font-normal'}`}>
                           Quantitative macro allocation
                         </span>
                       </div>
-
+ 
                       <div className="pl-4 relative flex items-center min-h-[44px]">
                         {activeStep2 === 1 && (
                           <motion.div
@@ -415,11 +460,11 @@ export default function StackSection({ onAnalyseClick, onTalkClick }: StackSecti
                             className="absolute left-0 w-[2px] h-6 bg-[#5457b8] rounded-full"
                           />
                         )}
-                        <span className={`text-[16px] sm:text-[18px] leading-snug transition-colors duration-300 ${activeStep2 === 1 ? 'text-[#0f0f11] font-medium' : 'text-[#8a8a8a] font-normal'}`}>
+                        <span className={`text-[15px] sm:text-[18px] leading-snug transition-colors duration-300 ${activeStep2 === 1 ? 'text-[#0f0f11] font-medium' : 'text-[#8a8a8a] font-normal'}`}>
                           Direct equity ownership
                         </span>
                       </div>
-
+ 
                       <div className="pl-4 relative flex items-center min-h-[44px]">
                         {activeStep2 === 2 && (
                           <motion.div
@@ -427,15 +472,15 @@ export default function StackSection({ onAnalyseClick, onTalkClick }: StackSecti
                             className="absolute left-0 w-[2px] h-6 bg-[#5457b8] rounded-full"
                           />
                         )}
-                        <span className={`text-[16px] sm:text-[18px] leading-snug transition-colors duration-300 ${activeStep2 === 2 ? 'text-[#0f0f11] font-medium' : 'text-[#8a8a8a] font-normal'}`}>
+                        <span className={`text-[15px] sm:text-[18px] leading-snug transition-colors duration-300 ${activeStep2 === 2 ? 'text-[#0f0f11] font-medium' : 'text-[#8a8a8a] font-normal'}`}>
                           Radical transparency
                         </span>
                       </div>
                     </div>
                   </div>
-
+ 
                   {/* Card Bottom CTA Buttons */}
-                  <div className="flex flex-wrap items-center gap-3 mt-8">
+                  <div className="flex flex-wrap items-center gap-3 mt-6 sm:mt-8">
                     <button
                       type="button"
                       onClick={onAnalyseClick}
@@ -444,7 +489,7 @@ export default function StackSection({ onAnalyseClick, onTalkClick }: StackSecti
                       <span>View all strategies</span>
                       <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
                     </button>
-
+ 
                     <button
                       type="button"
                       onClick={onTalkClick}
@@ -457,10 +502,10 @@ export default function StackSection({ onAnalyseClick, onTalkClick }: StackSecti
                     </button>
                   </div>
                 </div>
-
+ 
                 {/* Right Side: Visual Diagnostic Mock */}
-                <div className="lg:col-span-5 flex flex-col justify-between h-full bg-[#f2f2f2] rounded-[28px] p-5">
-                  <div className="relative flex-1 min-h-[190px]">
+                <div className="lg:col-span-5 flex flex-col justify-between h-full bg-[#f2f2f2] rounded-[24px] p-4 lg:p-5">
+                  <div className="relative flex-1 min-h-[160px] sm:min-h-[190px]">
                     <AnimatePresence mode="wait">
                       <motion.div
                         key={activeStep2}
@@ -476,16 +521,16 @@ export default function StackSection({ onAnalyseClick, onTalkClick }: StackSecti
                       </motion.div>
                     </AnimatePresence>
                   </div>
-
-                  <span className="text-[10px] text-[#8e8a83] text-right mt-3 block">
+ 
+                  <span className="text-[10px] text-[#8e8a83] text-right mt-2 sm:mt-3 block">
                     For illustrative purposes only. This service is offered by DIPL
                   </span>
                 </div>
-
+ 
               </div>
             </div>
           </motion.div>
-
+ 
         </div>
       </div>
     </section>

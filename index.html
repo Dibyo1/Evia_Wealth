@@ -1,8 +1,10 @@
 <!doctype html>
-<html lang="en" class="dark">
+<html lang="en" class="dark" style="background: #000000;">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="dark" />
+    <meta name="theme-color" content="#000000" />
     <title>Evia Wealth — Your Trusted Investment Partner</title>
     <meta name="description" content="Personalised wealth management engineered for senior executives, business leaders, and UHNI families across India. Delivering institutional expertise with radical transparency." />
     <meta property="og:title" content="Evia Wealth — Your Trusted Investment Partner" />
@@ -16,6 +18,7 @@
     <link rel="preload" href="/fonts/Poppins-Bold.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;800&family=Poppins:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,600;1,700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
     <script>
+      window.__eviaBootStart = performance.now();
       window.willRun = true;
       try {
         sessionStorage.removeItem("evia-splash-seen");
@@ -145,6 +148,310 @@
   </head>
   <body class="bg-black text-white antialiased selection:bg-emerald-500/30 selection:text-emerald-300">
     <div id="root"></div>
+    <script>
+      (function() {
+        const canvas = document.createElement("canvas");
+        const ctx = canvas.getContext ? canvas.getContext("2d") : null;
+        if (!ctx) return;
+
+        const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+        // 1. Fully upgraded sparkle density and configuration
+        const CONFIG = {
+          COUNT_WELCOME: prefersReduced ? 100 : (window.innerWidth > 768 ? 420 : 200),
+          COUNT_BURST: prefersReduced ? 0 : 150,
+          LIFETIME_MIN: 0.9,
+          LIFETIME_MAX: 1.8,
+          DRIFT_Y: prefersReduced ? 0 : -14, // Elegant upward drift
+          MAX_DPR: 1.5,
+          REVEAL_BURST: true // Burst flag configurable
+        };
+
+        console.info("[evia] sparkles start", CONFIG.COUNT_WELCOME, window.innerWidth, window.innerHeight);
+
+        canvas.id = "evia-sparkles";
+        canvas.style.position = "fixed";
+        canvas.style.inset = "0";
+        canvas.style.width = "100%";
+        canvas.style.height = "100%";
+        canvas.style.pointerEvents = "none";
+        canvas.style.zIndex = "2147483001";
+        document.body.appendChild(canvas);
+
+        let width = window.innerWidth;
+        let height = window.innerHeight;
+
+        function resizeCanvas() {
+          const dpr = Math.min(window.devicePixelRatio || 1, CONFIG.MAX_DPR);
+          width = window.innerWidth;
+          height = window.innerHeight;
+          canvas.width = width * dpr;
+          canvas.height = height * dpr;
+          ctx.scale(dpr, dpr);
+        }
+        resizeCanvas();
+        window.addEventListener("resize", resizeCanvas);
+
+        // 2. Optimized Sprite Cache (Drawn with gold tones and intense bright centers)
+        const spriteGlow = document.createElement("canvas");
+        spriteGlow.width = 64;
+        spriteGlow.height = 64;
+        const ctxGlow = spriteGlow.getContext("2d");
+        if (ctxGlow) {
+          const grad = ctxGlow.createRadialGradient(32, 32, 0, 32, 32, 32);
+          grad.addColorStop(0, "rgba(255, 255, 255, 1)");
+          grad.addColorStop(0.2, "rgba(246, 231, 180, 0.9)");
+          grad.addColorStop(0.5, "rgba(212, 175, 55, 0.4)");
+          grad.addColorStop(1, "rgba(168, 134, 42, 0)");
+          ctxGlow.fillStyle = grad;
+          ctxGlow.fillRect(0, 0, 64, 64);
+        }
+
+        const spriteStar = document.createElement("canvas");
+        spriteStar.width = 64;
+        spriteStar.height = 64;
+        const ctxStar = spriteStar.getContext("2d");
+        if (ctxStar) {
+          ctxStar.strokeStyle = "rgba(246, 231, 180, 0.8)";
+          ctxStar.lineWidth = 1.5;
+          ctxStar.beginPath();
+          ctxStar.moveTo(32, 8);
+          ctxStar.lineTo(32, 56);
+          ctxStar.moveTo(8, 32);
+          ctxStar.lineTo(56, 32);
+          ctxStar.stroke();
+
+          const grad = ctxStar.createRadialGradient(32, 32, 0, 32, 32, 12);
+          grad.addColorStop(0, "rgba(255, 255, 255, 1)");
+          grad.addColorStop(0.3, "rgba(246, 231, 180, 0.85)");
+          grad.addColorStop(0.6, "rgba(212, 175, 55, 0.3)");
+          grad.addColorStop(1, "rgba(212, 175, 55, 0)");
+          ctxStar.fillStyle = grad;
+          ctxStar.beginPath();
+          ctxStar.arc(32, 32, 12, 0, Math.PI * 2);
+          ctxStar.fill();
+        }
+
+        const spriteHard = document.createElement("canvas");
+        spriteHard.width = 16;
+        spriteHard.height = 16;
+        const ctxHard = spriteHard.getContext("2d");
+        if (ctxHard) {
+          const grad = ctxHard.createRadialGradient(8, 8, 0, 8, 8, 8);
+          grad.addColorStop(0, "rgba(255, 255, 255, 1)");
+          grad.addColorStop(0.4, "rgba(212, 175, 55, 0.95)");
+          grad.addColorStop(1, "rgba(168, 134, 42, 0)");
+          ctxHard.fillStyle = grad;
+          ctxHard.beginPath();
+          ctxHard.arc(8, 8, 8, 0, Math.PI * 2);
+          ctxHard.fill();
+        }
+
+        function randomNormal(mean, std) {
+          let u = 0, v = 0;
+          while (u === 0) u = Math.random();
+          while (v === 0) v = Math.random();
+          const num = Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v);
+          return num * std + mean;
+        }
+
+        const particles = [];
+
+        // Spawn Phase A Welcome (denser around the heading)
+        const countWelcome = CONFIG.COUNT_WELCOME;
+        for (let i = 0; i < countWelcome; i++) {
+          const p = {};
+          p.spawnTime = Math.random() * 0.9; // spawn fast between t = 0 to 0.9s
+          p.lifetime = CONFIG.LIFETIME_MIN + Math.random() * (CONFIG.LIFETIME_MAX - CONFIG.LIFETIME_MIN);
+
+          p.x0 = Math.max(0, Math.min(width, randomNormal(width / 2, width * 0.28)));
+          p.y0 = Math.random() * height;
+
+          p.vx = 0;
+          p.vy = CONFIG.DRIFT_Y * (0.6 + Math.random() * 0.8);
+
+          const rSprite = Math.random();
+          if (rSprite < 0.15 && !prefersReduced) {
+            p.sprite = spriteStar;
+            p.size = 5.0 + Math.random() * 5.0; // some 4-point stars up to 10px
+          } else if (rSprite < 0.6) {
+            p.sprite = spriteGlow;
+            p.size = 1.5 + Math.random() * 4.5; // sizes 1.5 - 6px
+          } else {
+            p.sprite = spriteHard;
+            p.size = 1.0 + Math.random() * 2.0;
+          }
+
+          p.phase = Math.random() * Math.PI * 2;
+          p.twinkleSpeed = prefersReduced ? (1 + Math.random() * 2) : (2.5 + Math.random() * 4);
+          p.wobbleSpeed = prefersReduced ? 0 : (1 + Math.random() * 3);
+          p.wobbleAmp = prefersReduced ? 0 : (3 + Math.random() * 6);
+          p.isWelcome = true;
+
+          particles.push(p);
+        }
+
+        // Phase B Burst Generator
+        let burstTriggered = false;
+        function triggerBurst() {
+          if (!CONFIG.REVEAL_BURST || prefersReduced) return;
+          const count = CONFIG.COUNT_BURST;
+          const centerY = height / 2;
+
+          for (let i = 0; i < count; i++) {
+            const p = {};
+            p.spawnTime = 1.6;
+            p.lifetime = 1.0 + Math.random() * 0.4;
+
+            p.x0 = width / 2 + (Math.random() - 0.5) * (width * 0.5);
+            p.y0 = centerY + (Math.random() - 0.5) * 40;
+
+            const angle = -Math.PI / 2 + (Math.random() - 0.5) * (Math.PI * 0.72);
+            const spd = 60 + Math.random() * 160;
+            p.vx = Math.cos(angle) * spd;
+            p.vy = Math.sin(angle) * spd;
+
+            const rSprite = Math.random();
+            if (rSprite < 0.15) {
+              p.sprite = spriteStar;
+              p.size = 4.0 + Math.random() * 4.0;
+            } else if (rSprite < 0.6) {
+              p.sprite = spriteGlow;
+              p.size = 2.0 + Math.random() * 3.0;
+            } else {
+              p.sprite = spriteHard;
+              p.size = 1.2 + Math.random() * 1.8;
+            }
+
+            p.phase = Math.random() * Math.PI * 2;
+            p.twinkleSpeed = 4 + Math.random() * 6;
+            p.wobbleSpeed = 0;
+            p.wobbleAmp = 0;
+            p.isWelcome = false;
+
+            particles.push(p);
+          }
+        }
+
+        // Performance Profiling & Adaptive Quality
+        let frameCount = 0;
+        let lastFrameTime = performance.now();
+        let totalFrameTime = 0;
+        let adaptiveHalved = false;
+
+        // Custom Event exits to bypass setTimeout main thread blocking
+        let exitTriggered = false;
+        let unmountTriggered = false;
+
+        const targetExitTime = prefersReduced ? 0.8 : 1.6;
+        const targetUnmountTime = prefersReduced ? 1.2 : 2.0;
+
+        function tick() {
+          if (document.hidden) {
+            requestAnimationFrame(tick);
+            return;
+          }
+
+          const now = performance.now();
+          const clock = (now - window.__eviaBootStart) / 1000;
+
+          // Frame Time Measurement
+          const delta = now - lastFrameTime;
+          lastFrameTime = now;
+          if (frameCount > 0 && frameCount <= 20) {
+            totalFrameTime += delta;
+            if (frameCount === 20) {
+              const avg = totalFrameTime / 20;
+              if (avg > 22 && !adaptiveHalved) {
+                adaptiveHalved = true;
+                const keepCount = Math.max(100, Math.floor(particles.length / 2));
+                particles.splice(keepCount);
+                console.info("[evia] adaptive performance activated (avg " + avg.toFixed(1) + "ms), halved particles to:", particles.length);
+              }
+            }
+          }
+          frameCount++;
+
+          // Precision requestAnimationFrame-checked triggers (immune to CPU load delays)
+          if (clock >= targetExitTime && !exitTriggered) {
+            exitTriggered = true;
+            document.documentElement.classList.remove("splash-run");
+            window.dispatchEvent(new CustomEvent("evia:splash-exit", { detail: { time: now - window.__eviaBootStart } }));
+            console.info("[evia] splash exit trigger", (now - window.__eviaBootStart).toFixed(1) + "ms");
+          }
+
+          if (clock >= targetExitTime && !burstTriggered) {
+            burstTriggered = true;
+            triggerBurst();
+          }
+
+          if (clock >= targetUnmountTime && !unmountTriggered) {
+            unmountTriggered = true;
+            window.dispatchEvent(new CustomEvent("evia:splash-unmount", { detail: { time: now - window.__eviaBootStart } }));
+            console.info("[evia] splash unmount trigger", (now - window.__eviaBootStart).toFixed(1) + "ms");
+          }
+
+          ctx.clearRect(0, 0, width, height);
+          ctx.globalCompositeOperation = "lighter";
+
+          let aliveCount = 0;
+
+          for (let i = 0; i < particles.length; i++) {
+            const p = particles[i];
+
+            if (clock < p.spawnTime) {
+              aliveCount++;
+              continue;
+            }
+
+            const age = clock - p.spawnTime;
+            if (age >= p.lifetime) {
+              continue;
+            }
+
+            aliveCount++;
+
+            let currentX = p.x0 + p.vx * age;
+            let currentY = p.y0 + p.vy * age;
+
+            if (p.wobbleAmp > 0) {
+              currentX += Math.sin(p.phase + age * p.wobbleSpeed) * p.wobbleAmp;
+            }
+
+            // Opacity & Fade
+            let fadeIn = 1;
+            if (p.isWelcome) {
+              fadeIn = Math.min(1, age / 0.12);
+            }
+            const twinkle = 0.4 + 0.6 * Math.sin(p.phase + age * p.twinkleSpeed);
+            let decay = Math.exp(-3 * (age / p.lifetime));
+
+            // Settle decay at exactly t = 0.9s: stop spawning and decay exponentially
+            if (p.isWelcome && clock >= 0.9) {
+              decay *= Math.exp(-4 * (clock - 0.9));
+            }
+
+            const alpha = fadeIn * twinkle * decay;
+            if (alpha <= 0.01) continue;
+
+            ctx.globalAlpha = alpha;
+            ctx.drawImage(p.sprite, currentX - p.size / 2, currentY - p.size / 2, p.size, p.size);
+          }
+
+          // Clean up DOM once timing limits are met and particles are dead
+          if (clock >= 3.0 || (clock >= targetUnmountTime && aliveCount === 0)) {
+            canvas.remove();
+            window.removeEventListener("resize", resizeCanvas);
+            console.info("[evia] sparkles engine terminated cleanly at", (performance.now() - window.__eviaBootStart).toFixed(1) + "ms");
+            return;
+          }
+
+          requestAnimationFrame(tick);
+        }
+
+        requestAnimationFrame(tick);
+      })();
+    </script>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

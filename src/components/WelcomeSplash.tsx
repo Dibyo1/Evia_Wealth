@@ -1,10 +1,5 @@
-import React, { useState, useEffect, Suspense } from "react";
+import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-
-// Lazy-load SparklesCore to improve first paint of the site
-const SparklesCore = React.lazy(() =>
-  import("./ui/sparkles").then((m) => ({ default: m.SparklesCore }))
-);
 
 export default function WelcomeSplash() {
   const [showSplash, setShowSplash] = useState(true);
@@ -53,22 +48,30 @@ export default function WelcomeSplash() {
     const reduce = mediaQuery.matches;
     setPrefersReducedMotion(reduce);
 
-    const timeoutMs = reduce ? 800 : 1600;
+    // Synchronize exit with the precision requestAnimationFrame-checked clock
+    const handleExit = () => {
+      document.documentElement.classList.remove("splash-run");
+      window.dispatchEvent(new CustomEvent("evia:splash-done"));
+      console.info("[evia] splash done received via rAF");
+    };
 
-    const timer = setTimeout(() => {
+    const handleUnmount = () => {
+      setShowSplash(false);
+    };
+
+    window.addEventListener("evia:splash-exit", handleExit);
+    window.addEventListener("evia:splash-unmount", handleUnmount);
+
+    // Absolute fallback failsafe timer
+    const failsafeTimer = setTimeout(() => {
       setShowSplash(false);
       document.documentElement.classList.remove("splash-run");
       window.dispatchEvent(new CustomEvent("evia:splash-done"));
-      console.info("[evia] splash done");
-    }, timeoutMs);
-
-    // Failsafe timer
-    const failsafeTimer = setTimeout(() => {
-      document.documentElement.classList.remove("splash-run");
     }, 2600);
 
     return () => {
-      clearTimeout(timer);
+      window.removeEventListener("evia:splash-exit", handleExit);
+      window.removeEventListener("evia:splash-unmount", handleUnmount);
       clearTimeout(failsafeTimer);
       document.body.style.overflow = "";
       document.documentElement.classList.remove("splash-run");
@@ -117,21 +120,6 @@ export default function WelcomeSplash() {
               <div className="absolute inset-x-0 top-0 bg-gradient-to-r from-transparent via-[#d4af37] to-transparent h-px w-3/4 mx-auto" />
               <div className="absolute inset-x-0 top-0 bg-gradient-to-r from-transparent via-[#f6e7b4] to-transparent h-[5px] w-1/4 blur-sm mx-auto" />
               <div className="absolute inset-x-0 top-0 bg-gradient-to-r from-transparent via-[#f6e7b4] to-transparent h-px w-1/4 mx-auto" />
-
-              {/* Sparkles background */}
-              {!prefersReducedMotion && (
-                <Suspense fallback={null}>
-                  <SparklesCore
-                    background="transparent"
-                    minSize={0.6}
-                    maxSize={1.4}
-                    particleDensity={120}
-                    speed={1}
-                    particleColor="#d4af37"
-                    className="absolute inset-0 w-full h-full"
-                  />
-                </Suspense>
-              )}
 
               {/* Radial Mask overlay to prevent edges from sticking out */}
               <div
