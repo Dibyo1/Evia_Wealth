@@ -26,6 +26,41 @@ export default function PhilosophySection() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  const lastScrollTimeRef = useRef(0);
+  const hasAutoAdvancedRef = useRef(false);
+
+  // Guarded auto-scroll transition to TimelineSection once the arc completes
+  useEffect(() => {
+    // When the arc finishes movement (around scrollProgress >= 0.80)
+    if (scrollProgress >= 0.80) {
+      if (!hasAutoAdvancedRef.current) {
+        const checkInactivity = () => {
+          const now = performance.now();
+          const timeSinceLastScroll = now - lastScrollTimeRef.current;
+
+          // If 200ms has elapsed since the user last scrolled
+          if (timeSinceLastScroll >= 200) {
+            const target = document.getElementById("how-we-do-things");
+            if (target && !hasAutoAdvancedRef.current) {
+              hasAutoAdvancedRef.current = true;
+              target.scrollIntoView({ behavior: "smooth", block: "start" });
+            }
+          } else {
+            // Check again once the remaining inactive time is reached
+            const remaining = 200 - timeSinceLastScroll;
+            timeoutId = setTimeout(checkInactivity, Math.max(remaining, 30));
+          }
+        };
+
+        let timeoutId = setTimeout(checkInactivity, 200);
+        return () => clearTimeout(timeoutId);
+      }
+    } else if (scrollProgress < 0.20) {
+      // Reset the guard so it can trigger again when scrolling down next time
+      hasAutoAdvancedRef.current = false;
+    }
+  }, [scrollProgress]);
+
   const quoteText =
     "Traditional wealth management is broken & you need a better way to manage your money. Using unbiased data driven decisions, we ensure your investment journey is successful so you can focus on what matters most to you";
 
@@ -80,6 +115,7 @@ export default function PhilosophySection() {
     };
 
     const handleScroll = () => {
+      lastScrollTimeRef.current = performance.now();
       if (!ticking) {
         ticking = true;
         rafId = window.requestAnimationFrame(computeProgress);
@@ -126,12 +162,9 @@ export default function PhilosophySection() {
   // Segment B: Black dome mask sweeping up from progress 0.48 to 0.82
   const arcProgress = Math.min(Math.max((scrollProgress - 0.48) / 0.34, 0), 1);
 
-  // Segment C: Incoming content fades & rises in from progress 0.78 to 0.95
-  const contentProgress = Math.min(Math.max((scrollProgress - 0.78) / 0.17, 0), 1);
-
   // Compute word reveal styling
   const getWordStyle = (index: number) => {
-    const center = 0.10 + (index / Math.max(totalWords - 1, 1)) * 0.80;
+    const center = 0.05 + (index / Math.max(totalWords - 1, 1)) * 0.90;
     const waveHalfWidth = 0.07;
 
     let factor = 0;
@@ -194,10 +227,18 @@ export default function PhilosophySection() {
     ? 4 * arcProgress * arcProgress * arcProgress
     : 1 - Math.pow(-2 * arcProgress + 2, 3) / 2;
 
+  // --- CINEMATIC RELEASE / SCROLL UP PHASE ---
+  // From 0.80 to 1.00 scroll progress, the entire sticky content translates upward
+  // so that the next section (Timeline) enters the screen continuously.
+  const exitProgress = Math.min(Math.max((scrollProgress - 0.80) / 0.20, 0), 1);
+  const easedExit = exitProgress * exitProgress * (3 - 2 * exitProgress);
+  const exitTranslateY = Math.round(easedExit * -250); // Translate up by 250px
+
   // --- FULL TRAVEL TRANSLATION ---
   // Dome starts completely below the screen (translateY = H)
   // Dome ends completely above the screen (translateY = -domeHeightPx)
-  const domeTranslateY = H + (-domeHeightPx - H) * easedArcProgress;
+  const domeTranslateYBase = H + (-domeHeightPx - H) * easedArcProgress;
+  const domeTranslateY = domeTranslateYBase + exitTranslateY;
 
   // Physical-based outgoing opacity:
   // Quote is centered vertically.
@@ -230,16 +271,6 @@ export default function PhilosophySection() {
     attrCoverFactor = (domeTranslateY - attrTopY) / (attrBottomY - attrTopY);
   }
   const attributionOpacity = baseAttributionOpacity * attrCoverFactor;
-
-  // Subtle glow layer positioned immediately preceding the curved edge
-  const glowShiftPx = Math.round(isMobile ? (W * 0.12) : (W * 0.04));
-  const glowTranslateY = domeTranslateY - glowShiftPx;
-  const glowHeightPx = Math.round(isMobile ? (W * 0.25) : (W * 0.12));
-
-  // Incoming timeline header fade & rise
-  const easedContentNorm = contentProgress * contentProgress * (3 - 2 * contentProgress);
-  const contentOpacity = easedContentNorm;
-  const contentTranslateY = Math.round((1 - easedContentNorm) * 35);
 
   return (
     <section
@@ -322,58 +353,38 @@ export default function PhilosophySection() {
         {/* LAYER 2: THE CURVED DOME MASK AND HALO GLOW                         */}
         {/* =================================================================== */}
         <div className="absolute inset-0 w-full h-full z-20 overflow-hidden pointer-events-none">
-          {/* Layer A: Very soft wide atmospheric background glow */}
+          {/* Layer A: Wide, extremely soft atmospheric fade (Curved) */}
           <div 
             style={{
               width: `${domeWidthPx}px`,
               height: `${domeHeightPx}px`,
-              borderRadius: "50% 50% 0 0",
-              position: "absolute",
-              left: "50%",
-              top: "0px",
-              transform: `translateX(-50%) translateY(${domeTranslateY - 15}px)`,
-              background: "radial-gradient(ellipse at top, rgba(160, 160, 160, 0.16) 0%, rgba(80, 80, 80, 0.05) 45%, rgba(0, 0, 0, 0) 75%)",
-              filter: "blur(24px)",
-              willChange: "transform",
-              pointerEvents: "none",
-            }} 
-          />
-
-          {/* Layer B: Medium-width soft curved atmospheric highlight (charcoal/grey) */}
-          <div 
-            style={{
-              width: `${domeWidthPx}px`,
-              height: `${domeHeightPx}px`,
-              borderRadius: "50% 50% 0 0",
               position: "absolute",
               left: "50%",
               top: "0px",
               transform: `translateX(-50%) translateY(${domeTranslateY}px)`,
-              borderTop: "5px solid rgba(170, 170, 170, 0.22)",
-              borderLeft: "2.5px solid rgba(120, 120, 120, 0.04)",
-              borderRight: "2.5px solid rgba(120, 120, 120, 0.04)",
-              filter: "blur(2.5px)",
+              borderRadius: "50% 50% 0 0",
+              background: "linear-gradient(to top, rgba(160, 140, 100, 0.16) 0%, rgba(45, 45, 45, 0.08) 60%, rgba(0, 0, 0, 0) 100%)",
+              filter: "blur(60px)",
               willChange: "transform",
               pointerEvents: "none",
-            }} 
+            }}
           />
 
-          {/* Layer B2: Defined elegant boundary halo to give a clear curved definition */}
+          {/* Layer B: Medium, tighter premium halo glow (Curved) */}
           <div 
             style={{
               width: `${domeWidthPx}px`,
               height: `${domeHeightPx}px`,
-              borderRadius: "50% 50% 0 0",
               position: "absolute",
               left: "50%",
               top: "0px",
-              transform: `translateX(-50%) translateY(${domeTranslateY}px)`,
-              borderTop: "1.5px solid rgba(220, 220, 220, 0.38)",
-              borderLeft: "0.5px solid rgba(150, 150, 150, 0.03)",
-              borderRight: "0.5px solid rgba(150, 150, 150, 0.03)",
+              transform: `translateX(-50%) translateY(${domeTranslateY - (isMobile ? 12 : 24)}px)`,
+              borderRadius: "50% 50% 0 0",
+              background: "linear-gradient(to top, rgba(160, 140, 100, 0.28) 0%, rgba(65, 65, 65, 0.18) 50%, rgba(0, 0, 0, 0) 100%)",
+              filter: "blur(25px)",
               willChange: "transform",
               pointerEvents: "none",
-            }} 
+            }}
           />
 
           {/* Layer C: Physical solid black dome */}
@@ -388,11 +399,10 @@ export default function PhilosophySection() {
               top: "0px",
               transform: `translateX(-50%) translateY(${domeTranslateY}px)`,
               willChange: "transform",
-              boxShadow: "0 -35px 80px -15px rgba(0, 0, 0, 0.98)",
               pointerEvents: "none",
             }} 
           >
-            {/* Layer D: Massive solid black fill underneath to cover everything below the curve */}
+            {/* Continuous black fill below the curved dome to block any text beneath */}
             <div 
               style={{
                 position: "absolute",
@@ -403,40 +413,6 @@ export default function PhilosophySection() {
                 backgroundColor: "#000000",
               }}
             />
-          </div>
-        </div>
-
-        {/* =================================================================== */}
-        {/* LAYER 3: INCOMING SECTION CONTENT                                    */}
-        {/* =================================================================== */}
-        <div
-          className="absolute inset-0 w-full h-full z-30 flex flex-col items-center justify-center p-6 md:p-12 text-center pointer-events-none"
-          style={{
-            opacity: contentOpacity,
-            transform: `translateY(${contentTranslateY}px)`,
-            willChange: "opacity, transform",
-          }}
-        >
-          <div className="max-w-3xl mx-auto flex flex-col items-center pointer-events-auto">
-            <div className="gold-eyebrow-pill mb-6">
-              <span className="gold-dot" />
-              <span className="gold-eyebrow-text">HOW WE ARE DIFFERENT</span>
-            </div>
-
-            <h2 className="text-[34px] sm:text-[46px] md:text-[52px] font-bold tracking-[-0.03em] mb-4 gold-gradient-heading leading-[1.14]">
-              How Evia Wealth does things
-              <br />
-              differently
-            </h2>
-
-            <p className="text-[14px] sm:text-[16px] text-[#c4c0b8] max-w-2xl leading-relaxed font-normal">
-              We monitor macroeconomic swings, rebalance your asset allocation in real-time, and eliminate biased commissions.
-            </p>
-
-            <div className="mt-8 flex flex-col items-center gap-1 text-[10px] text-[#cdb864] font-mono tracking-widest uppercase">
-              <span className="animate-pulse">Scroll down to explore timeline steps</span>
-              <span className="text-base animate-bounce mt-1">↓</span>
-            </div>
           </div>
         </div>
 

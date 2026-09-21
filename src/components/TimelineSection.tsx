@@ -514,9 +514,28 @@ export default function TimelineSection() {
   return (
     <section
       id="how-we-do-things"
-      className="relative z-20 bg-black pt-4 pb-28 sm:pb-36 text-white"
+      className="relative z-20 bg-black pt-24 pb-28 sm:pb-36 text-white"
     >
       <div className="max-w-[1400px] w-full mx-auto px-4 sm:px-6">
+        
+        {/* Section Heading */}
+        <div className="max-w-3xl mx-auto flex flex-col items-center text-center mb-16 md:mb-24">
+          <div className="gold-eyebrow-pill mb-6">
+            <span className="gold-dot" />
+            <span className="gold-eyebrow-text">HOW WE ARE DIFFERENT</span>
+          </div>
+
+          <h2 className="text-[34px] sm:text-[46px] md:text-[52px] font-bold tracking-[-0.03em] mb-4 gold-gradient-heading leading-[1.14]">
+            How Evia Wealth does things
+            <br />
+            differently
+          </h2>
+
+          <p className="text-[14px] sm:text-[16px] text-[#c4c0b8] max-w-2xl leading-relaxed font-normal">
+            We monitor macroeconomic swings, rebalance your asset allocation in real-time, and eliminate biased commissions.
+          </p>
+        </div>
+
         {/* =================================================================== */}
         {/* THE FOUR STEPS WITH LEFT TIMELINE RAIL                             */}
         {/* =================================================================== */}
