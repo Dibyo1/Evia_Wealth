@@ -9,6 +9,7 @@ import TeamSection from "./components/TeamSection";
 import PartnersSection from "./components/PartnersSection";
 import InsightsSection from "./components/InsightsSection";
 import OfficesSection from "./components/OfficesSection";
+import TestimonialsWithMarquee from "./components/TestimonialsWithMarquee";
 import FooterSection from "./components/FooterSection";
 import AppDownloadToast from "./components/AppDownloadToast";
 import { PortfolioModal, LoginModal } from "./components/Modals";
@@ -108,6 +109,9 @@ export default function App() {
 
           {/* 4.9 Offices (3D Dotted Wireframe Globe + Expanded MapLibre Map) */}
           <OfficesSection onGetInTouch={() => setPortfolioModalOpen(true)} />
+
+          {/* New Testimonials & Institutional Logos Section */}
+          <TestimonialsWithMarquee />
         </main>
 
         {/* 4.10 - 4.13 CTA, Newsletter, Badges & Footer */}

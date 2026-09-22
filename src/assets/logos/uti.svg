@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 65" fill="none">
+  <rect x="5" y="5" width="45" height="34" fill="#F37021" />
+  
+  <path d="M19 32 C19 36, 36 36, 36 32 L34 24 C34 22, 21 22, 21 24 Z" fill="#005A9C" />
+  <rect x="23" y="22" width="9" height="2" fill="#005A9C" />
+  <line x1="21" y1="28" x2="34" y2="28" stroke="#F37021" strokeWidth="1.5" />
+  <line x1="22" y1="31" x2="33" y2="31" stroke="#F37021" strokeWidth="1.5" />
+
+  <ellipse cx="27.5" cy="21" rx="4" ry="2.5" fill="#005A9C" />
+
+  <path d="M27.5 20 C27.5 11, 27.5 11, 27.5 10 C27.5 11, 27.5 11, 27.5 20" stroke="#005A9C" strokeWidth="2.5" strokeLinecap="round" />
+  <path d="M26 20 C24 13, 21 14, 21 14 C23 15, 25 18, 26 20" fill="#005A9C" />
+  <path d="M29 20 C31 13, 34 14, 34 14 C32 15, 30 18, 29 20" fill="#005A9C" />
+  <path d="M25 21 C21 16, 17 18, 17 18 C19 19, 23 21, 25 21" fill="#005A9C" />
+  <path d="M30 21 C34 16, 38 18, 38 18 C36 19, 32 21, 30 21" fill="#005A9C" />
+
+  <rect x="52" y="5" width="98" height="34" fill="#005A9C" />
+  
+  <path d="M64 13 V23 C64 27, 72 27, 72 23 V13" stroke="#FFFFFF" strokeWidth="5.5" strokeLinecap="round" strokeLinejoin="round" />
+  <path d="M82 10 V27" stroke="#FFFFFF" strokeWidth="5.5" strokeLinecap="round" />
+  <path d="M77 15 H85" stroke="#FFFFFF" strokeWidth="5.5" strokeLinecap="round" />
+  <rect x="91" y="16" width="5.5" height="11" fill="#FFFFFF" />
+  <circle cx="93.75" cy="11.5" r="2.75" fill="#FFFFFF" />
+  
+  <circle cx="106" cy="10" r="2.2" stroke="#FFFFFF" strokeWidth="0.8" />
+  <text x="104.5" y="11.5" fill="#FFFFFF" fontSize="4.5" fontWeight="bold" fontFamily="sans-serif">R</text>
+
+  <text x="5" y="54" fill="#005A9C" fontSize="13.5" fontWeight="950" fontFamily="sans-serif" letterSpacing="-0.2">UTI Mutual Fund</text>
+</svg>

@@ -156,3 +156,171 @@
   content-visibility: auto;
   contain-intrinsic-size: 1px 700px;
 }
+
+/* TEMP GOLD TEXT - delete this block to revert */
+/* Scope everything under html[data-temp-gold] so it can be enabled/disabled with one attribute toggle */
+
+/* 1. BASELINE TEXT COLOURS (MAPPED TO EXISTING HIERARCHY) */
+
+/* Text that is currently white / near-white -> #e6d78a */
+html[data-temp-gold] p,
+html[data-temp-gold] li,
+html[data-temp-gold] span,
+html[data-temp-gold] a,
+html[data-temp-gold] label,
+html[data-temp-gold] dt,
+html[data-temp-gold] dd,
+html[data-temp-gold] td,
+html[data-temp-gold] th,
+html[data-temp-gold] blockquote,
+html[data-temp-gold] button,
+html[data-temp-gold] input,
+html[data-temp-gold] select,
+html[data-temp-gold] textarea,
+html[data-temp-gold] body,
+html[data-temp-gold] .text-white,
+html[data-temp-gold] .text-neutral-50,
+html[data-temp-gold] .text-neutral-100,
+html[data-temp-gold] .text-neutral-200,
+html[data-temp-gold] .text-gray-50,
+html[data-temp-gold] .text-gray-100,
+html[data-temp-gold] .text-gray-200,
+html[data-temp-gold] .text-zinc-50,
+html[data-temp-gold] .text-zinc-100,
+html[data-temp-gold] .text-zinc-200 {
+  color: #e6d78a !important;
+}
+
+/* Text that is currently grey (text-gray-*, text-zinc-*, text-neutral-*, text-slate-*, text-white/60 and similar) -> #cdb864 */
+html[data-temp-gold] .text-neutral-300,
+html[data-temp-gold] .text-neutral-400,
+html[data-temp-gold] .text-gray-300,
+html[data-temp-gold] .text-gray-400,
+html[data-temp-gold] .text-zinc-300,
+html[data-temp-gold] .text-zinc-400,
+html[data-temp-gold] .text-slate-300,
+html[data-temp-gold] .text-slate-400,
+html[data-temp-gold] .text-white\/80,
+html[data-temp-gold] .text-white\/70,
+html[data-temp-gold] .text-white\/60 {
+  color: #cdb864 !important;
+}
+
+/* Fine print, disclaimers, legal lines, placeholders and other dim text -> #a89537 */
+html[data-temp-gold] .text-neutral-500,
+html[data-temp-gold] .text-neutral-600,
+html[data-temp-gold] .text-gray-500,
+html[data-temp-gold] .text-gray-600,
+html[data-temp-gold] .text-zinc-500,
+html[data-temp-gold] .text-zinc-600,
+html[data-temp-gold] .text-slate-500,
+html[data-temp-gold] .text-slate-600,
+html[data-temp-gold] .text-white\/50,
+html[data-temp-gold] .text-white\/40,
+html[data-temp-gold] .text-white\/30,
+html[data-temp-gold] small,
+html[data-temp-gold] .hs-note,
+html[data-temp-gold] input::placeholder,
+html[data-temp-gold] textarea::placeholder {
+  color: #a89537 !important;
+}
+
+/* Hover/Link states -> #f1e7b4 */
+html[data-temp-gold] a:hover,
+html[data-temp-gold] button:hover,
+html[data-temp-gold] [role="button"]:hover,
+html[data-temp-gold] .hover\:text-white:hover,
+html[data-temp-gold] .hover\:text-neutral-300:hover,
+html[data-temp-gold] .hover\:text-neutral-200:hover,
+html[data-temp-gold] .hover\:text-neutral-100:hover,
+html[data-temp-gold] .group:hover .group-hover\:text-white,
+html[data-temp-gold] .group:hover .group-hover\:text-\[\#ebe0a6\] {
+  color: #f1e7b4 !important;
+}
+
+
+/* 2. LIGHT SURFACES RECOLOR (UNREADABLE ON WHITE/CREAM BACKGROUNDS) -> #8a7526 */
+html[data-temp-gold] .bg-white,
+html[data-temp-gold] .bg-white *,
+html[data-temp-gold] [class*="bg-[#f5f3ee]"],
+html[data-temp-gold] [class*="bg-[#f5f3ee]"] *,
+html[data-temp-gold] .hs-card,
+html[data-temp-gold] .hs-card *,
+html[data-temp-gold] .hs-panel,
+html[data-temp-gold] .hs-panel *,
+html[data-temp-gold] .hs-row,
+html[data-temp-gold] .hs-row *,
+html[data-temp-gold] .hs-row--bm,
+html[data-temp-gold] .hs-row--bm *,
+html[data-temp-gold] .hs-bubble,
+html[data-temp-gold] .hs-bubble *,
+html[data-temp-gold] [class*="bg-neutral-200/20"],
+html[data-temp-gold] [class*="bg-neutral-200/20"] * {
+  color: #8a7526 !important;
+}
+
+
+/* 3. STRICT PROTECTIONS AND EXCEPTIONS (DO NOT CHANGE) */
+
+/* Keep gold-gradient and heading elements transparent so gradient background-clip works */
+html[data-temp-gold] .gold-gradient-heading,
+html[data-temp-gold] .gold-gradient-heading *,
+html[data-temp-gold] .hs-title,
+html[data-temp-gold] [class*="bg-gradient-to-r"][class*="bg-clip-text"] {
+  background: linear-gradient(90deg, #ebe0a6 0%, #d4c06e 35%, #b9a13f 70%, #a89537 100%) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  color: transparent !important;
+}
+
+/* Black text on solid gold pills/buttons (CTA links, navigation button) */
+html[data-temp-gold] .gold-pill-btn,
+html[data-temp-gold] .gold-pill-btn *,
+html[data-temp-gold] [class*="bg-gradient-to-r"][class*="text-black"],
+html[data-temp-gold] [class*="bg-gradient-to-r"][class*="text-black"] *,
+html[data-temp-gold] button[class*="bg-gradient-to-r"],
+html[data-temp-gold] button[class*="bg-gradient-to-r"] * {
+  color: #000000 !important;
+  -webkit-text-fill-color: #000000 !important;
+}
+
+/* Keep gold eyebrows exactly as originally styled */
+html[data-temp-gold] .gold-eyebrow-text,
+html[data-temp-gold] .gold-eyebrow-text * {
+  color: #d9c56e !important;
+}
+
+/* Semantic red colors */
+html[data-temp-gold] .hs-val--neg,
+html[data-temp-gold] .hs-val--neg *,
+html[data-temp-gold] [class*="text-red-"],
+html[data-temp-gold] [class*="text-red-"] *,
+html[data-temp-gold] [class*="text-[#e0566b]"],
+html[data-temp-gold] [class*="text-[#e0566b]"] * {
+  color: #e0566b !important;
+}
+
+/* Semantic green colors */
+html[data-temp-gold] .hs-val--pos,
+html[data-temp-gold] .hs-val--pos *,
+html[data-temp-gold] [class*="text-emerald-"],
+html[data-temp-gold] [class*="text-emerald-"] *,
+html[data-temp-gold] [class*="text-[#2fa88a]"],
+html[data-temp-gold] [class*="text-[#2fa88a]"] * {
+  color: #2fa88a !important;
+}
+
+/* White text on solid black badges (such as the VS circle) */
+html[data-temp-gold] .hs-vs,
+html[data-temp-gold] .hs-vs * {
+  color: #ffffff !important;
+}
+
+/* Blue text on active strategy pill */
+html[data-temp-gold] .hs-pill,
+html[data-temp-gold] .hs-pill * {
+  color: #3547a8 !important;
+}
+
+/* TEMP GOLD TEXT - end block */

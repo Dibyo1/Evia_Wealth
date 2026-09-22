@@ -67,7 +67,7 @@ export default function WelcomeSplash() {
       setShowSplash(false);
       document.documentElement.classList.remove("splash-run");
       window.dispatchEvent(new CustomEvent("evia:splash-done"));
-    }, 2600);
+    }, 3600);
 
     return () => {
       window.removeEventListener("evia:splash-exit", handleExit);
