@@ -515,3 +515,6 @@ export default function RotatingEarth({
   // square host → the canvas is a perfect circle
   return <div ref={hostRef} className={className} style={{ aspectRatio: "1 / 1", width: "100%" }} />
 }
+
+export const DottedGlobe = RotatingEarth
+

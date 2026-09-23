@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Building2, Phone, Mail, ArrowRight, MapPin, Globe } from "lucide-react";
 import { OFFICES_DATA, OfficeInfo } from "../data/siteData";
-import RotatingEarth from "@/components/ui/wireframe-dotted-globe";
+import { DottedGlobe } from "@/components/ui/wireframe-dotted-globe";
 import ExpandedOfficeMap from "@/components/ui/expanded-office-map";
 
 interface OfficesSectionProps {
@@ -123,10 +123,16 @@ export default function OfficesSection({ onGetInTouch }: OfficesSectionProps) {
                     : "opacity-100 scale-100 relative"
                 }`}
               >
-                <RotatingEarth
+                <DottedGlobe
                   width={680}
                   height={560}
                   className="w-full"
+                  colors={{
+                    dot: "255,255,255",
+                    landLine: "rgba(255,255,255,0.55)",
+                    graticule: "rgba(255,255,255,0.13)",
+                    rim: "rgba(255,255,255,0.55)",
+                  }}
                   paused={mapExpanded}
                   onMarkerClick={() => {
                     setMapExpanded(true);
