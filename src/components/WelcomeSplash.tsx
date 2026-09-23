@@ -48,35 +48,63 @@ export default function WelcomeSplash() {
     const reduce = mediaQuery.matches;
     setPrefersReducedMotion(reduce);
 
-    // Synchronize exit with the precision requestAnimationFrame-checked clock
+    // Synchronize exit
     const handleExit = () => {
+      document.body.style.overflow = "";
       document.documentElement.classList.remove("splash-run");
+      setShowSplash(false);
       window.dispatchEvent(new CustomEvent("evia:splash-done"));
-      console.info("[evia] splash done received via rAF");
+      const lenis = (window as any).lenis;
+      if (lenis) {
+        lenis.start();
+        lenis.resize();
+      }
     };
 
     const handleUnmount = () => {
+      document.body.style.overflow = "";
       setShowSplash(false);
+      window.dispatchEvent(new CustomEvent("evia:splash-done"));
+      const lenis = (window as any).lenis;
+      if (lenis) {
+        lenis.start();
+        lenis.resize();
+      }
     };
 
     window.addEventListener("evia:splash-exit", handleExit);
     window.addEventListener("evia:splash-unmount", handleUnmount);
 
-    // Absolute fallback failsafe timer
-    const failsafeTimer = setTimeout(() => {
-      setShowSplash(false);
-      document.documentElement.classList.remove("splash-run");
-      window.dispatchEvent(new CustomEvent("evia:splash-done"));
-    }, 3600);
+    // Natural splash completion timer (1.5s)
+    const splashTimer = setTimeout(() => {
+      handleExit();
+    }, 1500);
 
     return () => {
       window.removeEventListener("evia:splash-exit", handleExit);
       window.removeEventListener("evia:splash-unmount", handleUnmount);
-      clearTimeout(failsafeTimer);
+      clearTimeout(splashTimer);
       document.body.style.overflow = "";
       document.documentElement.classList.remove("splash-run");
+      const lenis = (window as any).lenis;
+      if (lenis) {
+        lenis.start();
+        lenis.resize();
+      }
     };
   }, []);
+
+  const dismissSplash = () => {
+    document.body.style.overflow = "";
+    document.documentElement.classList.remove("splash-run");
+    setShowSplash(false);
+    window.dispatchEvent(new CustomEvent("evia:splash-done"));
+    const lenis = (window as any).lenis;
+    if (lenis) {
+      lenis.start();
+      lenis.resize();
+    }
+  };
 
   return (
     <AnimatePresence>
@@ -85,8 +113,9 @@ export default function WelcomeSplash() {
           key="welcome-splash-overlay"
           initial={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.4 }}
-          className="splash-overlay"
+          transition={{ duration: 0.3 }}
+          className="splash-overlay cursor-pointer"
+          onClick={dismissSplash}
           style={{ pointerEvents: showSplash ? "auto" : "none" }}
         >
           {/* Main Content Container with font loading opacity protection */}

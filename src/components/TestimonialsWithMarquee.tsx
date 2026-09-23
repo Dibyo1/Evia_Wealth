@@ -1,6 +1,6 @@
 import React from "react";
 
-// Import pristine vector assets from the assets/logos folder
+// Import authentic high-resolution logos from assets/logos
 import iwLogo from "../assets/logos/iw.svg";
 import ngenLogo from "../assets/logos/ngen.svg";
 import utiLogo from "../assets/logos/uti.svg";
@@ -13,44 +13,44 @@ import nseLogo from "../assets/logos/nse.svg";
 export default function TestimonialsWithMarquee() {
   const logoItems = [
     {
-      name: "iWealth",
+      name: "Investwell",
       src: iwLogo,
-      heightClass: "h-12 w-auto",
+      heightClass: "h-16 sm:h-20 max-w-[150px] sm:max-w-[170px] w-auto object-contain",
     },
     {
       name: "NGen",
       src: ngenLogo,
-      heightClass: "h-11 w-auto",
+      heightClass: "h-16 sm:h-20 max-w-[210px] sm:max-w-[230px] w-auto object-contain",
     },
     {
       name: "UTI Mutual Fund",
       src: utiLogo,
-      heightClass: "h-12 w-auto",
+      heightClass: "h-16 sm:h-20 max-w-[210px] sm:max-w-[230px] w-auto object-contain",
     },
     {
       name: "Bandhan Mutual Fund",
       src: bandhanLogo,
-      heightClass: "h-11 w-auto",
+      heightClass: "h-16 sm:h-20 max-w-[220px] sm:max-w-[240px] w-auto object-contain",
     },
     {
       name: "HDFC Mutual Fund",
       src: hdfcLogo,
-      heightClass: "h-10 w-auto",
+      heightClass: "h-16 sm:h-20 max-w-[220px] sm:max-w-[240px] w-auto object-contain",
     },
     {
-      name: "ICICI Prudential",
+      name: "ICICI Prudential Asset Management",
       src: iciciLogo,
-      heightClass: "h-12 w-auto",
+      heightClass: "h-16 sm:h-20 max-w-[210px] sm:max-w-[230px] w-auto object-contain",
     },
     {
       name: "Kotak Mutual Fund",
       src: kotakLogo,
-      heightClass: "h-10 w-auto",
+      heightClass: "h-16 sm:h-20 max-w-[220px] sm:max-w-[240px] w-auto object-contain",
     },
     {
       name: "NSE Mutual Fund Platform",
       src: nseLogo,
-      heightClass: "h-11 w-auto",
+      heightClass: "h-14 sm:h-18 max-w-[250px] sm:max-w-[270px] w-auto object-contain",
     },
   ];
 
@@ -122,19 +122,19 @@ export default function TestimonialsWithMarquee() {
       </div>
 
       {/* Infinite Scrolling Logo Marquee Strip */}
-      <div className="w-full py-10 bg-[#0a0a0c]/40 border-y border-white/5 relative">
+      <div className="w-full py-12 md:py-16 bg-[#0a0a0c]/50 border-y border-white/5 relative">
         {/* Left/Right Fade Masks */}
-        <div className="absolute left-0 top-0 bottom-0 w-16 sm:w-32 bg-gradient-to-r from-black via-black/80 to-transparent pointer-events-none z-10" />
-        <div className="absolute right-0 top-0 bottom-0 w-16 sm:w-32 bg-gradient-to-l from-black via-black/80 to-transparent pointer-events-none z-10" />
+        <div className="absolute left-0 top-0 bottom-0 w-16 sm:w-36 bg-gradient-to-r from-black via-black/85 to-transparent pointer-events-none z-10" />
+        <div className="absolute right-0 top-0 bottom-0 w-16 sm:w-36 bg-gradient-to-l from-black via-black/85 to-transparent pointer-events-none z-10" />
 
         {/* Marquee animation container */}
         <div className="flex w-max animate-marquee hover:[animation-play-state:paused] items-center">
           {/* First Row Set */}
-          <div className="flex items-center gap-8 shrink-0 px-4">
+          <div className="flex items-center gap-8 sm:gap-10 shrink-0 px-4">
             {logoItems.map((logo, idx) => (
               <div
                 key={`m1-${idx}`}
-                className="h-20 px-8 py-3 rounded-2xl bg-white border border-neutral-200/80 shadow-md flex items-center justify-center shrink-0 hover:scale-[1.03] transition-transform duration-300 min-w-[170px]"
+                className="h-28 sm:h-32 px-8 sm:px-11 py-4 rounded-2xl bg-white border border-neutral-200/90 shadow-lg flex items-center justify-center shrink-0 hover:scale-[1.03] transition-transform duration-300 min-w-[240px] sm:min-w-[280px]"
               >
                 <img
                   src={logo.src}
@@ -147,11 +147,11 @@ export default function TestimonialsWithMarquee() {
           </div>
 
           {/* Second Row Set (Duplicates for smooth looping) */}
-          <div className="flex items-center gap-8 shrink-0 px-4">
+          <div className="flex items-center gap-8 sm:gap-10 shrink-0 px-4">
             {logoItems.map((logo, idx) => (
               <div
                 key={`m2-${idx}`}
-                className="h-20 px-8 py-3 rounded-2xl bg-white border border-neutral-200/80 shadow-md flex items-center justify-center shrink-0 hover:scale-[1.03] transition-transform duration-300 min-w-[170px]"
+                className="h-28 sm:h-32 px-8 sm:px-11 py-4 rounded-2xl bg-white border border-neutral-200/90 shadow-lg flex items-center justify-center shrink-0 hover:scale-[1.03] transition-transform duration-300 min-w-[240px] sm:min-w-[280px]"
               >
                 <img
                   src={logo.src}

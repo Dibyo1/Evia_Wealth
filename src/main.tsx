@@ -3,6 +3,56 @@ import { createRoot } from 'react-dom/client';
 import App from './App.tsx';
 import './index.css';
 
+// Intercept benign ResizeObserver loop notifications (common across browser implementations
+// when animating viewports or smooth-scroll layout updates)
+if (typeof window !== 'undefined') {
+  const isResizeObserverError = (val: any) => {
+    if (!val) return false;
+    const msg =
+      typeof val === 'string'
+        ? val
+        : val.message || (val.reason && val.reason.message) || '';
+    return (
+      typeof msg === 'string' &&
+      (msg.includes('ResizeObserver loop completed with undelivered notifications') ||
+        msg.includes('ResizeObserver loop limit exceeded'))
+    );
+  };
+
+  window.addEventListener(
+    'error',
+    (e) => {
+      if (isResizeObserverError(e.error) || isResizeObserverError(e.message)) {
+        e.stopImmediatePropagation();
+        e.preventDefault();
+      }
+    },
+    true
+  );
+
+  window.addEventListener(
+    'unhandledrejection',
+    (e) => {
+      if (isResizeObserverError(e.reason)) {
+        e.stopImmediatePropagation();
+        e.preventDefault();
+      }
+    },
+    true
+  );
+
+  const prevOnError = window.onerror;
+  window.onerror = function (message, source, lineno, colno, error) {
+    if (isResizeObserverError(message) || isResizeObserverError(error)) {
+      return true;
+    }
+    if (typeof prevOnError === 'function') {
+      return prevOnError.call(this, message, source, lineno, colno, error);
+    }
+    return false;
+  };
+}
+
 interface ErrorBoundaryProps {
   children: ReactNode;
 }
@@ -19,10 +69,22 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
   }
 
   static getDerivedStateFromError(error: Error): ErrorBoundaryState {
+    if (
+      error?.message?.includes('ResizeObserver loop completed with undelivered notifications') ||
+      error?.message?.includes('ResizeObserver loop limit exceeded')
+    ) {
+      return { hasError: false, error: null };
+    }
     return { hasError: true, error };
   }
 
   componentDidCatch(error: Error, errorInfo: ErrorInfo) {
+    if (
+      error?.message?.includes('ResizeObserver loop completed with undelivered notifications') ||
+      error?.message?.includes('ResizeObserver loop limit exceeded')
+    ) {
+      return;
+    }
     console.error("Uncaught application error:", error, errorInfo);
   }
 
