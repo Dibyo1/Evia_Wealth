@@ -1,53 +1,69 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
+import { useNavigation } from "../context/NavigationContext";
 
-type Solution = { title: string; description?: string; href?: string };
-type Category = { id: string; label: string; solutions: Solution[] };
+export type SolutionItem = { title: string; description?: string; href?: string };
+export type SolutionCategory = { id: string; label: string; href: string; solutions: SolutionItem[] };
 
-export const SOLUTIONS_MENU: Category[] = [
+export const SOLUTIONS_MENU: SolutionCategory[] = [
   {
     id: "investment-products",
     label: "Investment Products",
+    href: "/solutions/investment-products",
     solutions: [
-      { title: "Mutual Funds & ETFs", description: "Curated active, passive, and smart-beta fund strategies", href: "#solutions" },
-      { title: "Alternative Investments", description: "High-yield private equity, venture, and private debt access", href: "#solutions" },
-      { title: "Structured Products", description: "Custom payoff profiles with built-in capital protection", href: "#solutions" },
+      { title: "Equities", description: "High-conviction direct equity portfolios based on bottom-up research", href: "/solutions/investment-products" },
+      { title: "Fixed Income", description: "Bespoke cash-flow alignment and tailored yield instruments", href: "/solutions/investment-products" },
+      { title: "Mutual Funds", description: "Curated active, passive, and smart-beta fund strategies", href: "/solutions/investment-products" },
+      { title: "Alternative Investments", description: "Private equity, venture capital, and private debt access", href: "/solutions/investment-products" },
+      { title: "Structured Products", description: "Custom payoff profiles with capital protection structures", href: "/solutions/investment-products" },
+      { title: "Derivatives", description: "Quantitative hedging and opportunistic exposures", href: "/solutions/investment-products" },
+      { title: "Execution & Depository Services", description: "End-to-end seamless execution and custody platform", href: "/solutions/investment-products" },
     ],
   },
   {
     id: "portfolio-solutions",
     label: "Portfolio Solutions",
+    href: "/solutions/portfolio-solutions",
     solutions: [
-      { title: "Discretionary PMS", description: "Fully-managed active equity and algorithmic portfolios", href: "#solutions" },
-      { title: "Multi-Asset Allocations", description: "Global diversified portfolios matched to dynamic risk appetites", href: "#solutions" },
-      { title: "Tactical Overlays", description: "Short-term momentum capture to optimize cyclical returns", href: "#solutions" },
+      { title: "Evia Wealth Global Allocator", description: "Access best-in-class global funds across world markets", href: "/solutions/portfolio-solutions" },
+      { title: "Evia Wealth Indian Olympians", description: "Large-cap core strategy in dominant market leaders", href: "/solutions/portfolio-solutions" },
+      { title: "Evia Wealth Indian Titans", description: "Thematic high-growth structural opportunities in India", href: "/solutions/portfolio-solutions" },
+      { title: "Evia Wealth 360", description: "Holistic multi-custody reporting and portfolio diagnostics", href: "/solutions/portfolio-solutions" },
     ],
   },
   {
     id: "wealth-planning",
     label: "Wealth Planning",
+    href: "/solutions/wealth-planning",
     solutions: [
-      { title: "Estate & Trust Advisory", description: "Secure succession frameworks for legacy transmission", href: "#solutions" },
-      { title: "Tax Structuring", description: "Comprehensive tax planning to boost overall post-tax yields", href: "#solutions" },
-      { title: "Family Office Services", description: "Institutional governance, accounting, and compliance reporting", href: "#solutions" },
+      { title: "Wealth Transmission & Succession", description: "Wills, private trusts, and generational legacy transfer", href: "/solutions/wealth-planning" },
+      { title: "Wealth Protection & Preservation", description: "Ring-fencing estate assets from liabilities and risks", href: "/solutions/wealth-planning" },
+      { title: "Family & Business", description: "Governance frameworks, family constitutions & boards", href: "/solutions/wealth-planning" },
+      { title: "Philanthropy Services", description: "Impactful giving vehicles and structured family CSR", href: "/solutions/wealth-planning" },
     ],
   },
   {
     id: "real-estate",
     label: "Real Estate",
+    href: "/solutions/real-estate",
     solutions: [
-      { title: "Commercial Real Estate", description: "Premium grade-A offices, warehousing, and retail assets", href: "#solutions" },
-      { title: "Fractional Ownership", description: "High-yield premium real estate with modular entry ticket sizes", href: "#solutions" },
-      { title: "REITs & InvITs portfolio", description: "Highly liquid, yield-bearing infrastructure and property trusts", href: "#solutions" },
+      { title: "Real Estate Aggregation Platform (REAP)", description: "Integrated private office platform in collaboration with Props AMC", href: "/solutions/real-estate" },
+      { title: "Financial Investments in Real Estate", description: "REITs, InvITs, NCDs, and structured real estate funds", href: "/solutions/real-estate" },
+      { title: "Residential Real Estate", description: "Curated primary, secondary, and distressed opportunities", href: "/solutions/real-estate" },
+      { title: "Pre-Lease Options", description: "High-yield commercial, warehousing, and healthcare assets", href: "/solutions/real-estate" },
+      { title: "Fundraising & Structured Financing", description: "LAP, LRD, structured buybacks, and debt instruments", href: "/solutions/real-estate" },
+      { title: "Opportunities in Emerging Sectors", description: "Student housing, co-living, senior living & logistics", href: "/solutions/real-estate" },
+      { title: "International Opportunities", description: "Cross-border real estate acquisitions and partnerships", href: "/solutions/real-estate" },
     ],
   },
   {
     id: "lending-solutions",
     label: "Lending Solutions",
+    href: "/solutions/lending-solutions",
     solutions: [
-      { title: "Loan Against Securities (LAS)", description: "Unlock instant cash flow without breaking compound cycles", href: "#solutions" },
-      { title: "Structured Debt", description: "Bespoke personal and business credit line solutions", href: "#solutions" },
-      { title: "Mortgage Advisory", description: "Sourcing optimized financing for commercial and residential acquisitions", href: "#solutions" },
+      { title: "Loan against Securities", description: "Instant cash liquidity without breaking compound compounding cycles", href: "/solutions/lending-solutions" },
+      { title: "Personal Loan", description: "Bespoke confidential credit lines for high-net-worth individuals", href: "/solutions/lending-solutions" },
+      { title: "Home Loan", description: "Institutional mortgage advisory for luxury homes and properties", href: "/solutions/lending-solutions" },
     ],
   },
 ];
@@ -71,7 +87,8 @@ const Chevron = ({ dir, className = "" }: { dir: "down" | "right"; className?: s
   </svg>
 );
 
-export default function SolutionsMenu({ categories = SOLUTIONS_MENU }: { categories?: Category[] }) {
+export default function SolutionsMenu({ categories = SOLUTIONS_MENU }: { categories?: SolutionCategory[] }) {
+  const { navigate, activeSolutionId } = useNavigation();
   const [open, setOpen] = useState(false);
   const [activeId, setActiveId] = useState(categories[0]?.id);
   const rootRef = useRef<HTMLDivElement>(null);
@@ -111,6 +128,18 @@ export default function SolutionsMenu({ categories = SOLUTIONS_MENU }: { categor
 
   const active = categories.find((c) => c.id === activeId) ?? categories[0];
 
+  const [clickedId, setClickedId] = useState<string | null>(null);
+
+  const handleCategoryClick = (categoryId: string) => {
+    setClickedId(categoryId);
+    // Brief immediate click feedback (~80ms), then close dropdown and navigate
+    setTimeout(() => {
+      setOpen(false);
+      setClickedId(null);
+      navigate(`/solutions/${categoryId}`);
+    }, 80);
+  };
+
   const onListKeyDown = (e: React.KeyboardEvent) => {
     const i = categories.findIndex((c) => c.id === activeId);
     if (e.key === "ArrowDown") {
@@ -140,15 +169,16 @@ export default function SolutionsMenu({ categories = SOLUTIONS_MENU }: { categor
             openMenu();
           }
         }}
-        className="inline-flex items-center gap-1.5 text-[#e6d78a] transition-colors hover:text-[#f1e7b4] focus-visible:outline-none focus-visible:text-[#f1e7b4] cursor-pointer"
+        className={`inline-flex items-center gap-1.5 transition-colors cursor-pointer ${
+          activeSolutionId ? "text-[#f6e7b4] font-semibold" : "text-[#e6d78a] hover:text-[#f1e7b4]"
+        }`}
       >
-        Solutions
+        <span>Solutions</span>
         <Chevron dir="down" className={`transition-transform duration-200 ${open ? "rotate-180" : ""}`} />
       </button>
 
       <AnimatePresence>
         {open && (
-          // pt-3 (padding, not margin) bridges the gap so the hover never drops
           <motion.div
             initial={{ opacity: 0, y: 6 }}
             animate={{ opacity: 1, y: 0 }}
@@ -161,28 +191,39 @@ export default function SolutionsMenu({ categories = SOLUTIONS_MENU }: { categor
               onKeyDown={onListKeyDown}
               className="flex overflow-hidden rounded-2xl border border-[rgba(212,175,55,.35)] bg-[#0b0b0b]/95 shadow-[0_24px_60px_-12px_rgba(0,0,0,.8),0_0_0_1px_rgba(212,175,55,.06)] backdrop-blur-xl"
             >
-              {/* categories */}
-              <ul className="w-[250px] shrink-0 p-2">
+              {/* categories list */}
+              <ul className="w-[260px] shrink-0 p-2">
                 {categories.map((c) => {
-                  const isActive = c.id === active?.id;
+                  const isHovered = c.id === active?.id;
+                  const isCurrentRoute = activeSolutionId === c.id;
+                  const isClicked = clickedId === c.id;
+
                   return (
                     <li key={c.id}>
                       <button
                         type="button"
                         role="menuitem"
+                        onClick={() => handleCategoryClick(c.id)}
                         onMouseEnter={() => setActiveId(c.id)}
                         onFocus={() => setActiveId(c.id)}
-                        className={`flex w-full items-center justify-between rounded-xl px-4 py-3 text-left text-[15px] transition-colors focus-visible:outline-none cursor-pointer ${
-                          isActive
-                            ? "bg-[rgba(212,175,55,0.12)] text-[#f1e7b4]"
+                        className={`flex w-full items-center justify-between rounded-xl px-4 py-3 text-left text-[14.5px] transition-all cursor-pointer ${
+                          isClicked ? "scale-[0.98] opacity-80" : ""
+                        } ${
+                          isHovered || isCurrentRoute
+                            ? "bg-[rgba(212,175,55,0.14)] text-[#f1e7b4] font-medium"
                             : "text-[#cfc7a0]/80 hover:text-[#f1e7b4]"
                         }`}
                       >
-                        {c.label}
+                        <div className="flex items-center gap-2.5">
+                          {isCurrentRoute && (
+                            <span className="w-1.5 h-1.5 rounded-full bg-[#d4c06e] shadow-[0_0_6px_#d4c06e]" />
+                          )}
+                          <span>{c.label}</span>
+                        </div>
                         <Chevron
                           dir="right"
                           className={`transition-all duration-200 ${
-                            isActive ? "translate-x-0 opacity-100" : "-translate-x-1 opacity-0"
+                            isHovered ? "translate-x-0 opacity-100" : "-translate-x-1 opacity-0"
                           }`}
                         />
                       </button>
@@ -191,8 +232,8 @@ export default function SolutionsMenu({ categories = SOLUTIONS_MENU }: { categor
                 })}
               </ul>
 
-              {/* solutions for the hovered category */}
-              <div className="hidden w-[340px] border-l border-[rgba(212,175,55,.18)] p-5 md:block">
+              {/* solutions preview for the hovered category */}
+              <div className="hidden w-[360px] border-l border-[rgba(212,175,55,.18)] p-5 md:block">
                 <AnimatePresence mode="wait">
                   <motion.div
                     key={active?.id}
@@ -201,24 +242,37 @@ export default function SolutionsMenu({ categories = SOLUTIONS_MENU }: { categor
                     exit={{ opacity: 0, x: -4 }}
                     transition={{ duration: 0.15 }}
                   >
-                    <p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.18em] text-[#d9c56e]">
-                      {active?.label}
-                    </p>
-                    <ul className="space-y-1">
+                    <div className="flex items-center justify-between mb-3">
+                      <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#d9c56e]">
+                        {active?.label}
+                      </p>
+                      <button
+                        type="button"
+                        onClick={() => handleCategoryClick(active.id)}
+                        className="text-[11.5px] text-[#e6d78a]/70 hover:text-[#f1e7b4] transition-colors underline underline-offset-2 cursor-pointer"
+                      >
+                        View Page →
+                      </button>
+                    </div>
+
+                    <ul className="space-y-1 max-h-[380px] overflow-y-auto pr-1">
                       {active?.solutions.map((s) => (
                         <li key={s.title}>
-                          <a
-                            href={s.href ?? "#"}
+                          <button
+                            type="button"
+                            onClick={() => handleCategoryClick(active.id)}
                             role="menuitem"
-                            className="block rounded-lg px-3 py-2.5 transition-colors hover:bg-white/5 focus-visible:bg-white/5 focus-visible:outline-none"
+                            className="block w-full text-left rounded-lg px-3 py-2 transition-colors hover:bg-white/5 focus-visible:bg-white/5 focus-visible:outline-none cursor-pointer group"
                           >
-                            <span className="block text-[14.5px] font-medium text-[#f1e7b4]">{s.title}</span>
+                            <span className="block text-[14px] font-medium text-[#f1e7b4] group-hover:text-white transition-colors">
+                              {s.title}
+                            </span>
                             {s.description && (
-                              <span className="mt-0.5 block text-[12.5px] leading-snug text-[#cfc7a0]/60">
+                              <span className="mt-0.5 block text-[12px] leading-snug text-[#cfc7a0]/60 line-clamp-1">
                                 {s.description}
                               </span>
                             )}
-                          </a>
+                          </button>
                         </li>
                       ))}
                     </ul>

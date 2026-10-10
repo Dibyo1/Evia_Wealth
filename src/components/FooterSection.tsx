@@ -1,12 +1,14 @@
 import React, { useState } from "react";
 import { ArrowRight, Lock, Award, ShieldCheck, Check } from "lucide-react";
 import EviaLogo from "./EviaLogo";
+import { useNavigation } from "../context/NavigationContext";
 
 interface FooterSectionProps {
   onReviewPortfolio: () => void;
 }
 
 export default function FooterSection({ onReviewPortfolio }: FooterSectionProps) {
+  const { navigate } = useNavigation();
   const [email, setEmail] = useState("");
   const [subscribed, setSubscribed] = useState(false);
 
@@ -158,17 +160,57 @@ export default function FooterSection({ onReviewPortfolio }: FooterSectionProps)
             </div>
           </div>
 
-          {/* Links Col 1: Products */}
+          {/* Links Col 1: Solutions */}
           <div className="md:col-span-2 sm:col-span-4">
             <div className="text-[11px] font-bold tracking-widest uppercase text-neutral-400 mb-4">
-              PRODUCTS
+              SOLUTIONS
             </div>
             <ul className="space-y-2.5 text-[13px] text-neutral-400">
-              <li><a href="#solutions" className="hover:text-white transition-colors">Portfolio Management (PMS)</a></li>
-              <li><a href="#solutions" className="hover:text-white transition-colors">Integrated Wealth Advisory</a></li>
-              <li><a href="#solutions" className="hover:text-white transition-colors">Curated Mutual Funds</a></li>
-              <li><a href="#solutions" className="hover:text-white transition-colors">Fixed Income & Bonds</a></li>
-              <li><a href="#solutions" className="hover:text-white transition-colors">Alternative Assets (AIF)</a></li>
+              <li>
+                <button
+                  type="button"
+                  onClick={() => navigate("/solutions/investment-products")}
+                  className="hover:text-white transition-colors cursor-pointer text-left"
+                >
+                  Investment Products
+                </button>
+              </li>
+              <li>
+                <button
+                  type="button"
+                  onClick={() => navigate("/solutions/portfolio-solutions")}
+                  className="hover:text-white transition-colors cursor-pointer text-left"
+                >
+                  Portfolio Solutions
+                </button>
+              </li>
+              <li>
+                <button
+                  type="button"
+                  onClick={() => navigate("/solutions/wealth-planning")}
+                  className="hover:text-white transition-colors cursor-pointer text-left"
+                >
+                  Wealth Planning
+                </button>
+              </li>
+              <li>
+                <button
+                  type="button"
+                  onClick={() => navigate("/solutions/real-estate")}
+                  className="hover:text-white transition-colors cursor-pointer text-left"
+                >
+                  Real Estate
+                </button>
+              </li>
+              <li>
+                <button
+                  type="button"
+                  onClick={() => navigate("/solutions/lending-solutions")}
+                  className="hover:text-white transition-colors cursor-pointer text-left"
+                >
+                  Lending Solutions
+                </button>
+              </li>
             </ul>
           </div>
 
@@ -178,11 +220,78 @@ export default function FooterSection({ onReviewPortfolio }: FooterSectionProps)
               COMPANY
             </div>
             <ul className="space-y-2.5 text-[13px] text-neutral-400">
-              <li><a href="#" className="hover:text-white transition-colors">Investment Philosophy</a></li>
-              <li><a href="#partners" className="hover:text-white transition-colors">Dedicated Client Partners</a></li>
-              <li><a href="#" onClick={(e) => { e.preventDefault(); onReviewPortfolio(); }} className="hover:text-white transition-colors">Compounding Calculator</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">Client Reviews</a></li>
-              <li><a href="#offices" className="hover:text-white transition-colors">Contact Us</a></li>
+              <li>
+                <button
+                  type="button"
+                  onClick={() => navigate("/", "about")}
+                  className="hover:text-white transition-colors cursor-pointer text-left"
+                >
+                  About Us
+                </button>
+              </li>
+              <li>
+                <button
+                  type="button"
+                  onClick={() => navigate("/", "philosophy")}
+                  className="hover:text-white transition-colors cursor-pointer text-left"
+                >
+                  Investment Philosophy
+                </button>
+              </li>
+              <li>
+                <button
+                  type="button"
+                  onClick={() => navigate("/research-and-insights")}
+                  className="hover:text-white transition-colors cursor-pointer text-left"
+                >
+                  Research & Insights
+                </button>
+              </li>
+              <li>
+                <button
+                  type="button"
+                  onClick={() => navigate("/special-privileges")}
+                  className="hover:text-white transition-colors cursor-pointer text-left"
+                >
+                  Special Privileges
+                </button>
+              </li>
+              <li>
+                <button
+                  type="button"
+                  onClick={() => navigate("/", "team")}
+                  className="hover:text-white transition-colors cursor-pointer text-left"
+                >
+                  Our Leadership Team
+                </button>
+              </li>
+              <li>
+                <button
+                  type="button"
+                  onClick={() => navigate("/", "partners")}
+                  className="hover:text-white transition-colors cursor-pointer text-left"
+                >
+                  Dedicated Client Partners
+                </button>
+              </li>
+              <li>
+                <button
+                  type="button"
+                  onClick={() => navigate("/", "offices")}
+                  className="hover:text-white transition-colors cursor-pointer text-left"
+                >
+                  Offices & Suites
+                </button>
+              </li>
+              <li>
+                <button
+                  type="button"
+                  onClick={() => navigate("/contact")}
+                  className="hover:text-white transition-colors cursor-pointer text-left"
+                >
+                  Contact Us
+                </button>
+              </li>
             </ul>
           </div>
 

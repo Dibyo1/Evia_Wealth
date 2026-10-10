@@ -4,7 +4,20 @@ import { motion, AnimatePresence } from "framer-motion";
 export default function WelcomeSplash() {
   const [showSplash, setShowSplash] = useState(true);
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
-  const [fontsReady, setFontsReady] = useState(false);
+  const [fontsReady, setFontsReady] = useState(() => {
+    if (typeof document !== "undefined" && document.fonts) {
+      return document.fonts.status === "loaded";
+    }
+    return true;
+  });
+
+  // Ensure any legacy sessionStorage blocks are removed
+  useEffect(() => {
+    try {
+      sessionStorage.removeItem("evia_splash_shown");
+      sessionStorage.removeItem("evia-splash-seen");
+    } catch {}
+  }, []);
 
   // Monitor font-loading with a hard 300ms timeout
   useEffect(() => {

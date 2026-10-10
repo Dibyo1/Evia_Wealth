@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { ArrowRight, Menu, X } from "lucide-react";
 import EviaLogo from "./EviaLogo";
 import SolutionsMenu from "./SolutionsMenu";
+import { useNavigation } from "../context/NavigationContext";
 
 interface NavbarProps {
   onReviewPortfolio: () => void;
@@ -10,9 +11,16 @@ interface NavbarProps {
 
 export default function Navbar({ onReviewPortfolio, onLoginClick }: NavbarProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { isHome, isResearch, isPrivileges, isContact, navigate } = useNavigation();
 
   const scrollToSection = (id: string) => {
     setMobileMenuOpen(false);
+
+    if (!isHome) {
+      navigate("/", id);
+      return;
+    }
+
     const element = document.getElementById(id);
     if (element) {
       const navOffset = 68; // perfectly aligns with our 68px desktop bar height
@@ -28,6 +36,8 @@ export default function Navbar({ onReviewPortfolio, onLoginClick }: NavbarProps)
           behavior: "smooth",
         });
       }
+    } else {
+      navigate("/", id);
     }
   };
 
@@ -88,11 +98,11 @@ export default function Navbar({ onReviewPortfolio, onLoginClick }: NavbarProps)
           <div className="flex items-center">
             {/* Logo: EviaLogo (about 40px height at size="md") */}
             <a
-              href="#"
+              href="/"
               className="flex items-center group cursor-pointer focus:outline-none shrink-0"
               onClick={(e) => {
                 e.preventDefault();
-                window.scrollTo({ top: 0, behavior: "auto" });
+                navigate("/");
               }}
             >
               <EviaLogo size="md" />
@@ -107,10 +117,19 @@ export default function Navbar({ onReviewPortfolio, onLoginClick }: NavbarProps)
               <SolutionsMenu />
 
               <button
-                onClick={() => scrollToSection("team")}
+                onClick={() => navigate("/research-and-insights")}
+                className={`transition-colors duration-150 cursor-pointer focus:outline-none ${
+                  isResearch ? "text-[#f6e7b4] font-semibold" : "text-[#e6d78a] hover:text-[#f6e7b4]"
+                }`}
+              >
+                Research & Insights
+              </button>
+
+              <button
+                onClick={() => scrollToSection("about")}
                 className="text-[#e6d78a] hover:text-[#f6e7b4] transition-colors duration-150 cursor-pointer focus:outline-none"
               >
-                Our Team
+                About Us
               </button>
 
               <button
@@ -121,22 +140,22 @@ export default function Navbar({ onReviewPortfolio, onLoginClick }: NavbarProps)
               </button>
 
               <button
-                onClick={() => scrollToSection("offices")}
-                className="text-[#e6d78a] hover:text-[#f6e7b4] transition-colors duration-150 cursor-pointer focus:outline-none"
+                onClick={() => navigate("/special-privileges")}
+                className={`transition-colors duration-150 cursor-pointer focus:outline-none ${
+                  isPrivileges ? "text-[#f6e7b4] font-semibold" : "text-[#e6d78a] hover:text-[#f6e7b4]"
+                }`}
               >
-                Offices
+                Special Privileges
               </button>
 
-              <a
-                href="#esop"
-                onClick={(e) => {
-                  e.preventDefault();
-                  onReviewPortfolio();
-                }}
-                className="text-[#e6d78a] hover:text-[#f6e7b4] transition-colors duration-150 cursor-pointer"
+              <button
+                onClick={() => navigate("/contact")}
+                className={`transition-colors duration-150 cursor-pointer focus:outline-none ${
+                  isContact ? "text-[#f6e7b4] font-semibold" : "text-[#e6d78a] hover:text-[#f6e7b4]"
+                }`}
               >
-                ESOP portal
-              </a>
+                Contact Us
+              </button>
             </div>
           </div>
 
@@ -164,11 +183,11 @@ export default function Navbar({ onReviewPortfolio, onLoginClick }: NavbarProps)
         {/* Mobile Navbar Row (Visible under 900px) */}
         <div className="mobile-only w-full h-[56px] px-6 flex items-center justify-between">
           <a
-            href="#"
+            href="/"
             className="flex items-center group cursor-pointer focus:outline-none"
             onClick={(e) => {
               e.preventDefault();
-              window.scrollTo({ top: 0, behavior: "auto" });
+              navigate("/");
             }}
           >
             <EviaLogo size="sm" />
@@ -187,47 +206,119 @@ export default function Navbar({ onReviewPortfolio, onLoginClick }: NavbarProps)
       {/* Mobile Slide-down Full-Width Blurred Menu Panel */}
       {mobileMenuOpen && (
         <div
-          className="mobile-only fixed left-0 right-0 top-[56px] w-full border-b border-white/8 p-6 flex flex-col gap-6 animate-in fade-in slide-in-from-top duration-200"
+          className="mobile-only fixed left-0 right-0 top-[56px] w-full border-b border-white/8 p-6 flex flex-col gap-5 animate-in fade-in slide-in-from-top duration-200 max-h-[calc(100vh-56px)] overflow-y-auto"
           style={{
-            background: "rgba(0, 0, 0, 0.88)",
+            background: "rgba(0, 0, 0, 0.94)",
             backdropFilter: "blur(20px) saturate(1.2)",
             WebkitBackdropFilter: "blur(20px) saturate(1.2)",
             zIndex: 999
           }}
         >
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-1.5">
+            <div className="px-3 pt-1 pb-1">
+              <span className="text-[11px] font-semibold tracking-wider text-[#d9c56e] uppercase">
+                Solutions
+              </span>
+            </div>
+            <div className="grid grid-cols-1 gap-1 pl-2 mb-2 border-l border-[#d4af37]/25 ml-2">
+              <button
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  navigate("/solutions/investment-products");
+                }}
+                className="text-left text-[14.5px] text-[#f1e7b4] py-1.5 px-3 rounded-lg hover:bg-white/5 transition-colors"
+              >
+                Investment Products
+              </button>
+              <button
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  navigate("/solutions/portfolio-solutions");
+                }}
+                className="text-left text-[14.5px] text-[#f1e7b4] py-1.5 px-3 rounded-lg hover:bg-white/5 transition-colors"
+              >
+                Portfolio Solutions
+              </button>
+              <button
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  navigate("/solutions/wealth-planning");
+                }}
+                className="text-left text-[14.5px] text-[#f1e7b4] py-1.5 px-3 rounded-lg hover:bg-white/5 transition-colors"
+              >
+                Wealth Planning
+              </button>
+              <button
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  navigate("/solutions/real-estate");
+                }}
+                className="text-left text-[14.5px] text-[#f1e7b4] py-1.5 px-3 rounded-lg hover:bg-white/5 transition-colors"
+              >
+                Real Estate
+              </button>
+              <button
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  navigate("/solutions/lending-solutions");
+                }}
+                className="text-left text-[14.5px] text-[#f1e7b4] py-1.5 px-3 rounded-lg hover:bg-white/5 transition-colors"
+              >
+                Lending Solutions
+              </button>
+            </div>
+
             <button
-              onClick={() => scrollToSection("solutions")}
-              className="text-left text-[16px] font-semibold text-white py-2 px-3 rounded-xl hover:bg-white/5 transition-colors"
+              onClick={() => {
+                setMobileMenuOpen(false);
+                navigate("/research-and-insights");
+              }}
+              className={`text-left text-[15px] font-medium py-2 px-3 rounded-xl transition-colors ${
+                isResearch ? "bg-white/10 text-[#f1e7b4] font-semibold" : "text-white hover:bg-white/5"
+              }`}
             >
-              Products & Solutions
+              Research and Insights
             </button>
+
             <button
-              onClick={() => scrollToSection("team")}
-              className="text-left text-[16px] font-semibold text-white py-2 px-3 rounded-xl hover:bg-white/5 transition-colors"
+              onClick={() => scrollToSection("about")}
+              className="text-left text-[15px] font-medium text-white py-2 px-3 rounded-xl hover:bg-white/5 transition-colors"
             >
-              Our Leadership Team
+              About Us
             </button>
             <button
               onClick={() => scrollToSection("partners")}
-              className="text-left text-[16px] font-semibold text-white py-2 px-3 rounded-xl hover:bg-white/5 transition-colors"
+              className="text-left text-[15px] font-medium text-white py-2 px-3 rounded-xl hover:bg-white/5 transition-colors"
             >
               Dedicated Client Partners
             </button>
             <button
+              onClick={() => {
+                setMobileMenuOpen(false);
+                navigate("/special-privileges");
+              }}
+              className={`text-left text-[15px] font-medium py-2 px-3 rounded-xl transition-colors ${
+                isPrivileges ? "bg-white/10 text-[#f1e7b4] font-semibold" : "text-white hover:bg-white/5"
+              }`}
+            >
+              Special Privileges
+            </button>
+            <button
               onClick={() => scrollToSection("offices")}
-              className="text-left text-[16px] font-semibold text-white py-2 px-3 rounded-xl hover:bg-white/5 transition-colors"
+              className="text-left text-[15px] font-medium text-white py-2 px-3 rounded-xl hover:bg-white/5 transition-colors"
             >
               Advisory Suites & Offices
             </button>
             <button
               onClick={() => {
                 setMobileMenuOpen(false);
-                onReviewPortfolio();
+                navigate("/contact");
               }}
-              className="text-left text-[16px] font-semibold text-white py-2 px-3 rounded-xl hover:bg-white/5 transition-colors"
+              className={`text-left text-[15px] font-medium py-2 px-3 rounded-xl transition-colors ${
+                isContact ? "bg-white/10 text-[#f1e7b4] font-semibold" : "text-white hover:bg-white/5"
+              }`}
             >
-              ESOP Portal
+              Contact Us
             </button>
           </div>
 
