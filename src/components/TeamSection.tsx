@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Plus, ArrowRight } from "lucide-react";
+import { Plus } from "lucide-react";
 import { motion, AnimatePresence, LayoutGroup } from "motion/react";
 import { TEAM_MEMBERS, TeamMember } from "../data/siteData";
 
@@ -185,54 +185,6 @@ export default function TeamSection() {
                 </motion.div>
               );
             })}
-
-            {/* =================================================================== */}
-            {/* RESEARCH & QUANT COUNCIL BOTTOM ROW                                 */}
-            {/* =================================================================== */}
-            <div className="w-full rounded-[24px] bg-[#0b0c0f] border border-white/10 p-5 sm:p-6 flex items-center justify-between shadow-lg">
-              <div className="flex items-center gap-3">
-                
-                {/* Overlapping small circular portraits */}
-                <div className="flex -space-x-2.5 overflow-hidden shrink-0">
-                  <img
-                    className="inline-block h-8 w-8 rounded-full ring-2 ring-[#0b0c0f] object-cover"
-                    referrerPolicy="no-referrer"
-                    src="https://eviawealth.com/images/team-member/punit.jpg"
-                    alt="Council member"
-                  />
-                  <img
-                    className="inline-block h-8 w-8 rounded-full ring-2 ring-[#0b0c0f] object-cover"
-                    referrerPolicy="no-referrer"
-                    src="https://eviawealth.com/images/team-member/bikash.jpg"
-                    alt="Council member"
-                  />
-                  <img
-                    className="inline-block h-8 w-8 rounded-full ring-2 ring-[#0b0c0f] object-cover"
-                    referrerPolicy="no-referrer"
-                    src="https://eviawealth.com/images/team-member/narayan.jpg"
-                    alt="Council member"
-                  />
-                </div>
-
-                <span className="text-[13px] sm:text-[14px] text-neutral-400 font-semibold font-['Poppins']">
-                  Research & Quant Council
-                </span>
-              </div>
-
-              <button
-                type="button"
-                onClick={() => {
-                  if (expandedId !== "punit-sharma") {
-                    setExpandedId("punit-sharma");
-                  }
-                }}
-                className="flex items-center gap-1.5 text-xs sm:text-sm font-semibold text-neutral-300 hover:text-white transition-colors cursor-pointer group"
-              >
-                <span>See all members</span>
-                <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
-              </button>
-            </div>
-
           </div>
         </LayoutGroup>
 
