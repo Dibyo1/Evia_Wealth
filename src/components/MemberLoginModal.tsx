@@ -620,9 +620,10 @@ export default function MemberLoginModal({
 
                   {/* Google Play Store Badge */}
                   <a
-                    href="#"
-                    onClick={(e) => e.preventDefault()}
-                    className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-black border border-white/20 hover:border-[#cdb864]/60 transition-all text-left shadow-sm group"
+                    href="https://play.google.com/store/apps/details?id=com.tvs.investwell"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-black border border-white/20 hover:border-[#cdb864]/60 transition-all text-left shadow-sm group cursor-pointer"
                     title="Get it on Google Play"
                   >
                     <svg className="w-5 h-5 shrink-0 group-hover:scale-105 transition-transform" viewBox="0 0 24 24">

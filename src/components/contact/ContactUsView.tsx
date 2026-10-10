@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { MapPin, Mail, Phone, ArrowLeft, X, ChevronRight, Check, Send } from "lucide-react";
+import { MapPin, Mail, Phone, ArrowLeft, ChevronRight, Check, Send } from "lucide-react";
 import { motion } from "motion/react";
 import { useNavigation } from "../../context/NavigationContext";
 
@@ -69,8 +69,8 @@ export default function ContactUsView({}: ContactUsViewProps) {
         />
 
         <div className="relative z-10 max-w-[1240px] mx-auto px-5 sm:px-8">
-          {/* Breadcrumb + Close / Back Action */}
-          <div className="flex items-center justify-between gap-4 mb-8">
+          {/* Breadcrumb Navigation */}
+          <div className="flex items-center gap-4 mb-8">
             <motion.div
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
@@ -87,19 +87,6 @@ export default function ContactUsView({}: ContactUsViewProps) {
               <ChevronRight className="w-3.5 h-3.5 text-[#d4af37]/60" />
               <span className="text-[#f1e7b4] font-medium">Contact</span>
             </motion.div>
-
-            {/* Close / Return Button */}
-            <motion.button
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.35 }}
-              onClick={() => navigate("/")}
-              aria-label="Close Contact Us and return to Home"
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 hover:border-[#d9c56e]/40 text-[#c4c0b8] hover:text-[#f1e7b4] text-xs font-medium transition-all duration-200 cursor-pointer"
-            >
-              <X className="w-3.5 h-3.5" />
-              <span className="hidden sm:inline">Close</span>
-            </motion.button>
           </div>
 
           {/* Section Eyebrow Pill: Mint dot + CONTACT US */}
