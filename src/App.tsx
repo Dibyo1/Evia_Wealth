@@ -7,7 +7,6 @@ import PhilosophySection from "./components/PhilosophySection";
 import TimelineSection from "./components/TimelineSection";
 import StackSection from "./components/StackSection";
 import TeamSection from "./components/TeamSection";
-import PartnersSection from "./components/PartnersSection";
 import InsightsSection from "./components/InsightsSection";
 import OfficesSection from "./components/OfficesSection";
 import TestimonialsWithMarquee from "./components/TestimonialsWithMarquee";
@@ -118,9 +117,6 @@ function AppContent() {
                 onAnalyseClick={() => setPortfolioModalOpen(true)}
                 onTalkClick={() => setPortfolioModalOpen(true)}
               />
-
-              {/* 4.7 Dedicated Client Partners Carousel */}
-              <PartnersSection />
 
               {/* 4.8 Insights for our Clients */}
               <InsightsSection />

@@ -268,15 +268,6 @@ export default function FooterSection({ onReviewPortfolio }: FooterSectionProps)
               <li>
                 <button
                   type="button"
-                  onClick={() => navigate("/", "partners")}
-                  className="hover:text-white transition-colors cursor-pointer text-left"
-                >
-                  Dedicated Client Partners
-                </button>
-              </li>
-              <li>
-                <button
-                  type="button"
                   onClick={() => navigate("/", "offices")}
                   className="hover:text-white transition-colors cursor-pointer text-left"
                 >
