@@ -6,7 +6,7 @@ import { useNavigation } from "../context/NavigationContext";
 
 interface NavbarProps {
   onReviewPortfolio: () => void;
-  onLoginClick: () => void;
+  onLoginClick: (origin?: { x: number; y: number }) => void;
 }
 
 export default function Navbar({ onReviewPortfolio, onLoginClick }: NavbarProps) {
@@ -162,7 +162,13 @@ export default function Navbar({ onReviewPortfolio, onLoginClick }: NavbarProps)
           {/* Right Block: Member Login & CTA Button */}
           <div className="flex items-center gap-6">
             <button
-              onClick={onLoginClick}
+              onClick={(e) => {
+                const rect = e.currentTarget.getBoundingClientRect();
+                onLoginClick({
+                  x: Math.round(rect.left + rect.width / 2),
+                  y: Math.round(rect.top + rect.height / 2),
+                });
+              }}
               className="text-[15px] font-medium text-[#e6d78a] hover:text-[#f6e7b4] transition-colors duration-150 cursor-pointer focus:outline-none"
               style={{ fontFamily: "'Poppins', sans-serif" }}
             >
@@ -324,11 +330,15 @@ export default function Navbar({ onReviewPortfolio, onLoginClick }: NavbarProps)
 
           <div className="pt-4 border-t border-white/10 flex flex-col gap-3">
             <button
-              onClick={() => {
+              onClick={(e) => {
+                const rect = e.currentTarget.getBoundingClientRect();
                 setMobileMenuOpen(false);
-                onLoginClick();
+                onLoginClick({
+                  x: Math.round(rect.left + rect.width / 2),
+                  y: Math.round(rect.top + rect.height / 2),
+                });
               }}
-              className="w-full py-3 rounded-full border border-[#cdb864]/30 text-sm font-medium text-[#e6d78a] hover:bg-white/5 transition-all text-center"
+              className="w-full py-3 rounded-full border border-[#cdb864]/30 text-sm font-medium text-[#e6d78a] hover:bg-white/5 transition-all text-center cursor-pointer"
             >
               Member login
             </button>

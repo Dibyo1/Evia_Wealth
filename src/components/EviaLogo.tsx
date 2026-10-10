@@ -5,6 +5,7 @@ interface EviaLogoProps {
   iconOnly?: boolean;
   lightText?: boolean;
   size?: "sm" | "md" | "lg";
+  preferImage?: boolean;
 }
 
 /**
@@ -50,9 +51,18 @@ export function EviaLogoMark({ className = "w-9 h-9", colorGrad = "url(#evia-gol
 }
 
 /**
- * Full Brand Logo Lockup featuring the Golden Wings and Serif Text (EVIA WEALTH - YOUR WEALTH ARTIST)
+ * Full Brand Logo Lockup featuring the official logo image (from LOGO 1.png / eviawealth.com)
+ * with automatic fallback to pure SVG / typography lockup.
  */
-export default function EviaLogo({ className = "", iconOnly = false, lightText = true, size = "md" }: EviaLogoProps) {
+export default function EviaLogo({
+  className = "",
+  iconOnly = false,
+  lightText = true,
+  size = "md",
+  preferImage = true,
+}: EviaLogoProps) {
+  const [imageError, setImageError] = React.useState(false);
+
   // Proportional scaling
   const iconSizeClass =
     size === "sm"
@@ -61,8 +71,30 @@ export default function EviaLogo({ className = "", iconOnly = false, lightText =
       ? "w-14 h-14 md:w-16 md:h-16"
       : "w-9 h-9 md:w-10 md:h-10";
 
+  const imgHeightClass =
+    size === "sm"
+      ? "h-[30px]"
+      : size === "lg"
+      ? "h-[50px] md:h-[58px]"
+      : "h-[38px] md:h-[42px]";
+
   if (iconOnly) {
     return <EviaLogoMark className={`${iconSizeClass} ${className}`} />;
+  }
+
+  // Render official uploaded logo image if available
+  if (preferImage && !imageError) {
+    return (
+      <div className={`inline-flex items-center select-none ${className}`}>
+        <img
+          src="/images/logo.png"
+          alt="Evia Wealth"
+          className={`${imgHeightClass} w-auto object-contain max-w-full drop-shadow-sm`}
+          loading="eager"
+          onError={() => setImageError(true)}
+        />
+      </div>
+    );
   }
 
   return (

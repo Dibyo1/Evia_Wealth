@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 300" width="960" height="300" fill="none">
+  <defs>
+    <!-- Rich metallic 3D gold gradient for the wing feathers -->
+    <linearGradient id="goldWingOuter" x1="15%" y1="95%" x2="85%" y2="5%">
+      <stop offset="0%" stop-color="#734d0f" />
+      <stop offset="20%" stop-color="#9a7122" />
+      <stop offset="40%" stop-color="#dfba4e" />
+      <stop offset="60%" stop-color="#fff5b8" />
+      <stop offset="80%" stop-color="#caa035" />
+      <stop offset="100%" stop-color="#785012" />
+    </linearGradient>
+
+    <linearGradient id="goldWingMiddle" x1="15%" y1="95%" x2="85%" y2="5%">
+      <stop offset="0%" stop-color="#69440c" />
+      <stop offset="25%" stop-color="#996e1e" />
+      <stop offset="45%" stop-color="#e2bf57" />
+      <stop offset="65%" stop-color="#fff6bf" />
+      <stop offset="85%" stop-color="#be932b" />
+      <stop offset="100%" stop-color="#664008" />
+    </linearGradient>
+
+    <linearGradient id="goldWingInner" x1="15%" y1="95%" x2="85%" y2="5%">
+      <stop offset="0%" stop-color="#5a3806" />
+      <stop offset="30%" stop-color="#8f6417" />
+      <stop offset="50%" stop-color="#d6af44" />
+      <stop offset="70%" stop-color="#faefa5" />
+      <stop offset="90%" stop-color="#b08622" />
+      <stop offset="100%" stop-color="#523204" />
+    </linearGradient>
+
+    <!-- Metallic bevel highlights for wings -->
+    <linearGradient id="wingSpineHighlight" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#d4af37" stop-opacity="0.2" />
+      <stop offset="50%" stop-color="#ffffff" stop-opacity="0.8" />
+      <stop offset="100%" stop-color="#dfba4e" stop-opacity="0.3" />
+    </linearGradient>
+
+    <!-- Metallic Gold for the signature A-swoosh and lines -->
+    <linearGradient id="goldSwooshGrad" x1="0%" y1="50%" x2="100%" y2="50%">
+      <stop offset="0%" stop-color="#855d14" />
+      <stop offset="25%" stop-color="#cf9f2e" />
+      <stop offset="55%" stop-color="#fff6ba" />
+      <stop offset="85%" stop-color="#e0b84c" />
+      <stop offset="100%" stop-color="#8a6117" />
+    </linearGradient>
+
+    <!-- Text gold gradient for WEALTH -->
+    <linearGradient id="wealthGoldGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#fdf4be" />
+      <stop offset="40%" stop-color="#e3be53" />
+      <stop offset="70%" stop-color="#be942d" />
+      <stop offset="100%" stop-color="#8a6217" />
+    </linearGradient>
+
+    <!-- Off-white luxury fill for EVIA letters with soft warm tone -->
+    <linearGradient id="eviaTextFill" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff" />
+      <stop offset="60%" stop-color="#f8f5eb" />
+      <stop offset="100%" stop-color="#ebe5d3" />
+    </linearGradient>
+
+    <filter id="subtleGlow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="#000000" flood-opacity="0.18" />
+    </filter>
+
+    <filter id="softBevel" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="1" dy="2" stdDeviation="1" flood-color="#5c410e" flood-opacity="0.35" />
+    </filter>
+  </defs>
+
+  <!-- ============================================== -->
+  <!-- 1. LEFT ICON: 3 GOLDEN METALLIC WING FEATHERS  -->
+  <!-- ============================================== -->
+  <g id="brand-wing-mark" filter="url(#subtleGlow)">
+    <!-- Feather 1 (Top / Outer Wing - Longest curve tapering to sharp top tip) -->
+    <path
+      d="M 125 245
+         C 112 215, 114 150, 158 85
+         C 182 50, 218 25, 246 16
+         C 236 30, 222 55, 198 88
+         C 172 125, 158 170, 156 220
+         C 156 235, 154 245, 142 248
+         C 134 250, 128 248, 125 245 Z"
+      fill="url(#goldWingOuter)"
+    />
+    <!-- Feather 1 Spine Highlight Edge -->
+    <path
+      d="M 128 243
+         C 116 215, 118 152, 160 88
+         C 184 52, 220 26, 246 16
+         C 238 28, 222 54, 202 85"
+      stroke="url(#wingSpineHighlight)"
+      stroke-width="1.8"
+      stroke-linecap="round"
+      fill="none"
+    />
+
+    <!-- Feather 2 (Middle Wing) -->
+    <path
+      d="M 136 248
+         C 126 222, 130 175, 164 125
+         C 184 96, 212 78, 240 70
+         C 226 84, 212 108, 194 135
+         C 174 165, 164 200, 164 232
+         C 164 242, 160 248, 150 250
+         C 144 251, 138 250, 136 248 Z"
+      fill="url(#goldWingMiddle)"
+    />
+    <!-- Feather 2 Spine Highlight Edge -->
+    <path
+      d="M 138 246
+         C 128 222, 132 176, 166 126
+         C 185 98, 214 80, 240 70"
+      stroke="url(#wingSpineHighlight)"
+      stroke-width="1.4"
+      stroke-linecap="round"
+      fill="none"
+    />
+
+    <!-- Feather 3 (Bottom Wing) -->
+    <path
+      d="M 148 252
+         C 140 234, 148 200, 174 165
+         C 188 145, 204 132, 218 126
+         C 206 138, 194 158, 184 180
+         C 172 205, 170 228, 170 245
+         C 170 250, 165 253, 158 254
+         C 152 254, 149 253, 148 252 Z"
+      fill="url(#goldWingInner)"
+    />
+    <!-- Feather 3 Spine Highlight Edge -->
+    <path
+      d="M 150 250
+         C 142 234, 150 202, 175 166
+         C 189 146, 205 133, 218 126"
+      stroke="url(#wingSpineHighlight)"
+      stroke-width="1.2"
+      stroke-linecap="round"
+      fill="none"
+    />
+  </g>
+
+  <!-- ============================================== -->
+  <!-- 2. BRAND NAME: EVIA (With Signature A-Swoosh)   -->
+  <!-- ============================================== -->
+  <g id="brand-evia-typography">
+    <!-- Letter E -->
+    <g class="letter-e">
+      <!-- Main Stem & Horizontal Arms -->
+      <path
+        d="M 285 58 L 382 58 L 382 72 L 358 72 L 320 72 L 320 106 L 362 106 L 362 119 L 320 119 L 320 156 L 360 156 L 385 156 L 385 170 L 285 170 L 285 156 L 305 156 L 305 72 L 285 72 Z"
+        fill="url(#eviaTextFill)"
+        stroke="#dec97e"
+        stroke-width="1.1"
+      />
+    </g>
+
+    <!-- Letter V -->
+    <g class="letter-v">
+      <path
+        d="M 405 58 L 434 58 L 472 152 L 508 58 L 536 58 L 536 71 L 522 71 L 484 170 L 460 170 L 418 71 L 405 71 Z"
+        fill="url(#eviaTextFill)"
+        stroke="#dec97e"
+        stroke-width="1.1"
+      />
+    </g>
+
+    <!-- Letter I -->
+    <g class="letter-i">
+      <path
+        d="M 552 58 L 602 58 L 602 72 L 584 72 L 584 156 L 602 156 L 602 170 L 552 170 L 552 156 L 570 156 L 570 72 L 552 72 Z"
+        fill="url(#eviaTextFill)"
+        stroke="#dec97e"
+        stroke-width="1.1"
+      />
+    </g>
+
+    <!-- Letter A with Baseline & Diagonal Legs -->
+    <g class="letter-a">
+      <path
+        d="M 662 58 L 678 58 L 728 170 L 702 170 L 688 136 L 642 136 L 630 170 L 604 170 L 650 58 Z
+           M 668 88 L 648 126 L 682 126 Z"
+        fill="url(#eviaTextFill)"
+        stroke="#dec97e"
+        stroke-width="1.1"
+      />
+    </g>
+
+    <!-- ======================================================== -->
+    <!-- SIGNATURE DETAIL: Dynamic 3D Gold Swoosh Across The 'A'  -->
+    <!-- Cuts across the crossbar and arcs gracefully to the right -->
+    <!-- ======================================================== -->
+    <g filter="url(#softBevel)">
+      <!-- Main Metallic Gold Swoosh -->
+      <path
+        d="M 618 162
+           C 638 138, 668 116, 706 102
+           C 728 94, 762 90, 792 90
+           C 752 98, 720 112, 694 128
+           C 668 144, 642 165, 630 175
+           Z"
+        fill="url(#goldSwooshGrad)"
+      />
+      <!-- Shiny Spine Highlight along the upper arc of the Swoosh -->
+      <path
+        d="M 622 160
+           C 642 136, 672 114, 710 100
+           C 732 93, 764 89, 792 90"
+        stroke="#fffbe0"
+        stroke-width="1.5"
+        stroke-linecap="round"
+        fill="none"
+      />
+      <!-- Shadow under the swoosh giving 3D floating depth -->
+      <path
+        d="M 626 166
+           C 644 146, 670 128, 698 126"
+        stroke="#593b08"
+        stroke-width="1.2"
+        stroke-linecap="round"
+        fill="none"
+        opacity="0.6"
+      />
+    </g>
+  </g>
+
+  <!-- ============================================== -->
+  <!-- 3. MIDDLE LINE: — W E A L T H — (3D Gold)       -->
+  <!-- ============================================== -->
+  <g id="brand-wealth-lockup">
+    <!-- Left Gold Bar -->
+    <rect x="255" y="208" width="82" height="3" rx="1.5" fill="url(#goldSwooshGrad)" />
+    <rect x="255" y="208" width="82" height="1" rx="0.5" fill="#fffbe0" opacity="0.6" />
+
+    <!-- WEALTH Text (Wide tracked-out serif caps in 3D gold) -->
+    <text
+      x="500"
+      y="222"
+      text-anchor="middle"
+      font-family="'Cinzel', 'Playfair Display', 'Georgia', serif"
+      font-size="28"
+      font-weight="700"
+      letter-spacing="0.38em"
+      fill="url(#wealthGoldGrad)"
+      filter="url(#softBevel)"
+    >WEALTH</text>
+
+    <!-- Right Gold Bar -->
+    <rect x="663" y="208" width="82" height="3" rx="1.5" fill="url(#goldSwooshGrad)" />
+    <rect x="663" y="208" width="82" height="1" rx="0.5" fill="#fffbe0" opacity="0.6" />
+  </g>
+
+  <!-- ============================================== -->
+  <!-- 4. BOTTOM TAGLINE: Y O U R   W E A L T H   A R T I S T -->
+  <!-- ============================================== -->
+  <g id="brand-tagline">
+    <text
+      x="500"
+      y="268"
+      text-anchor="middle"
+      font-family="'Poppins', 'Montserrat', 'Helvetica Neue', sans-serif"
+      font-size="14.5"
+      font-weight="500"
+      letter-spacing="0.48em"
+      fill="#b8b2a2"
+    >YOUR WEALTH ARTIST</text>
+  </g>
+</svg>

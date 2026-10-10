@@ -13,7 +13,8 @@ import OfficesSection from "./components/OfficesSection";
 import TestimonialsWithMarquee from "./components/TestimonialsWithMarquee";
 import FooterSection from "./components/FooterSection";
 import AppDownloadToast from "./components/AppDownloadToast";
-import { PortfolioModal, LoginModal } from "./components/Modals";
+import { PortfolioModal } from "./components/Modals";
+import MemberLoginModal from "./components/MemberLoginModal";
 import WelcomeSplash from "./components/WelcomeSplash";
 import SolutionPageView from "./components/solutions/SolutionPageView";
 import ResearchInsightsView from "./components/research/ResearchInsightsView";
@@ -36,7 +37,13 @@ const initParticles = async (engine: Engine) => {
 function AppContent() {
   const [portfolioModalOpen, setPortfolioModalOpen] = useState(false);
   const [loginModalOpen, setLoginModalOpen] = useState(false);
+  const [loginOrigin, setLoginOrigin] = useState<{ x: number; y: number } | null>(null);
   const { isHome, isResearch, isPrivileges, isContact, activeSolutionId, currentPath } = useNavigation();
+
+  const handleOpenLogin = (origin?: { x: number; y: number }) => {
+    setLoginOrigin(origin ?? null);
+    setLoginModalOpen(true);
+  };
 
   // Configure the Auto-Advance Transition Zone only when on home page
   const zones = useMemo<Zone[]>(() => {
@@ -84,7 +91,7 @@ function AppContent() {
         {/* Floating Pill Navbar */}
         <Navbar
           onReviewPortfolio={() => setPortfolioModalOpen(true)}
-          onLoginClick={() => setLoginModalOpen(true)}
+          onLoginClick={handleOpenLogin}
         />
 
         {/* Main Content Sections: Home vs Research & Insights vs Solutions Sub-page with Smooth PageTransition */}
@@ -128,21 +135,21 @@ function AppContent() {
             <main id="research-view">
               <ResearchInsightsView
                 onReviewPortfolio={() => setPortfolioModalOpen(true)}
-                onLoginClick={() => setLoginModalOpen(true)}
+                onLoginClick={handleOpenLogin}
               />
             </main>
           ) : isPrivileges ? (
             <main id="privileges-view">
               <SpecialPrivilegesView
                 onReviewPortfolio={() => setPortfolioModalOpen(true)}
-                onLoginClick={() => setLoginModalOpen(true)}
+                onLoginClick={handleOpenLogin}
               />
             </main>
           ) : isContact ? (
             <main id="contact-view">
               <ContactUsView
                 onReviewPortfolio={() => setPortfolioModalOpen(true)}
-                onLoginClick={() => setLoginModalOpen(true)}
+                onLoginClick={handleOpenLogin}
               />
             </main>
           ) : (
@@ -150,7 +157,7 @@ function AppContent() {
               <SolutionPageView
                 solutionId={activeSolutionId || "investment-products"}
                 onReviewPortfolio={() => setPortfolioModalOpen(true)}
-                onLoginClick={() => setLoginModalOpen(true)}
+                onLoginClick={handleOpenLogin}
               />
             </main>
           )}
@@ -167,9 +174,10 @@ function AppContent() {
           isOpen={portfolioModalOpen}
           onClose={() => setPortfolioModalOpen(false)}
         />
-        <LoginModal
+        <MemberLoginModal
           isOpen={loginModalOpen}
           onClose={() => setLoginModalOpen(false)}
+          origin={loginOrigin}
         />
       </div>
     </ParticlesProvider>

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { X, CheckCircle, ArrowRight, Shield, Lock, Building2 } from "lucide-react";
+import EviaLogo from "./EviaLogo";
 
 interface PortfolioModalProps {
   isOpen: boolean;
@@ -59,8 +60,11 @@ export function PortfolioModal({ isOpen, onClose }: PortfolioModalProps) {
           </div>
         ) : (
           <div>
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#34d399]/10 border border-[#34d399]/30 text-[#34d399] text-[10px] font-bold uppercase tracking-wider mb-3">
-              Institutional Advisory
+            <div className="flex items-center justify-between mb-4">
+              <EviaLogo size="sm" />
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#34d399]/10 border border-[#34d399]/30 text-[#34d399] text-[10px] font-bold uppercase tracking-wider">
+                Institutional Advisory
+              </div>
             </div>
             <h3 className="text-2xl font-bold text-white tracking-tight mb-1">
               Review My Portfolio
@@ -172,10 +176,8 @@ export function LoginModal({ isOpen, onClose }: LoginModalProps) {
           <X className="w-4 h-4" />
         </button>
 
-        <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-[#9c7820] via-[#dfba48] to-[#fde587] p-[1.5px] mb-4 flex items-center justify-center">
-          <div className="w-full h-full bg-black rounded-full flex items-center justify-center font-serif text-sm font-bold text-[#dfba48]">
-            EW
-          </div>
+        <div className="mb-5 flex items-center">
+          <EviaLogo size="md" />
         </div>
 
         <h3 className="text-xl font-bold text-white mb-1">
