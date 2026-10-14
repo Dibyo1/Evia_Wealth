@@ -20,8 +20,6 @@ import ResearchInsightsView from "./components/research/ResearchInsightsView";
 import SpecialPrivilegesView from "./components/privileges/SpecialPrivilegesView";
 import ContactUsView from "./components/contact/ContactUsView";
 import AmcsEmpanelled from "./pages/AmcsEmpanelled";
-import CommissionDisclosurePage from "./pages/CommissionDisclosurePage";
-import CommissionDisclosureModal from "./components/CommissionDisclosureModal";
 import PageTransition from "./components/PageTransition";
 import { NavigationProvider, useNavigation } from "./context/NavigationContext";
 
@@ -170,11 +168,28 @@ function AppContent() {
               />
             </main>
           ) : isCommissionDisclosure ? (
-            <main id="disclosure-view">
-              <CommissionDisclosurePage
-                onReviewPortfolio={() => setPortfolioModalOpen(true)}
-                onLoginClick={handleOpenLogin}
-              />
+            <main id="disclosure-view" className="pt-28 pb-16 px-4 max-w-5xl mx-auto min-h-screen">
+              <div className="rounded-2xl border border-[rgba(212,175,55,0.3)] bg-neutral-900/60 p-4 md:p-6 shadow-2xl backdrop-blur-xl">
+                <div className="flex items-center justify-between mb-4">
+                  <div>
+                    <h1 className="text-xl font-serif text-[#f1e7b4]">Commission Disclosure</h1>
+                    <p className="text-xs text-neutral-400">ARN-300286 • Evia Wealth</p>
+                  </div>
+                  <a
+                    href="/documents/commission-disclosure.pdf"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-[rgba(212,175,55,0.15)] border border-[rgba(212,175,55,0.3)] text-[#f1e7b4] text-xs font-medium hover:bg-[rgba(212,175,55,0.25)] transition-colors"
+                  >
+                    Open PDF in New Tab
+                  </a>
+                </div>
+                <iframe
+                  src="/documents/commission-disclosure.pdf"
+                  title="Commission Disclosure (ARN-300286)"
+                  className="w-full h-[750px] rounded-xl border border-neutral-800 bg-neutral-950"
+                />
+              </div>
             </main>
           ) : (
             <main id="solution-view">
@@ -202,10 +217,6 @@ function AppContent() {
           isOpen={loginModalOpen}
           onClose={() => setLoginModalOpen(false)}
           origin={loginOrigin}
-        />
-        <CommissionDisclosureModal
-          isOpen={isDisclosureModalOpen}
-          onClose={closeDisclosureModal}
         />
       </div>
     </ParticlesProvider>

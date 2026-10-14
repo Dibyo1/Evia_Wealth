@@ -57,7 +57,8 @@ export function NavigationProvider({ children }: { children: ReactNode }) {
   const transitionTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const openDisclosureModal = useCallback(() => {
-    setIsDisclosureModalOpen(true);
+    window.open("/documents/commission-disclosure.pdf", "_blank", "noopener,noreferrer");
+    setIsDisclosureModalOpen(false);
   }, []);
 
   const closeDisclosureModal = useCallback(() => {
