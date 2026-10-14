@@ -19,6 +19,9 @@ import SolutionPageView from "./components/solutions/SolutionPageView";
 import ResearchInsightsView from "./components/research/ResearchInsightsView";
 import SpecialPrivilegesView from "./components/privileges/SpecialPrivilegesView";
 import ContactUsView from "./components/contact/ContactUsView";
+import AmcsEmpanelled from "./pages/AmcsEmpanelled";
+import CommissionDisclosurePage from "./pages/CommissionDisclosurePage";
+import CommissionDisclosureModal from "./components/CommissionDisclosureModal";
 import PageTransition from "./components/PageTransition";
 import { NavigationProvider, useNavigation } from "./context/NavigationContext";
 
@@ -37,7 +40,18 @@ function AppContent() {
   const [portfolioModalOpen, setPortfolioModalOpen] = useState(false);
   const [loginModalOpen, setLoginModalOpen] = useState(false);
   const [loginOrigin, setLoginOrigin] = useState<{ x: number; y: number } | null>(null);
-  const { isHome, isResearch, isPrivileges, isContact, activeSolutionId, currentPath } = useNavigation();
+  const {
+    isHome,
+    isResearch,
+    isPrivileges,
+    isContact,
+    isAmcsEmpanelled,
+    isCommissionDisclosure,
+    activeSolutionId,
+    currentPath,
+    isDisclosureModalOpen,
+    closeDisclosureModal,
+  } = useNavigation();
 
   const handleOpenLogin = (origin?: { x: number; y: number }) => {
     setLoginOrigin(origin ?? null);
@@ -148,6 +162,20 @@ function AppContent() {
                 onLoginClick={handleOpenLogin}
               />
             </main>
+          ) : isAmcsEmpanelled ? (
+            <main id="amcs-view">
+              <AmcsEmpanelled
+                onReviewPortfolio={() => setPortfolioModalOpen(true)}
+                onLoginClick={handleOpenLogin}
+              />
+            </main>
+          ) : isCommissionDisclosure ? (
+            <main id="disclosure-view">
+              <CommissionDisclosurePage
+                onReviewPortfolio={() => setPortfolioModalOpen(true)}
+                onLoginClick={handleOpenLogin}
+              />
+            </main>
           ) : (
             <main id="solution-view">
               <SolutionPageView
@@ -174,6 +202,10 @@ function AppContent() {
           isOpen={loginModalOpen}
           onClose={() => setLoginModalOpen(false)}
           origin={loginOrigin}
+        />
+        <CommissionDisclosureModal
+          isOpen={isDisclosureModalOpen}
+          onClose={closeDisclosureModal}
         />
       </div>
     </ParticlesProvider>

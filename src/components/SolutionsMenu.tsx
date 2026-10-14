@@ -21,17 +21,6 @@ export const SOLUTIONS_MENU: SolutionCategory[] = [
     ],
   },
   {
-    id: "portfolio-solutions",
-    label: "Portfolio Solutions",
-    href: "/solutions/portfolio-solutions",
-    solutions: [
-      { title: "Evia Wealth Global Allocator", description: "Access best-in-class global funds across world markets", href: "/solutions/portfolio-solutions" },
-      { title: "Evia Wealth Indian Olympians", description: "Large-cap core strategy in dominant market leaders", href: "/solutions/portfolio-solutions" },
-      { title: "Evia Wealth Indian Titans", description: "Thematic high-growth structural opportunities in India", href: "/solutions/portfolio-solutions" },
-      { title: "Evia Wealth 360", description: "Holistic multi-custody reporting and portfolio diagnostics", href: "/solutions/portfolio-solutions" },
-    ],
-  },
-  {
     id: "wealth-planning",
     label: "Wealth Planning",
     href: "/solutions/wealth-planning",

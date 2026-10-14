@@ -44,7 +44,7 @@ export const TEAM_MEMBERS: TeamMember[] = [
     facts: [
       { label: "Experience in wealth & banking", value: "16+ Years" },
       { label: "Academic credentials", value: "MBA (IBS Hyderabad)" },
-      { label: "Global certification", value: "CISI (U.K.) - Investment, Risk & Tax" },
+      { label: "Certification", value: "CISI (U.K.) - Investment, Risk & Tax" },
       { label: "Leadership pedigree", value: "Ex-Group Head, ICICI, BoB & Tata Capital" },
     ],
   },
@@ -56,10 +56,10 @@ export const TEAM_MEMBERS: TeamMember[] = [
     avatar: "https://eviawealth.com/images/team-member/bikash.jpg",
     bio: "Mr Bikash Kumar Nath is the CO-Founder and Director at Evia. A PGCBM from NMIMS, Mumbai he brings with him over 14 years of expertise into wealth management and banking. During his previous assignments as a Wealth Strategist he has been instrumental in driving growth and financial freedom for individuals and organizations across different age groups and diverse portfolio sizes. He is highly passionate about promoting the essence of informed investment decisions for long term wealth creation. At Evia he spearheads innovative strategies and educational initiatives.",
     facts: [
-      { label: "Experience managing wealth", value: "14+ Years" },
-      { label: "Management education", value: "PGCBM (NMIMS, Mumbai)" },
-      { label: "Institutional track record", value: "Wealth Strategist across diverse portfolios" },
-      { label: "Currently spearheads", value: "Innovative Strategies & Investor Initiatives" },
+      { label: "Experience in wealth & banking", value: "14+ Years" },
+      { label: "Academic credentials", value: "PGCBM (NMIMS, Mumbai)" },
+      { label: "Certification", value: "NISM series:- VA" },
+      { label: "Leadership pedigree", value: "Ex-Wealth Strategist across multi-asset portfolios" },
     ],
   },
   {
@@ -70,10 +70,10 @@ export const TEAM_MEMBERS: TeamMember[] = [
     avatar: "https://eviawealth.com/images/team-member/narayan.jpg",
     bio: "Mr. Debnarayan Dey is the Co-founder and Director at Evia. He has an exhaustive market & industry experience of over 13 years in the domains of Premium Banking and Investment advisory. He has also held leadership positions across PSU banks and Wealth based NBFC organisations and has successfully driven key management strategies. He is passionate about providing holistic financial solutions that meet the diverse and evolving needs of HNI and UHNIs. His mantra for model portfolio remains lucid and that is one that fosters a long term mutually beneficial client relationship. At Evia, he spearheads the key portfolio of products and research with a vision to make the organisation one of the most trusted brands in the field of research and advisory in our country.",
     facts: [
-      { label: "Experience in premium advisory", value: "13+ Years" },
-      { label: "Banking & NBFC background", value: "Leadership at PSU Banks & Wealth NBFCs" },
-      { label: "Client focus", value: "Holistic solutions for HNIs & UHNIs" },
-      { label: "Currently spearheads", value: "Products, Advisory & Quant Research" },
+      { label: "Experience in wealth & banking", value: "13+ Years" },
+      { label: "Academic credentials", value: "Btech, PGDM Management" },
+      { label: "Certification", value: "NISM series:- VA" },
+      { label: "Leadership pedigree", value: "Leadership at PSU Banks & Wealth NBFCs" },
     ],
   },
 ];

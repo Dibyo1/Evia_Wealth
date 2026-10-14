@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { ArrowRight, Menu, X } from "lucide-react";
 import EviaLogo from "./EviaLogo";
 import SolutionsMenu from "./SolutionsMenu";
+import ServicesMenu from "./ServicesMenu";
 import { useNavigation } from "../context/NavigationContext";
 
 interface NavbarProps {
@@ -11,7 +12,7 @@ interface NavbarProps {
 
 export default function Navbar({ onReviewPortfolio, onLoginClick }: NavbarProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const { isHome, isResearch, isPrivileges, isContact, navigate } = useNavigation();
+  const { isHome, isResearch, isPrivileges, isContact, isAmcsEmpanelled, navigate, openDisclosureModal } = useNavigation();
 
   const scrollToSection = (id: string) => {
     setMobileMenuOpen(false);
@@ -115,6 +116,9 @@ export default function Navbar({ onReviewPortfolio, onLoginClick }: NavbarProps)
             >
               {/* Solutions Dropdown Menu */}
               <SolutionsMenu />
+
+              {/* Services Dropdown Menu */}
+              <ServicesMenu />
 
               <button
                 onClick={() => navigate("/research-and-insights")}
@@ -232,15 +236,6 @@ export default function Navbar({ onReviewPortfolio, onLoginClick }: NavbarProps)
               <button
                 onClick={() => {
                   setMobileMenuOpen(false);
-                  navigate("/solutions/portfolio-solutions");
-                }}
-                className="text-left text-[14.5px] text-[#f1e7b4] py-1.5 px-3 rounded-lg hover:bg-white/5 transition-colors"
-              >
-                Portfolio Solutions
-              </button>
-              <button
-                onClick={() => {
-                  setMobileMenuOpen(false);
                   navigate("/solutions/wealth-planning");
                 }}
                 className="text-left text-[14.5px] text-[#f1e7b4] py-1.5 px-3 rounded-lg hover:bg-white/5 transition-colors"
@@ -264,6 +259,41 @@ export default function Navbar({ onReviewPortfolio, onLoginClick }: NavbarProps)
                 className="text-left text-[14.5px] text-[#f1e7b4] py-1.5 px-3 rounded-lg hover:bg-white/5 transition-colors"
               >
                 Lending Solutions
+              </button>
+            </div>
+
+            {/* Mobile Services Section */}
+            <div className="px-3 pt-2 pb-1">
+              <span className="text-[11px] font-semibold tracking-wider text-[#d9c56e] uppercase">
+                Services
+              </span>
+            </div>
+            <div className="grid grid-cols-1 gap-1 pl-2 mb-2 border-l border-[#d4af37]/25 ml-2">
+              <button
+                type="button"
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  openDisclosureModal();
+                }}
+                className="text-left text-[14.5px] text-[#f1e7b4] py-1.5 px-3 rounded-lg hover:bg-white/5 transition-colors flex items-center justify-between cursor-pointer"
+              >
+                <span>Commission Disclosure</span>
+                <span className="text-[10px] uppercase font-semibold tracking-wider px-1.5 py-0.5 rounded bg-[rgba(212,175,55,0.15)] text-[#f1e7b4] border border-[rgba(212,175,55,0.3)]">
+                  PDF
+                </span>
+              </button>
+              <button
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  navigate("/amcs-empanelled");
+                }}
+                className={`text-left text-[14.5px] py-1.5 px-3 rounded-lg transition-colors ${
+                  isAmcsEmpanelled
+                    ? "bg-white/10 text-[#f1e7b4] font-medium"
+                    : "text-[#f1e7b4] hover:bg-white/5"
+                }`}
+              >
+                List of AMCs Empanelled
               </button>
             </div>
 

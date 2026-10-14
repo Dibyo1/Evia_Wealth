@@ -306,9 +306,6 @@ export default function ContactUsView({}: ContactUsViewProps) {
                         <option value="" className="bg-[#121214] text-white/50">
                           Select a Product or Service
                         </option>
-                        <option value="portfolio-solutions" className="bg-[#121214] text-white">
-                          Portfolio Solutions
-                        </option>
                         <option value="investment-products" className="bg-[#121214] text-white">
                           Investment Products
                         </option>

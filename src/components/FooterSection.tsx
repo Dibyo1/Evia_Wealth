@@ -1,14 +1,12 @@
 import React, { useState } from "react";
 import { ArrowRight, Lock, Award, ShieldCheck, Check } from "lucide-react";
 import EviaLogo from "./EviaLogo";
-import { useNavigation } from "../context/NavigationContext";
 
 interface FooterSectionProps {
   onReviewPortfolio: () => void;
 }
 
 export default function FooterSection({ onReviewPortfolio }: FooterSectionProps) {
-  const { navigate } = useNavigation();
   const [email, setEmail] = useState("");
   const [subscribed, setSubscribed] = useState(false);
 
@@ -142,169 +140,54 @@ export default function FooterSection({ onReviewPortfolio }: FooterSectionProps)
           </div>
         </div>
 
-        {/* 4.13 Footer Link Columns */}
-        <div className="pt-12 border-t border-white/8 grid grid-cols-1 md:grid-cols-12 gap-10 mb-12">
-          {/* Brand Col (5 cols) */}
-          <div className="md:col-span-5 flex flex-col items-start">
+        {/* 4.13 Footer Brand & Details */}
+        <div className="pt-12 border-t border-white/8 mb-12">
+          {/* Brand Col */}
+          <div className="max-w-[760px] flex flex-col items-start">
             {/* Gold Logo */}
-            <div className="mb-4">
+            <div className="mb-5">
               <EviaLogo size="md" />
             </div>
 
-            <p className="text-[13px] text-neutral-400 leading-relaxed max-w-[360px] mb-4">
-              Evia Wealth is an institutional wealth management and multi-asset advisory platform. We craft bespoke portfolios engineered for capital preservation and uninterrupted compounding.
-            </p>
+            <div className="mb-6 max-w-[680px]">
+              <div className="text-[12px] font-bold tracking-widest uppercase text-neutral-300 mb-2.5">
+                About Our Company
+              </div>
+              <p className="text-[15px] text-neutral-300/90 leading-relaxed">
+                At Evia we believe that wealth management is about more than just numbers—it's about empowering you to achieve your financial goals and secure your future. With a deep understanding of the financial markets and a commitment to personalized service, we are dedicated to helping you navigate the complexities of wealth management with confidence.
+              </p>
+            </div>
+
+            <div className="space-y-2 text-[14px] text-neutral-300 max-w-[680px] mb-6 pt-5 border-t border-white/10">
+              <div className="text-white font-medium">
+                AMFI Registered Mutual Fund and SIF distributor. ARN-300286
+              </div>
+              <div className="text-white font-medium">
+                APMI Registered Portfolio Management Services- ARN03957
+              </div>
+              <div className="text-neutral-400 text-[13.5px]">
+                Initial Registration Date: 13-JUN-2024 | Valid till 12-JUN-2027
+              </div>
+              <div className="pt-1.5 flex flex-col sm:flex-row sm:items-center gap-y-1.5 sm:gap-x-6 text-[13.5px] text-neutral-400">
+                <div>
+                  Grievance Officer: Raja Gazi- <a href="tel:+918902923903" className="text-white hover:text-[#e5d58a] transition-colors font-medium">+91 89029 23903</a>
+                </div>
+                <div>
+                  Escalation: Punit Sharma - <a href="tel:+919748582212" className="text-white hover:text-[#e5d58a] transition-colors font-medium">+91 97485 82212</a>
+                </div>
+              </div>
+            </div>
 
             <div className="text-[12px] text-neutral-500 font-medium">
-              Offices in Mumbai • Bengaluru • Delhi NCR • Kolkata
+              Office in Kolkata
             </div>
-          </div>
-
-          {/* Links Col 1: Solutions */}
-          <div className="md:col-span-2 sm:col-span-4">
-            <div className="text-[11px] font-bold tracking-widest uppercase text-neutral-400 mb-4">
-              SOLUTIONS
-            </div>
-            <ul className="space-y-2.5 text-[13px] text-neutral-400">
-              <li>
-                <button
-                  type="button"
-                  onClick={() => navigate("/solutions/investment-products")}
-                  className="hover:text-white transition-colors cursor-pointer text-left"
-                >
-                  Investment Products
-                </button>
-              </li>
-              <li>
-                <button
-                  type="button"
-                  onClick={() => navigate("/solutions/portfolio-solutions")}
-                  className="hover:text-white transition-colors cursor-pointer text-left"
-                >
-                  Portfolio Solutions
-                </button>
-              </li>
-              <li>
-                <button
-                  type="button"
-                  onClick={() => navigate("/solutions/wealth-planning")}
-                  className="hover:text-white transition-colors cursor-pointer text-left"
-                >
-                  Wealth Planning
-                </button>
-              </li>
-              <li>
-                <button
-                  type="button"
-                  onClick={() => navigate("/solutions/real-estate")}
-                  className="hover:text-white transition-colors cursor-pointer text-left"
-                >
-                  Real Estate
-                </button>
-              </li>
-              <li>
-                <button
-                  type="button"
-                  onClick={() => navigate("/solutions/lending-solutions")}
-                  className="hover:text-white transition-colors cursor-pointer text-left"
-                >
-                  Lending Solutions
-                </button>
-              </li>
-            </ul>
-          </div>
-
-          {/* Links Col 2: Company */}
-          <div className="md:col-span-2 sm:col-span-4">
-            <div className="text-[11px] font-bold tracking-widest uppercase text-neutral-400 mb-4">
-              COMPANY
-            </div>
-            <ul className="space-y-2.5 text-[13px] text-neutral-400">
-              <li>
-                <button
-                  type="button"
-                  onClick={() => navigate("/", "about")}
-                  className="hover:text-white transition-colors cursor-pointer text-left"
-                >
-                  About Us
-                </button>
-              </li>
-              <li>
-                <button
-                  type="button"
-                  onClick={() => navigate("/", "philosophy")}
-                  className="hover:text-white transition-colors cursor-pointer text-left"
-                >
-                  Investment Philosophy
-                </button>
-              </li>
-              <li>
-                <button
-                  type="button"
-                  onClick={() => navigate("/research-and-insights")}
-                  className="hover:text-white transition-colors cursor-pointer text-left"
-                >
-                  Research & Insights
-                </button>
-              </li>
-              <li>
-                <button
-                  type="button"
-                  onClick={() => navigate("/special-privileges")}
-                  className="hover:text-white transition-colors cursor-pointer text-left"
-                >
-                  Special Privileges
-                </button>
-              </li>
-              <li>
-                <button
-                  type="button"
-                  onClick={() => navigate("/", "team")}
-                  className="hover:text-white transition-colors cursor-pointer text-left"
-                >
-                  Our Leadership Team
-                </button>
-              </li>
-              <li>
-                <button
-                  type="button"
-                  onClick={() => navigate("/", "offices")}
-                  className="hover:text-white transition-colors cursor-pointer text-left"
-                >
-                  Offices & Suites
-                </button>
-              </li>
-              <li>
-                <button
-                  type="button"
-                  onClick={() => navigate("/contact")}
-                  className="hover:text-white transition-colors cursor-pointer text-left"
-                >
-                  Contact Us
-                </button>
-              </li>
-            </ul>
-          </div>
-
-          {/* Links Col 3: Legal */}
-          <div className="md:col-span-3 sm:col-span-4">
-            <div className="text-[11px] font-bold tracking-widest uppercase text-neutral-400 mb-4">
-              LEGAL
-            </div>
-            <ul className="space-y-2.5 text-[13px] text-neutral-400">
-              <li><a href="#" className="hover:text-white transition-colors">SEBI Registration</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">Terms & Disclosures</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">Privacy Policy</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">Investor Charter</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">ODR Portal</a></li>
-            </ul>
           </div>
         </div>
 
         {/* Legal Disclaimer Bottom */}
         <div className="pt-8 border-t border-white/6 space-y-3 text-[11px] text-neutral-500 leading-relaxed font-sans">
           <p>
-            Evia Wealth is a registered trademark of Evia Wealth Management Private Limited, AMFI Registered Mutual Fund Distributor (ARN-248108). Regulated by the Securities and Exchange Board of India (SEBI).
+            Evia Wealth is a registered trademark of Evia Wealth Management Private Limited, AMFI Registered Mutual Fund and SIF distributor (ARN-300286) and APMI Registered Portfolio Management Services (ARN03957). Initial Registration Date: 13-JUN-2024 | Valid till 12-JUN-2027.
           </p>
           <p>
             Disclaimer: Investments in securities markets are subject to market risks; read all related documents carefully before investing. Past performance is not indicative of future returns.

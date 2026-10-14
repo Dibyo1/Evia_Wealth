@@ -255,7 +255,6 @@ export const SOLUTIONS_PAGES_DATA: Record<string, SolutionPageData> = {
 
 export const SOLUTIONS_CATEGORIES_LIST = [
   { id: "investment-products", label: "Investment Products", href: "/solutions/investment-products" },
-  { id: "portfolio-solutions", label: "Portfolio Solutions", href: "/solutions/portfolio-solutions" },
   { id: "wealth-planning", label: "Wealth Planning", href: "/solutions/wealth-planning" },
   { id: "real-estate", label: "Real Estate", href: "/solutions/real-estate" },
   { id: "lending-solutions", label: "Lending Solutions", href: "/solutions/lending-solutions" },

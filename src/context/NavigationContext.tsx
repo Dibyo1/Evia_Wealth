@@ -7,8 +7,13 @@ interface NavigationContextType {
   isResearch: boolean;
   isPrivileges: boolean;
   isContact: boolean;
+  isAmcsEmpanelled: boolean;
+  isCommissionDisclosure: boolean;
   activeSolutionId: string | null;
   isTransitioning: boolean;
+  isDisclosureModalOpen: boolean;
+  openDisclosureModal: () => void;
+  closeDisclosureModal: () => void;
 }
 
 const NavigationContext = createContext<NavigationContextType>({
@@ -18,8 +23,13 @@ const NavigationContext = createContext<NavigationContextType>({
   isResearch: false,
   isPrivileges: false,
   isContact: false,
+  isAmcsEmpanelled: false,
+  isCommissionDisclosure: false,
   activeSolutionId: null,
   isTransitioning: false,
+  isDisclosureModalOpen: false,
+  openDisclosureModal: () => {},
+  closeDisclosureModal: () => {},
 });
 
 export function NavigationProvider({ children }: { children: ReactNode }) {
@@ -30,7 +40,9 @@ export function NavigationProvider({ children }: { children: ReactNode }) {
         pathname.startsWith("/solutions/") ||
         pathname === "/research-and-insights" ||
         pathname === "/special-privileges" ||
-        pathname === "/contact"
+        pathname === "/contact" ||
+        pathname === "/amcs-empanelled" ||
+        pathname === "/commission-disclosure"
       ) {
         return pathname;
       }
@@ -41,7 +53,16 @@ export function NavigationProvider({ children }: { children: ReactNode }) {
 
   const [currentPath, setCurrentPath] = useState<string>(getInitialPath);
   const [isTransitioning, setIsTransitioning] = useState<boolean>(false);
+  const [isDisclosureModalOpen, setIsDisclosureModalOpen] = useState<boolean>(false);
   const transitionTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const openDisclosureModal = useCallback(() => {
+    setIsDisclosureModalOpen(true);
+  }, []);
+
+  const closeDisclosureModal = useCallback(() => {
+    setIsDisclosureModalOpen(false);
+  }, []);
 
   useEffect(() => {
     const onPopState = () => {
@@ -50,7 +71,9 @@ export function NavigationProvider({ children }: { children: ReactNode }) {
         pathname.startsWith("/solutions/") ||
         pathname === "/research-and-insights" ||
         pathname === "/special-privileges" ||
-        pathname === "/contact"
+        pathname === "/contact" ||
+        pathname === "/amcs-empanelled" ||
+        pathname === "/commission-disclosure"
           ? pathname
           : "/";
 
@@ -79,7 +102,9 @@ export function NavigationProvider({ children }: { children: ReactNode }) {
       path.startsWith("/solutions/") ||
       path === "/research-and-insights" ||
       path === "/special-privileges" ||
-      path === "/contact"
+      path === "/contact" ||
+      path === "/amcs-empanelled" ||
+      path === "/commission-disclosure"
         ? path
         : "/";
 
@@ -140,9 +165,16 @@ export function NavigationProvider({ children }: { children: ReactNode }) {
   const isResearch = currentPath === "/research-and-insights";
   const isPrivileges = currentPath === "/special-privileges";
   const isContact = currentPath === "/contact";
+  const isAmcsEmpanelled = currentPath === "/amcs-empanelled";
+  const isCommissionDisclosure = currentPath === "/commission-disclosure";
   const isHome =
     currentPath === "/" ||
-    (!currentPath.startsWith("/solutions/") && !isResearch && !isPrivileges && !isContact);
+    (!currentPath.startsWith("/solutions/") &&
+      !isResearch &&
+      !isPrivileges &&
+      !isContact &&
+      !isAmcsEmpanelled &&
+      !isCommissionDisclosure);
   const activeSolutionId = currentPath.startsWith("/solutions/")
     ? currentPath.replace("/solutions/", "")
     : null;
@@ -156,8 +188,13 @@ export function NavigationProvider({ children }: { children: ReactNode }) {
         isResearch,
         isPrivileges,
         isContact,
+        isAmcsEmpanelled,
+        isCommissionDisclosure,
         activeSolutionId,
         isTransitioning,
+        isDisclosureModalOpen,
+        openDisclosureModal,
+        closeDisclosureModal,
       }}
     >
       {children}
