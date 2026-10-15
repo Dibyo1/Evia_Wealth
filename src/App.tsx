@@ -21,6 +21,7 @@ import SpecialPrivilegesView from "./components/privileges/SpecialPrivilegesView
 import ContactUsView from "./components/contact/ContactUsView";
 import AmcsEmpanelled from "./pages/AmcsEmpanelled";
 import PageTransition from "./components/PageTransition";
+import DemoOne from "./demo";
 import { NavigationProvider, useNavigation } from "./context/NavigationContext";
 
 import { ParticlesProvider } from "@tsparticles/react";
@@ -45,10 +46,12 @@ function AppContent() {
     isContact,
     isAmcsEmpanelled,
     isCommissionDisclosure,
+    isReadingReveal,
     activeSolutionId,
     currentPath,
     isDisclosureModalOpen,
     closeDisclosureModal,
+    navigate,
   } = useNavigation();
 
   const handleOpenLogin = (origin?: { x: number; y: number }) => {
@@ -190,6 +193,18 @@ function AppContent() {
                   className="w-full h-[750px] rounded-xl border border-neutral-800 bg-neutral-950"
                 />
               </div>
+            </main>
+          ) : isReadingReveal ? (
+            <main id="reveal-view" className="min-h-screen relative pt-16">
+              <div className="fixed top-24 left-6 z-40">
+                <button
+                  onClick={() => navigate("/")}
+                  className="px-4 py-2 rounded-full bg-neutral-900/90 hover:bg-neutral-800 text-[#f1e7b4] border border-[rgba(212,175,55,0.3)] shadow-xl text-xs font-medium transition-all backdrop-blur-md cursor-pointer flex items-center gap-1.5"
+                >
+                  ← Back to Home
+                </button>
+              </div>
+              <DemoOne />
             </main>
           ) : (
             <main id="solution-view">

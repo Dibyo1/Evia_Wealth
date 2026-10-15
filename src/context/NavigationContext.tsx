@@ -9,6 +9,7 @@ interface NavigationContextType {
   isContact: boolean;
   isAmcsEmpanelled: boolean;
   isCommissionDisclosure: boolean;
+  isReadingReveal: boolean;
   activeSolutionId: string | null;
   isTransitioning: boolean;
   isDisclosureModalOpen: boolean;
@@ -25,6 +26,7 @@ const NavigationContext = createContext<NavigationContextType>({
   isContact: false,
   isAmcsEmpanelled: false,
   isCommissionDisclosure: false,
+  isReadingReveal: false,
   activeSolutionId: null,
   isTransitioning: false,
   isDisclosureModalOpen: false,
@@ -42,7 +44,9 @@ export function NavigationProvider({ children }: { children: ReactNode }) {
         pathname === "/special-privileges" ||
         pathname === "/contact" ||
         pathname === "/amcs-empanelled" ||
-        pathname === "/commission-disclosure"
+        pathname === "/commission-disclosure" ||
+        pathname === "/reading-text-reveal" ||
+        pathname === "/demo"
       ) {
         return pathname;
       }
@@ -115,7 +119,9 @@ function scrollElementIntoViewWithRetry(targetId: string, maxAttempts = 35, inte
         pathname === "/special-privileges" ||
         pathname === "/contact" ||
         pathname === "/amcs-empanelled" ||
-        pathname === "/commission-disclosure"
+        pathname === "/commission-disclosure" ||
+        pathname === "/reading-text-reveal" ||
+        pathname === "/demo"
           ? pathname
           : "/";
 
@@ -153,7 +159,9 @@ function scrollElementIntoViewWithRetry(targetId: string, maxAttempts = 35, inte
       path === "/special-privileges" ||
       path === "/contact" ||
       path === "/amcs-empanelled" ||
-      path === "/commission-disclosure"
+      path === "/commission-disclosure" ||
+      path === "/reading-text-reveal" ||
+      path === "/demo"
         ? path
         : "/";
 
@@ -216,6 +224,7 @@ function scrollElementIntoViewWithRetry(targetId: string, maxAttempts = 35, inte
   const isContact = currentPath === "/contact";
   const isAmcsEmpanelled = currentPath === "/amcs-empanelled";
   const isCommissionDisclosure = currentPath === "/commission-disclosure";
+  const isReadingReveal = currentPath === "/reading-text-reveal" || currentPath === "/demo";
   const isHome =
     currentPath === "/" ||
     (!currentPath.startsWith("/solutions/") &&
@@ -223,7 +232,8 @@ function scrollElementIntoViewWithRetry(targetId: string, maxAttempts = 35, inte
       !isPrivileges &&
       !isContact &&
       !isAmcsEmpanelled &&
-      !isCommissionDisclosure);
+      !isCommissionDisclosure &&
+      !isReadingReveal);
   const activeSolutionId = currentPath.startsWith("/solutions/")
     ? currentPath.replace("/solutions/", "")
     : null;
@@ -239,6 +249,7 @@ function scrollElementIntoViewWithRetry(targetId: string, maxAttempts = 35, inte
         isContact,
         isAmcsEmpanelled,
         isCommissionDisclosure,
+        isReadingReveal,
         activeSolutionId,
         isTransitioning,
         isDisclosureModalOpen,
