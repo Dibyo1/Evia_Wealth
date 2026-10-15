@@ -59,18 +59,12 @@
     color: #ffffff;
     font-family: 'Poppins', sans-serif;
     overflow-x: clip;
-    cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='%23cdb864' stroke='%23000' stroke-width='1.5'%3E%3Cpolygon points='2,2 10,22 13.5,13.5 22,10'/%3E%3C/svg%3E") 2 2, auto;
   }
 
   /* Headings with tight line height as requested */
   h1, h2, h3, h4, h5, h6 {
     font-family: 'Poppins', sans-serif;
     line-height: 1.25;
-  }
-
-  /* Keep text selectable with standard text cursor */
-  p, h1, h2, h3, h4, h5, h6, span, input, textarea {
-    cursor: auto;
   }
 
   a, button, [role="button"], select, .interactive-cursor {

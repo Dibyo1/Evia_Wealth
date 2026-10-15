@@ -84,12 +84,13 @@ export default function EviaLogo({
 
   // Render official uploaded logo image if available
   if (preferImage && !imageError) {
+    const logoSrc = lightText ? "/images/logo.png" : "/images/logo-dark.png";
     return (
       <div className={`inline-flex items-center select-none ${className}`}>
         <img
-          src="/images/logo.png"
+          src={logoSrc}
           alt="Evia Wealth"
-          className={`${imgHeightClass} w-auto object-contain max-w-full drop-shadow-sm`}
+          className={`${imgHeightClass} w-auto object-contain max-w-full drop-shadow-xs`}
           loading="eager"
           onError={() => setImageError(true)}
         />
