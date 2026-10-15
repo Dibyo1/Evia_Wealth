@@ -107,6 +107,13 @@ export default function Navbar({ onReviewPortfolio, onLoginClick }: NavbarProps)
               </button>
 
               <button
+                onClick={() => scrollToSection("about")}
+                className="text-[#e6d78a] hover:text-[#f6e7b4] transition-colors duration-150 cursor-pointer focus:outline-none"
+              >
+                About Us
+              </button>
+
+              <button
                 onClick={() => navigate("/special-privileges")}
                 className={`transition-colors duration-150 cursor-pointer focus:outline-none ${
                   isPrivileges ? "text-[#f6e7b4] font-semibold" : "text-[#e6d78a] hover:text-[#f6e7b4]"
@@ -268,6 +275,13 @@ export default function Navbar({ onReviewPortfolio, onLoginClick }: NavbarProps)
               }`}
             >
               Research and Insights
+            </button>
+
+            <button
+              onClick={() => scrollToSection("about")}
+              className="text-left text-[15px] font-medium text-white py-2 px-3 rounded-xl hover:bg-white/5 transition-colors"
+            >
+              About Us
             </button>
 
             <button
