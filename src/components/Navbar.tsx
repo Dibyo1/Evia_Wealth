@@ -16,30 +16,7 @@ export default function Navbar({ onReviewPortfolio, onLoginClick }: NavbarProps)
 
   const scrollToSection = (id: string) => {
     setMobileMenuOpen(false);
-
-    if (!isHome) {
-      navigate("/", id);
-      return;
-    }
-
-    const element = document.getElementById(id);
-    if (element) {
-      const navOffset = 68; // perfectly aligns with our 68px desktop bar height
-      const elementPosition = element.getBoundingClientRect().top;
-      const offsetPosition = elementPosition + window.pageYOffset - navOffset;
-      
-      const lenis = (window as any).lenis;
-      if (lenis) {
-        lenis.scrollTo(element, { offset: -navOffset, duration: 1.2 });
-      } else {
-        window.scrollTo({
-          top: offsetPosition,
-          behavior: "smooth",
-        });
-      }
-    } else {
-      navigate("/", id);
-    }
+    navigate("/", id);
   };
 
   return (

@@ -65,7 +65,48 @@ export function NavigationProvider({ children }: { children: ReactNode }) {
     setIsDisclosureModalOpen(false);
   }, []);
 
+function scrollElementIntoViewWithRetry(targetId: string, maxAttempts = 35, intervalMs = 50) {
+  if (typeof window === "undefined" || !targetId) return;
+
+  let attempts = 0;
+
+  const tryScroll = () => {
+    const element = document.getElementById(targetId);
+    if (element) {
+      const navOffset = 68;
+      const elementPosition = element.getBoundingClientRect().top;
+      const offsetPosition = elementPosition + window.pageYOffset - navOffset;
+      const lenis = (window as any).lenis;
+      if (lenis) {
+        lenis.resize();
+        lenis.scrollTo(element, { offset: -navOffset, duration: 1.2 });
+      } else {
+        window.scrollTo({
+          top: offsetPosition,
+          behavior: "smooth",
+        });
+      }
+      return;
+    }
+
+    attempts++;
+    if (attempts < maxAttempts) {
+      setTimeout(tryScroll, intervalMs);
+    }
+  };
+
+  tryScroll();
+}
+
   useEffect(() => {
+    // If arriving on Home with an anchor hash in the URL, scroll to it automatically
+    if (typeof window !== "undefined" && window.location.hash) {
+      const hashId = window.location.hash.replace("#", "");
+      if (hashId) {
+        scrollElementIntoViewWithRetry(hashId);
+      }
+    }
+
     const onPopState = () => {
       const pathname = window.location.pathname;
       const targetPath =
@@ -82,6 +123,13 @@ export function NavigationProvider({ children }: { children: ReactNode }) {
       setIsTransitioning(true);
       setCurrentPath(targetPath);
       window.scrollTo({ top: 0, behavior: "instant" });
+
+      if (window.location.hash) {
+        const hashId = window.location.hash.replace("#", "");
+        if (hashId) {
+          scrollElementIntoViewWithRetry(hashId);
+        }
+      }
 
       if (transitionTimerRef.current) clearTimeout(transitionTimerRef.current);
       transitionTimerRef.current = setTimeout(() => {
@@ -124,31 +172,31 @@ export function NavigationProvider({ children }: { children: ReactNode }) {
       clearTimeout(transitionTimerRef.current);
     }
 
-    // Set transition state to true
-    setIsTransitioning(true);
-
-    // If navigating with a hash on the home page, perform smooth anchor scroll
-    if (hash && newPath === "/") {
+    // If navigating with a hash when already on the home page, perform smooth anchor scroll directly
+    if (hash && newPath === "/" && currentPath === "/") {
       window.history.pushState(null, "", targetUrl);
-      setCurrentPath(newPath);
-      setTimeout(() => {
-        setIsTransitioning(false);
-        const element = document.getElementById(hash);
-        if (element) {
-          const navOffset = 68;
-          const offsetPosition = element.getBoundingClientRect().top + window.pageYOffset - navOffset;
-          const lenis = (window as any).lenis;
-          if (lenis) {
-            lenis.scrollTo(element, { offset: -navOffset, duration: 1.0 });
-          } else {
-            window.scrollTo({ top: offsetPosition, behavior: "smooth" });
-          }
-        }
-      }, 80);
+      scrollElementIntoViewWithRetry(hash);
       return;
     }
 
-    // Animate transition out then update route
+    // Set transition state to true
+    setIsTransitioning(true);
+
+    // If navigating from another page to home with a hash (e.g. from /special-privileges to About Us)
+    if (hash && newPath === "/" && currentPath !== "/") {
+      window.history.pushState(null, "", targetUrl);
+      setTimeout(() => {
+        setCurrentPath(newPath);
+        window.scrollTo({ top: 0, behavior: "instant" });
+        scrollElementIntoViewWithRetry(hash);
+        transitionTimerRef.current = setTimeout(() => {
+          setIsTransitioning(false);
+        }, 350);
+      }, 150);
+      return;
+    }
+
+    // Standard route transition
     window.history.pushState(null, "", targetUrl);
     
     // Fast exit animation handover: update route after brief exit frame (~200ms)
