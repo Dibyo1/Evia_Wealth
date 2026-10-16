@@ -1,6 +1,7 @@
 import React from "react";
 import { ArrowRight } from "lucide-react";
 import PortfolioGrowthCard from "../../components/ui/portfolio-growth-card.tsx";
+import StatsSection from "./StatsSection";
 
 interface HeroSectionProps {
   onReviewPortfolio: () => void;
@@ -58,38 +59,8 @@ export default function HeroSection({ onReviewPortfolio }: HeroSectionProps) {
           </div>
         </div>
 
-        {/* Bottom Three Stat Tiles */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-5">
-          {/* Tile 1 */}
-          <div className="rounded-2xl bg-[#0f0f11] border border-white/8 p-6 md:p-7 hover:border-white/15 transition-all">
-            <h2 className="text-[28px] md:text-[32px] font-bold text-white tracking-tight mb-2">
-              20+ Years
-            </h2>
-            <p className="text-[13px] text-neutral-400 leading-relaxed">
-              Cumulative leadership experience managing billions at global institutions.
-            </p>
-          </div>
-
-          {/* Tile 2 */}
-          <div className="rounded-2xl bg-[#0f0f11] border border-white/8 p-6 md:p-7 hover:border-white/15 transition-all">
-            <h2 className="text-[28px] md:text-[32px] font-bold text-white tracking-tight mb-2">
-              Top 10
-            </h2>
-            <p className="text-[13px] text-neutral-400 leading-relaxed">
-              Fastest-growing Portfolio Management Services (PMS) in India by SEBI AUM.
-            </p>
-          </div>
-
-          {/* Tile 3 */}
-          <div className="rounded-2xl bg-[#0f0f11] border border-white/8 p-6 md:p-7 hover:border-white/15 transition-all">
-            <h2 className="text-[28px] md:text-[32px] font-bold text-[#34d399] tracking-tight mb-2">
-              ₹1Cr → ₹1.73Cr
-            </h2>
-            <p className="text-[13px] text-neutral-400 leading-relaxed">
-              Demonstrated 5-year capital compounding trajectory across equity market cycles.
-            </p>
-          </div>
-        </div>
+        {/* Open Four-Column Statistics Section */}
+        <StatsSection />
       </div>
     </section>
   );
