@@ -37,7 +37,7 @@ export default function HeroSection({ onReviewPortfolio }: HeroSectionProps) {
 
             {/* Paragraph */}
             <p className="text-[16px] md:text-[17px] leading-[1.65] text-neutral-300 max-w-[540px] mb-8 font-normal">
-              Personalised wealth management engineered for senior executives, business leaders, and UHNI families across India. Delivering institutional expertise with radical transparency.
+              Personalised wealth management engineered for senior executives, business leaders, UHNI and HNI families across India. Delivering institutional expertise with radical transparency.
             </p>
 
             {/* CTA Button */}

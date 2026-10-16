@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 300" width="960" height="300" fill="none">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="105 8 695 268" width="695" height="268" fill="none">
   <defs>
     <!-- Rich metallic 3D gold gradient for the wing feathers -->
     <linearGradient id="goldWingOuterDark" x1="15%" y1="95%" x2="85%" y2="5%">
@@ -228,25 +227,27 @@
   <!-- ============================================== -->
   <g id="brand-wealth-lockup-dark">
     <!-- Left Gold Bar -->
-    <rect x="255" y="208" width="82" height="3" rx="1.5" fill="url(#goldSwooshGradDark)" />
-    <rect x="255" y="208" width="82" height="1" rx="0.5" fill="#fffbe0" opacity="0.6" />
+    <rect x="215" y="213" width="105" height="4.5" rx="2.25" fill="url(#goldSwooshGradDark)" />
+    <rect x="215" y="213" width="105" height="1.8" rx="0.9" fill="#fffbe0" opacity="0.9" />
 
     <!-- WEALTH Text (Wide tracked-out serif caps in 3D gold) -->
     <text
       x="500"
-      y="222"
+      y="228"
       text-anchor="middle"
       font-family="'Cinzel', 'Playfair Display', 'Georgia', serif"
-      font-size="28"
-      font-weight="700"
-      letter-spacing="0.38em"
+      font-size="52"
+      font-weight="900"
+      letter-spacing="0.22em"
       fill="url(#wealthGoldGradDark)"
+      stroke="#b88c1c"
+      stroke-width="1"
       filter="url(#softBevelDark)"
     >WEALTH</text>
 
     <!-- Right Gold Bar -->
-    <rect x="663" y="208" width="82" height="3" rx="1.5" fill="url(#goldSwooshGradDark)" />
-    <rect x="663" y="208" width="82" height="1" rx="0.5" fill="#fffbe0" opacity="0.6" />
+    <rect x="680" y="213" width="105" height="4.5" rx="2.25" fill="url(#goldSwooshGradDark)" />
+    <rect x="680" y="213" width="105" height="1.8" rx="0.9" fill="#fffbe0" opacity="0.9" />
   </g>
 
   <!-- ============================================== -->
@@ -258,10 +259,12 @@
       y="268"
       text-anchor="middle"
       font-family="'Poppins', 'Montserrat', 'Helvetica Neue', sans-serif"
-      font-size="14.5"
-      font-weight="600"
-      letter-spacing="0.48em"
-      fill="#45454d"
+      font-size="32"
+      font-weight="800"
+      letter-spacing="0.20em"
+      fill="#141418"
+      stroke="#caa035"
+      stroke-width="0.5"
     >YOUR WEALTH ARTIST</text>
   </g>
 </svg>

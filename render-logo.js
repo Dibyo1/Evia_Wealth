@@ -3,7 +3,7 @@ import { Resvg } from '@resvg/resvg-js';
 
 // Exact vector reproduction of LOGO 1.png with 100% fidelity to the uploaded design
 const svgContent = `<?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 300" width="960" height="300" fill="none">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="105 8 695 268" width="695" height="268" fill="none">
   <defs>
     <!-- Rich metallic 3D gold gradient for the wing feathers -->
     <linearGradient id="goldWingOuter" x1="15%" y1="95%" x2="85%" y2="5%">
@@ -50,11 +50,11 @@ const svgContent = `<?xml version="1.0" encoding="UTF-8"?>
     </linearGradient>
 
     <!-- Text gold gradient for WEALTH -->
-    <linearGradient id="wealthGoldGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" stop-color="#fdf4be" />
-      <stop offset="40%" stop-color="#e3be53" />
-      <stop offset="70%" stop-color="#be942d" />
-      <stop offset="100%" stop-color="#8a6217" />
+    <linearGradient id="wealthGoldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fffceb" />
+      <stop offset="25%" stop-color="#ffe16b" />
+      <stop offset="60%" stop-color="#f5ba22" />
+      <stop offset="100%" stop-color="#cb9616" />
     </linearGradient>
 
     <!-- Off-white luxury fill for EVIA letters with soft warm tone -->
@@ -65,11 +65,11 @@ const svgContent = `<?xml version="1.0" encoding="UTF-8"?>
     </linearGradient>
 
     <filter id="subtleGlow" x="-10%" y="-10%" width="120%" height="120%">
-      <feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="#000000" flood-opacity="0.18" />
+      <feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="#000000" flood-opacity="0.25" />
     </filter>
 
     <filter id="softBevel" x="-10%" y="-10%" width="120%" height="120%">
-      <feDropShadow dx="1" dy="2" stdDeviation="1" flood-color="#5c410e" flood-opacity="0.35" />
+      <feDropShadow dx="1" dy="2" stdDeviation="1" flood-color="#5c410e" flood-opacity="0.4" />
     </filter>
   </defs>
 
@@ -77,7 +77,6 @@ const svgContent = `<?xml version="1.0" encoding="UTF-8"?>
   <!-- 1. LEFT ICON: 3 GOLDEN METALLIC WING FEATHERS  -->
   <!-- ============================================== -->
   <g id="brand-wing-mark" filter="url(#subtleGlow)">
-    <!-- Feather 1 (Top / Outer Wing - Longest curve tapering to sharp top tip) -->
     <path
       d="M 125 245
          C 112 215, 114 150, 158 85
@@ -88,7 +87,6 @@ const svgContent = `<?xml version="1.0" encoding="UTF-8"?>
          C 134 250, 128 248, 125 245 Z"
       fill="url(#goldWingOuter)"
     />
-    <!-- Feather 1 Spine Highlight Edge -->
     <path
       d="M 128 243
          C 116 215, 118 152, 160 88
@@ -100,7 +98,6 @@ const svgContent = `<?xml version="1.0" encoding="UTF-8"?>
       fill="none"
     />
 
-    <!-- Feather 2 (Middle Wing) -->
     <path
       d="M 136 248
          C 126 222, 130 175, 164 125
@@ -111,7 +108,6 @@ const svgContent = `<?xml version="1.0" encoding="UTF-8"?>
          C 144 251, 138 250, 136 248 Z"
       fill="url(#goldWingMiddle)"
     />
-    <!-- Feather 2 Spine Highlight Edge -->
     <path
       d="M 138 246
          C 128 222, 132 176, 166 126
@@ -122,7 +118,6 @@ const svgContent = `<?xml version="1.0" encoding="UTF-8"?>
       fill="none"
     />
 
-    <!-- Feather 3 (Bottom Wing) -->
     <path
       d="M 148 252
          C 140 234, 148 200, 174 165
@@ -133,7 +128,6 @@ const svgContent = `<?xml version="1.0" encoding="UTF-8"?>
          C 152 254, 149 253, 148 252 Z"
       fill="url(#goldWingInner)"
     />
-    <!-- Feather 3 Spine Highlight Edge -->
     <path
       d="M 150 250
          C 142 234, 150 202, 175 166
@@ -149,9 +143,7 @@ const svgContent = `<?xml version="1.0" encoding="UTF-8"?>
   <!-- 2. BRAND NAME: EVIA (With Signature A-Swoosh)   -->
   <!-- ============================================== -->
   <g id="brand-evia-typography">
-    <!-- Letter E -->
     <g class="letter-e">
-      <!-- Main Stem & Horizontal Arms -->
       <path
         d="M 285 58 L 382 58 L 382 72 L 358 72 L 320 72 L 320 106 L 362 106 L 362 119 L 320 119 L 320 156 L 360 156 L 385 156 L 385 170 L 285 170 L 285 156 L 305 156 L 305 72 L 285 72 Z"
         fill="url(#eviaTextFill)"
@@ -160,7 +152,6 @@ const svgContent = `<?xml version="1.0" encoding="UTF-8"?>
       />
     </g>
 
-    <!-- Letter V -->
     <g class="letter-v">
       <path
         d="M 405 58 L 434 58 L 472 152 L 508 58 L 536 58 L 536 71 L 522 71 L 484 170 L 460 170 L 418 71 L 405 71 Z"
@@ -170,7 +161,6 @@ const svgContent = `<?xml version="1.0" encoding="UTF-8"?>
       />
     </g>
 
-    <!-- Letter I -->
     <g class="letter-i">
       <path
         d="M 552 58 L 602 58 L 602 72 L 584 72 L 584 156 L 602 156 L 602 170 L 552 170 L 552 156 L 570 156 L 570 72 L 552 72 Z"
@@ -180,7 +170,6 @@ const svgContent = `<?xml version="1.0" encoding="UTF-8"?>
       />
     </g>
 
-    <!-- Letter A with Baseline & Diagonal Legs -->
     <g class="letter-a">
       <path
         d="M 662 58 L 678 58 L 728 170 L 702 170 L 688 136 L 642 136 L 630 170 L 604 170 L 650 58 Z
@@ -191,12 +180,8 @@ const svgContent = `<?xml version="1.0" encoding="UTF-8"?>
       />
     </g>
 
-    <!-- ======================================================== -->
-    <!-- SIGNATURE DETAIL: Dynamic 3D Gold Swoosh Across The 'A'  -->
-    <!-- Cuts across the crossbar and arcs gracefully to the right -->
-    <!-- ======================================================== -->
+    <!-- SIGNATURE DETAIL: Dynamic 3D Gold Swoosh Across The 'A' -->
     <g filter="url(#softBevel)">
-      <!-- Main Metallic Gold Swoosh -->
       <path
         d="M 618 162
            C 638 138, 668 116, 706 102
@@ -206,7 +191,6 @@ const svgContent = `<?xml version="1.0" encoding="UTF-8"?>
            Z"
         fill="url(#goldSwooshGrad)"
       />
-      <!-- Shiny Spine Highlight along the upper arc of the Swoosh -->
       <path
         d="M 622 160
            C 642 136, 672 114, 710 100
@@ -216,7 +200,6 @@ const svgContent = `<?xml version="1.0" encoding="UTF-8"?>
         stroke-linecap="round"
         fill="none"
       />
-      <!-- Shadow under the swoosh giving 3D floating depth -->
       <path
         d="M 626 166
            C 644 146, 670 128, 698 126"
@@ -234,25 +217,27 @@ const svgContent = `<?xml version="1.0" encoding="UTF-8"?>
   <!-- ============================================== -->
   <g id="brand-wealth-lockup">
     <!-- Left Gold Bar -->
-    <rect x="255" y="208" width="82" height="3" rx="1.5" fill="url(#goldSwooshGrad)" />
-    <rect x="255" y="208" width="82" height="1" rx="0.5" fill="#fffbe0" opacity="0.6" />
+    <rect x="215" y="213" width="105" height="4.5" rx="2.25" fill="url(#goldSwooshGrad)" />
+    <rect x="215" y="213" width="105" height="1.8" rx="0.9" fill="#fffbe0" opacity="0.9" />
 
-    <!-- WEALTH Text (Wide tracked-out serif caps in 3D gold) -->
+    <!-- WEALTH Text (Wide tracked-out serif caps in luminous 3D gold) -->
     <text
       x="500"
-      y="222"
+      y="228"
       text-anchor="middle"
       font-family="'Cinzel', 'Playfair Display', 'Georgia', serif"
-      font-size="28"
-      font-weight="700"
-      letter-spacing="0.38em"
+      font-size="52"
+      font-weight="900"
+      letter-spacing="0.22em"
       fill="url(#wealthGoldGrad)"
+      stroke="#caa035"
+      stroke-width="1"
       filter="url(#softBevel)"
     >WEALTH</text>
 
     <!-- Right Gold Bar -->
-    <rect x="663" y="208" width="82" height="3" rx="1.5" fill="url(#goldSwooshGrad)" />
-    <rect x="663" y="208" width="82" height="1" rx="0.5" fill="#fffbe0" opacity="0.6" />
+    <rect x="680" y="213" width="105" height="4.5" rx="2.25" fill="url(#goldSwooshGrad)" />
+    <rect x="680" y="213" width="105" height="1.8" rx="0.9" fill="#fffbe0" opacity="0.9" />
   </g>
 
   <!-- ============================================== -->
@@ -264,10 +249,13 @@ const svgContent = `<?xml version="1.0" encoding="UTF-8"?>
       y="268"
       text-anchor="middle"
       font-family="'Poppins', 'Montserrat', 'Helvetica Neue', sans-serif"
-      font-size="14.5"
-      font-weight="500"
-      letter-spacing="0.48em"
-      fill="#b8b2a2"
+      font-size="32"
+      font-weight="800"
+      letter-spacing="0.20em"
+      fill="#ffffff"
+      stroke="#d4af37"
+      stroke-width="0.5"
+      filter="url(#subtleGlow)"
     >YOUR WEALTH ARTIST</text>
   </g>
 </svg>`;

@@ -73,24 +73,24 @@ export default function EviaLogo({
 
   const imgHeightClass =
     size === "sm"
-      ? "h-[30px]"
+      ? "h-[38px] sm:h-[40px]"
       : size === "lg"
-      ? "h-[50px] md:h-[58px]"
-      : "h-[38px] md:h-[42px]";
+      ? "h-[64px] md:h-[72px]"
+      : "h-[50px] md:h-[56px]";
 
   if (iconOnly) {
     return <EviaLogoMark className={`${iconSizeClass} ${className}`} />;
   }
 
-  // Render official uploaded logo image if available
+  // Render official uploaded logo image with high-definition vector SVG rendering
   if (preferImage && !imageError) {
-    const logoSrc = lightText ? "/images/logo.png" : "/images/logo-dark.png";
+    const logoSrc = lightText ? "/images/logo.svg" : "/images/logo-dark.svg";
     return (
       <div className={`inline-flex items-center select-none ${className}`}>
         <img
           src={logoSrc}
           alt="Evia Wealth"
-          className={`${imgHeightClass} w-auto object-contain max-w-full drop-shadow-xs`}
+          className={`${imgHeightClass} w-auto object-contain max-w-full filter drop-shadow-[0_2px_10px_rgba(212,175,55,0.18)]`}
           loading="eager"
           onError={() => setImageError(true)}
         />

@@ -9,7 +9,6 @@ import StackSection from "./components/StackSection";
 import TeamSection from "./components/TeamSection";
 import InsightsSection from "./components/InsightsSection";
 import OfficesSection from "./components/OfficesSection";
-import TestimonialsWithMarquee from "./components/TestimonialsWithMarquee";
 import FooterSection from "./components/FooterSection";
 import AppDownloadToast from "./components/AppDownloadToast";
 import { PortfolioModal } from "./components/Modals";
@@ -139,8 +138,8 @@ function AppContent() {
               {/* 4.9 Offices (3D Dotted Wireframe Globe + Expanded MapLibre Map) */}
               <OfficesSection onGetInTouch={() => setPortfolioModalOpen(true)} />
 
-              {/* New Testimonials & Institutional Logos Section */}
-              <TestimonialsWithMarquee />
+              {/* Testimonials */}
+              <TestimonialsSection />
             </main>
           ) : isResearch ? (
             <main id="research-view">

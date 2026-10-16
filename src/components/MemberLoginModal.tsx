@@ -258,7 +258,7 @@ export default function MemberLoginModal({
             <div className="flex flex-col items-center justify-center text-center mb-5">
               <div className="w-full py-2.5 px-3.5 rounded-xl bg-gradient-to-r from-[rgba(212,175,55,0.09)] via-[rgba(212,175,55,0.18)] to-[rgba(212,175,55,0.09)] border border-[rgba(212,175,55,0.4)] shadow-[0_4px_20px_rgba(212,175,55,0.12)]">
                 <p className="text-[11.5px] sm:text-[12.5px] font-bold tracking-[0.07em] sm:tracking-[0.09em] text-[#f4ebc1] uppercase leading-snug">
-                  YOUR WEALTH ARTIST , AMFI REGISTERED MUTUAL FUND DISTRIBUTOR
+                  YOUR WEALTH ARTIST, AMFI REGISTERED MUTUAL FUND DISTRIBUTOR
                 </p>
               </div>
             </div>

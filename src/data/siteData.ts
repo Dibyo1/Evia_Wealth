@@ -71,7 +71,7 @@ export const TEAM_MEMBERS: TeamMember[] = [
     bio: "Mr. Debnarayan Dey is the Co-founder and Director at Evia. He has an exhaustive market & industry experience of over 13 years in the domains of Premium Banking and Investment advisory. He has also held leadership positions across PSU banks and Wealth based NBFC organisations and has successfully driven key management strategies. He is passionate about providing holistic financial solutions that meet the diverse and evolving needs of HNI and UHNIs. His mantra for model portfolio remains lucid and that is one that fosters a long term mutually beneficial client relationship. At Evia, he spearheads the key portfolio of products and research with a vision to make the organisation one of the most trusted brands in the field of research and advisory in our country.",
     facts: [
       { label: "Experience in wealth & banking", value: "13+ Years" },
-      { label: "Academic credentials", value: "Btech, PGDM Management" },
+      { label: "Academic credentials", value: "Btech, PGDM" },
       { label: "Certification", value: "NISM series:- VA" },
       { label: "Leadership pedigree", value: "Leadership at PSU Banks & Wealth NBFCs" },
     ],
