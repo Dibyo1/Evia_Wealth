@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import {
   X,
@@ -22,23 +22,28 @@ import {
   CheckCircle,
 } from "lucide-react";
 import EviaLogo from "./EviaLogo";
+import EmailTypoSuggestion from "./EmailTypoSuggestion";
 import { useNavigation } from "../context/NavigationContext";
 
 interface MemberLoginModalProps {
   isOpen: boolean;
   onClose: () => void;
   origin?: { x: number; y: number } | null;
+  initialMode?: "password" | "otp" | "forgot" | "signup";
 }
 
 export default function MemberLoginModal({
   isOpen,
   onClose,
   origin,
+  initialMode = "password",
 }: MemberLoginModalProps) {
   const { navigate } = useNavigation();
 
-  // Mode: "password" vs "otp" vs "forgot"
-  const [mode, setMode] = useState<"password" | "otp" | "forgot">("password");
+  // Mode: "password" vs "otp" vs "forgot" vs "signup"
+  const [mode, setMode] = useState<"password" | "otp" | "forgot" | "signup">(
+    initialMode
+  );
 
   // Password Login state
   const [username, setUsername] = useState("");
@@ -50,11 +55,36 @@ export default function MemberLoginModal({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [loginSuccess, setLoginSuccess] = useState(false);
 
+  // Sign Up state
+  const [signupName, setSignupName] = useState("");
+  const [signupEmail, setSignupEmail] = useState("");
+  const [signupPhone, setSignupPhone] = useState("");
+  const [signupPassword, setSignupPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [showSignupPassword, setShowSignupPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [signupErrors, setSignupErrors] = useState<{
+    name?: string;
+    email?: string;
+    phone?: string;
+    password?: string;
+    confirmPassword?: string;
+  }>({});
+  const [signupSuccess, setSignupSuccess] = useState(false);
+
   // OTP Login state
   const [otpTarget, setOtpTarget] = useState("");
   const [otpTargetError, setOtpTargetError] = useState(false);
   const [otpCodeSent, setOtpCodeSent] = useState(false);
   const [otpCode, setOtpCode] = useState(["", "", "", "", "", ""]);
+
+  // Input refs for smooth focus return on typo correction
+  const usernameInputRef = useRef<HTMLInputElement>(null);
+  const signupEmailInputRef = useRef<HTMLInputElement>(null);
+  const otpTargetInputRef = useRef<HTMLInputElement>(null);
+  const forgotEmailInputRef = useRef<HTMLInputElement>(null);
+  const [forgotEmail, setForgotEmail] = useState("");
+  const [forgotSent, setForgotSent] = useState(false);
 
   // Detect prefers-reduced-motion
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
@@ -151,6 +181,59 @@ export default function MemberLoginModal({
         setLoginSuccess(false);
       }, 1500);
     }, 900);
+  };
+
+  // Handle Sign Up form submit
+  const handleSignupSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const errors: typeof signupErrors = {};
+
+    if (!signupName.trim()) {
+      errors.name = "Full name is required";
+    }
+
+    const emailTrimmed = signupEmail.trim();
+    // Validates standard providers (gmail, outlook, hotmail, etc.) and custom company domains
+    const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+$/;
+    if (!emailTrimmed) {
+      errors.email = "Email address is required";
+    } else if (!emailRegex.test(emailTrimmed)) {
+      errors.email = "Please enter a valid email address (e.g. name@gmail.com or company.com)";
+    }
+
+    const phoneDigits = signupPhone.replace(/\D/g, "");
+    if (!phoneDigits) {
+      errors.phone = "Phone number is required (digits only)";
+    } else if (phoneDigits.length < 10) {
+      errors.phone = "Phone number must have at least 10 digits";
+    }
+
+    if (!signupPassword) {
+      errors.password = "Password is required";
+    } else if (signupPassword.length < 6) {
+      errors.password = "Password must be at least 6 characters";
+    }
+
+    if (!confirmPassword) {
+      errors.confirmPassword = "Confirm password is required";
+    } else if (signupPassword !== confirmPassword) {
+      errors.confirmPassword = "Passwords do not match";
+    }
+
+    if (Object.keys(errors).length > 0) {
+      setSignupErrors(errors);
+      return;
+    }
+
+    setSignupErrors({});
+    setIsSubmitting(true);
+
+    setTimeout(() => {
+      setIsSubmitting(false);
+      setSignupSuccess(true);
+      // Auto-prefill username for login
+      setUsername(signupEmail);
+    }, 800);
   };
 
   // Compute dynamic clip origin: default to top right if not supplied
@@ -263,14 +346,50 @@ export default function MemberLoginModal({
               </div>
             </div>
 
-            {/* Heading "Welcome!" */}
-            <h2 className="text-[24px] font-semibold text-white text-center mb-6 leading-tight">
+            {/* Heading */}
+            <h2 className="text-[24px] font-semibold text-white text-center mb-3 leading-tight">
               {mode === "password"
-                ? "Welcome!"
+                ? "Welcome Back!"
+                : mode === "signup"
+                ? "Create Account"
                 : mode === "otp"
                 ? "OTP Sign In"
                 : "Reset Password"}
             </h2>
+
+            {/* Segmented Control for Log In / Sign Up */}
+            {(mode === "password" || mode === "signup") && (
+              <div className="flex p-1 rounded-xl bg-white/[0.05] border border-white/10 mb-6 max-w-[260px] mx-auto">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setMode("password");
+                    setSignupSuccess(false);
+                  }}
+                  className={`flex-1 py-1.5 text-xs font-semibold rounded-lg transition-all cursor-pointer ${
+                    mode === "password"
+                      ? "bg-gradient-to-r from-[#ebe0a6] via-[#d4c06e] to-[#a89537] text-black shadow-md"
+                      : "text-white/60 hover:text-white"
+                  }`}
+                >
+                  Log In
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setMode("signup");
+                    setLoginSuccess(false);
+                  }}
+                  className={`flex-1 py-1.5 text-xs font-semibold rounded-lg transition-all cursor-pointer ${
+                    mode === "signup"
+                      ? "bg-gradient-to-r from-[#ebe0a6] via-[#d4c06e] to-[#a89537] text-black shadow-md"
+                      : "text-white/60 hover:text-white"
+                  }`}
+                >
+                  Sign Up
+                </button>
+              </div>
+            )}
 
             {/* Success state banner */}
             {loginSuccess && (
@@ -293,6 +412,7 @@ export default function MemberLoginModal({
                     Username
                   </label>
                   <input
+                    ref={usernameInputRef}
                     type="text"
                     value={username}
                     onChange={(e) => {
@@ -305,6 +425,14 @@ export default function MemberLoginModal({
                         ? "border-[#e0566b] focus:border-[#e0566b] focus:ring-2 focus:ring-[#e0566b]/20"
                         : "border-white/[0.14] focus:border-[rgba(212,175,55,0.6)] focus:ring-3 focus:ring-[rgba(212,175,55,0.18)]"
                     }`}
+                  />
+                  <EmailTypoSuggestion
+                    email={username}
+                    inputRef={usernameInputRef}
+                    onAccept={(corrected) => {
+                      setUsername(corrected);
+                      if (usernameError) setUsernameError(false);
+                    }}
                   />
                   {usernameError && (
                     <p className="mt-1 text-left text-[12px] text-[#e0566b] font-medium">
@@ -457,7 +585,263 @@ export default function MemberLoginModal({
                   </svg>
                   <span>Sign in with Google</span>
                 </button>
+
+                {/* Switcher to Sign Up */}
+                <div className="pt-3 pb-1 text-center border-t border-white/[0.08] mt-3">
+                  <p className="text-[13px] text-white/70">
+                    New to Evia Wealth?{" "}
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setMode("signup");
+                        setSignupSuccess(false);
+                      }}
+                      className="text-[#d9c56e] font-semibold hover:text-[#f6e7b4] hover:underline cursor-pointer focus:outline-none ml-1"
+                    >
+                      Sign up
+                    </button>
+                  </p>
+                </div>
               </form>
+            )}
+
+            {/* ============================================================== */}
+            {/* 4) SIGN UP FORM: Member Registration                           */}
+            {/* ============================================================== */}
+            {mode === "signup" && (
+              <div>
+                {signupSuccess ? (
+                  <div className="py-6 text-center space-y-4">
+                    <div className="w-14 h-14 rounded-full bg-emerald-500/15 text-[#34d399] border border-emerald-500/35 flex items-center justify-center mx-auto shadow-[0_0_24px_rgba(52,211,153,0.2)]">
+                      <CheckCircle className="w-7 h-7" />
+                    </div>
+
+                    <div className="space-y-1">
+                      <h3 className="text-[22px] font-bold text-white tracking-tight">
+                        Account Created Successfully!
+                      </h3>
+                      <p className="text-xs text-[#d9c56e] font-medium uppercase tracking-wider">
+                        Welcome to Evia Wealth
+                      </p>
+                    </div>
+
+                    <p className="text-sm text-neutral-300 leading-relaxed max-w-sm mx-auto">
+                      Thank you, <span className="text-white font-semibold">{signupName}</span>. Your client account has been registered with email <span className="text-[#e6d78a] font-medium">{signupEmail}</span>. You can now log in to access your investment surveillance portal.
+                    </p>
+
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setSignupSuccess(false);
+                        setMode("password");
+                      }}
+                      className="w-full h-[46px] rounded-full bg-gradient-to-r from-[#ebe0a6] via-[#d4c06e] to-[#a89537] text-black font-semibold text-[14px] shadow-lg hover:brightness-105 transition-all cursor-pointer"
+                    >
+                      Proceed to Log In
+                    </button>
+                  </div>
+                ) : (
+                  <form onSubmit={handleSignupSubmit} className="space-y-3.5 text-left">
+                    {/* Full Name */}
+                    <div>
+                      <label className="block text-[12.5px] font-medium text-white/70 mb-1">
+                        Full Name*
+                      </label>
+                      <input
+                        type="text"
+                        value={signupName}
+                        onChange={(e) => {
+                          setSignupName(e.target.value);
+                          if (signupErrors.name) setSignupErrors({ ...signupErrors, name: undefined });
+                        }}
+                        placeholder="e.g. Vikram Singhania"
+                        className={`w-full h-11 px-3.5 rounded-[10px] bg-white/[0.04] border text-sm text-white placeholder-white/30 transition-all outline-none ${
+                          signupErrors.name
+                            ? "border-[#e0566b] focus:border-[#e0566b]"
+                            : "border-white/[0.14] focus:border-[rgba(212,175,55,0.6)] focus:ring-2 focus:ring-[rgba(212,175,55,0.18)]"
+                        }`}
+                      />
+                      {signupErrors.name && (
+                        <p className="mt-1 text-[11.5px] text-[#e0566b] font-medium">
+                          {signupErrors.name}
+                        </p>
+                      )}
+                    </div>
+
+                    {/* Email Address */}
+                    <div>
+                      <label className="block text-[12.5px] font-medium text-white/70 mb-1">
+                        Email Address*
+                      </label>
+                      <input
+                        ref={signupEmailInputRef}
+                        type="email"
+                        value={signupEmail}
+                        onChange={(e) => {
+                          setSignupEmail(e.target.value);
+                          if (signupErrors.email) setSignupErrors({ ...signupErrors, email: undefined });
+                        }}
+                        placeholder="name@gmail.com, outlook.com, or company.com"
+                        className={`w-full h-11 px-3.5 rounded-[10px] bg-white/[0.04] border text-sm text-white placeholder-white/30 transition-all outline-none ${
+                          signupErrors.email
+                            ? "border-[#e0566b] focus:border-[#e0566b]"
+                            : "border-white/[0.14] focus:border-[rgba(212,175,55,0.6)] focus:ring-2 focus:ring-[rgba(212,175,55,0.18)]"
+                        }`}
+                      />
+                      <EmailTypoSuggestion
+                        email={signupEmail}
+                        inputRef={signupEmailInputRef}
+                        onAccept={(corrected) => {
+                          setSignupEmail(corrected);
+                          if (signupErrors.email) {
+                            setSignupErrors((prev) => ({ ...prev, email: undefined }));
+                          }
+                        }}
+                      />
+                      {signupErrors.email ? (
+                        <p className="mt-1 text-[11.5px] text-[#e0566b] font-medium">
+                          {signupErrors.email}
+                        </p>
+                      ) : (
+                        <p className="mt-1 text-[10.5px] text-white/40">
+                          Accepts Gmail, Outlook, Hotmail, or custom company domains
+                        </p>
+                      )}
+                    </div>
+
+                    {/* Phone Number */}
+                    <div>
+                      <label className="block text-[12.5px] font-medium text-white/70 mb-1">
+                        Phone Number (Digits Only)*
+                      </label>
+                      <input
+                        type="tel"
+                        inputMode="numeric"
+                        pattern="[0-9]*"
+                        maxLength={15}
+                        value={signupPhone}
+                        onChange={(e) => {
+                          const digitsOnly = e.target.value.replace(/\D/g, "");
+                          setSignupPhone(digitsOnly);
+                          if (signupErrors.phone) setSignupErrors({ ...signupErrors, phone: undefined });
+                        }}
+                        placeholder="e.g. 9876543210"
+                        className={`w-full h-11 px-3.5 rounded-[10px] bg-white/[0.04] border text-sm text-white placeholder-white/30 transition-all outline-none ${
+                          signupErrors.phone
+                            ? "border-[#e0566b] focus:border-[#e0566b]"
+                            : "border-white/[0.14] focus:border-[rgba(212,175,55,0.6)] focus:ring-2 focus:ring-[rgba(212,175,55,0.18)]"
+                        }`}
+                      />
+                      {signupErrors.phone ? (
+                        <p className="mt-1 text-[11.5px] text-[#e0566b] font-medium">
+                          {signupErrors.phone}
+                        </p>
+                      ) : (
+                        <p className="mt-1 text-[10.5px] text-white/40">
+                          Numbers only (10–15 digits)
+                        </p>
+                      )}
+                    </div>
+
+                    {/* Passwords */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      <div>
+                        <label className="block text-[12.5px] font-medium text-white/70 mb-1">
+                          Password*
+                        </label>
+                        <div className="relative">
+                          <input
+                            type={showSignupPassword ? "text" : "password"}
+                            value={signupPassword}
+                            onChange={(e) => {
+                              setSignupPassword(e.target.value);
+                              if (signupErrors.password) setSignupErrors({ ...signupErrors, password: undefined });
+                            }}
+                            placeholder="Min. 6 chars"
+                            className={`w-full h-11 pl-3.5 pr-10 rounded-[10px] bg-white/[0.04] border text-sm text-white placeholder-white/30 transition-all outline-none ${
+                              signupErrors.password
+                                ? "border-[#e0566b] focus:border-[#e0566b]"
+                                : "border-white/[0.14] focus:border-[rgba(212,175,55,0.6)] focus:ring-2 focus:ring-[rgba(212,175,55,0.18)]"
+                            }`}
+                          />
+                          <button
+                            type="button"
+                            onClick={() => setShowSignupPassword(!showSignupPassword)}
+                            className="absolute right-3 top-1/2 -translate-y-1/2 text-white/50 hover:text-white transition-colors cursor-pointer"
+                          >
+                            {showSignupPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                          </button>
+                        </div>
+                        {signupErrors.password && (
+                          <p className="mt-1 text-[11px] text-[#e0566b] font-medium">
+                            {signupErrors.password}
+                          </p>
+                        )}
+                      </div>
+
+                      <div>
+                        <label className="block text-[12.5px] font-medium text-white/70 mb-1">
+                          Confirm Password*
+                        </label>
+                        <div className="relative">
+                          <input
+                            type={showConfirmPassword ? "text" : "password"}
+                            value={confirmPassword}
+                            onChange={(e) => {
+                              setConfirmPassword(e.target.value);
+                              if (signupErrors.confirmPassword) setSignupErrors({ ...signupErrors, confirmPassword: undefined });
+                            }}
+                            placeholder="Re-type password"
+                            className={`w-full h-11 pl-3.5 pr-10 rounded-[10px] bg-white/[0.04] border text-sm text-white placeholder-white/30 transition-all outline-none ${
+                              signupErrors.confirmPassword
+                                ? "border-[#e0566b] focus:border-[#e0566b]"
+                                : "border-white/[0.14] focus:border-[rgba(212,175,55,0.6)] focus:ring-2 focus:ring-[rgba(212,175,55,0.18)]"
+                            }`}
+                          />
+                          <button
+                            type="button"
+                            onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                            className="absolute right-3 top-1/2 -translate-y-1/2 text-white/50 hover:text-white transition-colors cursor-pointer"
+                          >
+                            {showConfirmPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                          </button>
+                        </div>
+                        {signupErrors.confirmPassword && (
+                          <p className="mt-1 text-[11px] text-[#e0566b] font-medium">
+                            {signupErrors.confirmPassword}
+                          </p>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Submit Button: Create Account */}
+                    <button
+                      type="submit"
+                      disabled={isSubmitting}
+                      className="w-full h-[46px] rounded-full bg-gradient-to-r from-[#ebe0a6] via-[#d4c06e] to-[#a89537] text-black font-semibold text-[15px] shadow-[0_0_20px_rgba(212,175,55,0.25)] hover:shadow-[0_0_28px_rgba(212,175,55,0.45)] hover:brightness-105 active:scale-[0.99] transition-all cursor-pointer mt-3 disabled:opacity-70 text-center"
+                    >
+                      {isSubmitting ? "Creating Account..." : "Create Account"}
+                    </button>
+
+                    {/* Already a user? Log in */}
+                    <div className="pt-3 pb-1 text-center">
+                      <p className="text-[13px] text-white/70">
+                        Already a user?{" "}
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setMode("password");
+                            setSignupSuccess(false);
+                          }}
+                          className="text-[#d9c56e] font-semibold hover:text-[#f6e7b4] hover:underline cursor-pointer focus:outline-none ml-1"
+                        >
+                          Log in
+                        </button>
+                      </p>
+                    </div>
+                  </form>
+                )}
+              </div>
             )}
 
             {/* ============================================================== */}
@@ -472,6 +856,7 @@ export default function MemberLoginModal({
                         Registered Mobile or Email
                       </label>
                       <input
+                        ref={otpTargetInputRef}
                         type="text"
                         value={otpTarget}
                         onChange={(e) => {
@@ -484,6 +869,14 @@ export default function MemberLoginModal({
                             ? "border-[#e0566b] focus:border-[#e0566b]"
                             : "border-white/[0.14] focus:border-[rgba(212,175,55,0.6)] focus:ring-3 focus:ring-[rgba(212,175,55,0.18)]"
                         }`}
+                      />
+                      <EmailTypoSuggestion
+                        email={otpTarget}
+                        inputRef={otpTargetInputRef}
+                        onAccept={(corrected) => {
+                          setOtpTarget(corrected);
+                          if (otpTargetError) setOtpTargetError(false);
+                        }}
                       />
                       {otpTargetError && (
                         <p className="mt-1 text-left text-[12px] text-[#e0566b] font-medium">
@@ -553,35 +946,79 @@ export default function MemberLoginModal({
             {/* SUB-MODE: Forgot Password                                      */}
             {/* ============================================================== */}
             {mode === "forgot" && (
-              <form
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  alert("Password reset link has been dispatched to your registered address.");
-                  setMode("password");
-                }}
-                className="space-y-4"
-              >
-                <p className="text-xs text-white/60 leading-relaxed text-left">
-                  Enter your registered username or email address and we'll send you an encrypted recovery link.
-                </p>
-                <div>
-                  <label className="block text-[13px] font-medium text-white/70 mb-1.5 text-left">
-                    Registered Email
-                  </label>
-                  <input
-                    type="email"
-                    required
-                    placeholder="name@eviawealth.com"
-                    className="w-full h-11 px-3.5 rounded-[10px] bg-white/[0.04] border border-white/[0.14] text-sm text-white placeholder-white/30 focus:border-[rgba(212,175,55,0.6)] focus:ring-3 focus:ring-[rgba(212,175,55,0.18)] outline-none"
-                  />
-                </div>
-                <button
-                  type="submit"
-                  className="w-full h-[46px] rounded-full bg-gradient-to-r from-[#ebe0a6] via-[#d4c06e] to-[#a89537] text-black font-semibold text-[15px] shadow-[0_0_20px_rgba(212,175,55,0.25)] hover:shadow-[0_0_28px_rgba(212,175,55,0.45)] transition-all cursor-pointer"
-                >
-                  Send Recovery Link
-                </button>
-              </form>
+              <div>
+                {forgotSent ? (
+                  <div className="py-6 text-center space-y-4">
+                    <div className="w-14 h-14 rounded-full bg-emerald-500/15 text-[#34d399] border border-emerald-500/35 flex items-center justify-center mx-auto shadow-[0_0_24px_rgba(52,211,153,0.2)]">
+                      <CheckCircle className="w-7 h-7" />
+                    </div>
+                    <div className="space-y-1">
+                      <h3 className="text-xl font-bold text-white tracking-tight">
+                        Recovery Link Dispatched
+                      </h3>
+                      <p className="text-xs text-[#d9c56e] font-medium uppercase tracking-wider">
+                        Encrypted Security Instruction
+                      </p>
+                    </div>
+                    <p className="text-xs text-neutral-300 leading-relaxed max-w-sm mx-auto">
+                      If an account exists for <span className="text-white font-medium">{forgotEmail}</span>, a secure password reset link has been dispatched to your inbox.
+                    </p>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setForgotSent(false);
+                        setMode("password");
+                      }}
+                      className="w-full h-11 rounded-full bg-gradient-to-r from-[#ebe0a6] via-[#d4c06e] to-[#a89537] text-black font-semibold text-xs tracking-wider uppercase shadow-md hover:brightness-105 transition-all cursor-pointer"
+                    >
+                      Return to Log In
+                    </button>
+                  </div>
+                ) : (
+                  <form
+                    onSubmit={(e) => {
+                      e.preventDefault();
+                      if (!forgotEmail) return;
+                      setIsSubmitting(true);
+                      setTimeout(() => {
+                        setIsSubmitting(false);
+                        setForgotSent(true);
+                      }, 700);
+                    }}
+                    className="space-y-4 text-left"
+                  >
+                    <p className="text-xs text-white/60 leading-relaxed text-left">
+                      Enter your registered email address and we'll send you an encrypted recovery link.
+                    </p>
+                    <div>
+                      <label className="block text-[13px] font-medium text-white/70 mb-1.5 text-left">
+                        Registered Email
+                      </label>
+                      <input
+                        ref={forgotEmailInputRef}
+                        type="email"
+                        required
+                        value={forgotEmail}
+                        onChange={(e) => setForgotEmail(e.target.value)}
+                        placeholder="name@eviawealth.com or name@gmail.com"
+                        className="w-full h-11 px-3.5 rounded-[10px] bg-white/[0.04] border border-white/[0.14] text-sm text-white placeholder-white/30 focus:border-[rgba(212,175,55,0.6)] focus:ring-3 focus:ring-[rgba(212,175,55,0.18)] outline-none"
+                      />
+                      <EmailTypoSuggestion
+                        email={forgotEmail}
+                        inputRef={forgotEmailInputRef}
+                        onAccept={(corrected) => setForgotEmail(corrected)}
+                      />
+                    </div>
+                    <button
+                      type="submit"
+                      disabled={isSubmitting}
+                      className="w-full h-[46px] rounded-full bg-gradient-to-r from-[#ebe0a6] via-[#d4c06e] to-[#a89537] text-black font-semibold text-[15px] shadow-[0_0_20px_rgba(212,175,55,0.25)] hover:shadow-[0_0_28px_rgba(212,175,55,0.45)] transition-all cursor-pointer disabled:opacity-60"
+                    >
+                      {isSubmitting ? "Dispatching Link..." : "Send Recovery Link"}
+                    </button>
+                  </form>
+                )}
+              </div>
             )}
 
             {/* ============================================================== */}

@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { MapPin, Mail, Phone, ArrowLeft, ChevronRight, Check, Send } from "lucide-react";
 import { motion } from "motion/react";
 import { useNavigation } from "../../context/NavigationContext";
+import EmailTypoSuggestion from "../EmailTypoSuggestion";
 
 interface ContactUsViewProps {
   onReviewPortfolio: () => void;
@@ -23,6 +24,7 @@ export default function ContactUsView({}: ContactUsViewProps) {
     message: "",
   });
 
+  const emailInputRef = useRef<HTMLInputElement>(null);
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
 
@@ -259,16 +261,19 @@ export default function ContactUsView({}: ContactUsViewProps) {
 
                     <div>
                       <label className="block text-[13px] font-medium text-white/80 mb-2 font-['Poppins']">
-                        Phone Number*
+                        Phone Number (Digits Only)*
                       </label>
                       <input
                         type="tel"
+                        inputMode="numeric"
+                        pattern="[0-9]*"
+                        maxLength={15}
                         required
                         value={formData.phoneNumber}
                         onChange={(e) =>
-                          setFormData({ ...formData, phoneNumber: e.target.value })
+                          setFormData({ ...formData, phoneNumber: e.target.value.replace(/\D/g, "") })
                         }
-                        placeholder="+91 98765 43210"
+                        placeholder="e.g. 9876543210"
                         className="w-full h-12 px-4 rounded-[10px] bg-[#0a0a0a] border border-white/[0.12] text-white placeholder-white/40 text-[14px] font-normal transition-all duration-200 outline-none focus:border-[rgba(212,175,55,0.6)] focus:ring-1 focus:ring-[rgba(212,175,55,0.4)]"
                       />
                     </div>
@@ -281,6 +286,7 @@ export default function ContactUsView({}: ContactUsViewProps) {
                         Email Address*
                       </label>
                       <input
+                        ref={emailInputRef}
                         type="email"
                         required
                         value={formData.emailAddress}
@@ -289,6 +295,13 @@ export default function ContactUsView({}: ContactUsViewProps) {
                         }
                         placeholder="john@example.com"
                         className="w-full h-12 px-4 rounded-[10px] bg-[#0a0a0a] border border-white/[0.12] text-white placeholder-white/40 text-[14px] font-normal transition-all duration-200 outline-none focus:border-[rgba(212,175,55,0.6)] focus:ring-1 focus:ring-[rgba(212,175,55,0.4)]"
+                      />
+                      <EmailTypoSuggestion
+                        email={formData.emailAddress}
+                        inputRef={emailInputRef}
+                        onAccept={(corrected) =>
+                          setFormData((prev) => ({ ...prev, emailAddress: corrected }))
+                        }
                       />
                     </div>
 
